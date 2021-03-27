@@ -147,7 +147,7 @@
   <ItemGroup>
     <ClCompile Include="src\renderer\Shader.cpp" />
     <ClCompile Include="src\renderer\Camera.cpp" />
-    <ClCompile Include="src\Main.cpp" />
+    <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\vendor\glad\glad.c" />
     <ClCompile Include="src\vendor\glm\detail\glm.cpp" />
     <ClCompile Include="src\vendor\imgui\imgui.cpp" />
