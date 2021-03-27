@@ -467,8 +467,8 @@
       <Filter>Header Files</Filter>
     </None>
     <None Include=".clang-format" />
-    <None Include="res\shaders\Camera.vs" />
-    <None Include="res\shaders\Camera.fs" />
+    <None Include="res\shaders\Texture.vs" />
+    <None Include="res\shaders\Texture.fs" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\vendor\stb_image\stb_image.h">
@@ -1353,6 +1353,9 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\textures\doge.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\box.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>
