@@ -8,6 +8,7 @@
 
 #include "renderer/Camera.h"
 #include "renderer/Shader.h"
+#include "renderer/ResourceManager.h"
 
 #include <iostream>
 
@@ -73,7 +74,8 @@ int main() {
 
     // build and compile our shader program
     // ------------------------------------
-    Shader textureShader("./res/shaders/Texture.vs", "./res/shaders/Texture.fs");
+
+    Shader textureShader = ResourceManager::LoadShader("./res/shaders/Texture.vs", "./res/shaders/Texture.fs", nullptr, "textureShader");
 
     // set up vertex data (and buffer(s)) and configure vertex attributes
     // ------------------------------------------------------------------
@@ -267,34 +269,12 @@ int main() {
 
     // load and create a texture
     // -------------------------
-    unsigned int boxTexture;
-    // texture 1
-    // ---------
-    glGenTextures(1, &boxTexture);
-    glBindTexture(GL_TEXTURE_2D, boxTexture);
-    // set the texture wrapping parameters
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    // set texture filtering parameters
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    // load image, create texture and generate mipmaps
-    int width, height, nrChannels;
-    stbi_set_flip_vertically_on_load(true); // tell stb_image.h to flip loaded texture's on the y-axis.
-    unsigned char* data = stbi_load(std::string("./res/textures/box.png").c_str(), &width, &height, &nrChannels, 4);
-    if (data) {
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-        glGenerateMipmap(GL_TEXTURE_2D);
-    }
-    else {
-        std::cout << "Failed to load texture" << std::endl;
-    }
-    stbi_image_free(data);
+    Texture2D bTexture = ResourceManager::LoadTexture2D("./res/textures/box.png", true, "boxTexture");
 
     // tell opengl for each sampler to which texture unit it belongs to (only has to be done once)
     // -------------------------------------------------------------------------------------------
-    textureShader.use();
-    textureShader.setInt("texture1", 0);
+    textureShader.Use();
+    textureShader.SetInteger("texture1", 0);
 
     // render loop
     // -----------
@@ -315,19 +295,18 @@ int main() {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         // bind textures on corresponding texture units
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, boxTexture);
+        bTexture.Bind();
 
         // activate shader
-        textureShader.use();
+        textureShader.Use();
 
         // pass projection matrix to shader (note that in this case it could change every frame)
         glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
-        textureShader.setMat4("projection", projection);
+        textureShader.SetMatrix4("projection", projection);
 
         // camera/view transformation
         glm::mat4 view = camera.GetViewMatrix();
-        textureShader.setMat4("view", view);
+        textureShader.SetMatrix4("view", view);
 
         // render boxes
         glBindVertexArray(VAO);
@@ -337,7 +316,7 @@ int main() {
             model = glm::translate(model, cubePositions[i]);
             float angle = 20.0f * i;
             model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
-            textureShader.setMat4("model", model);
+            textureShader.SetMatrix4("model", model);
 
             glDrawArrays(GL_TRIANGLES, 0, 36);
         }
@@ -352,6 +331,7 @@ int main() {
     // ------------------------------------------------------------------------
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
+    ResourceManager::Clear();
 
     // glfw: terminate, clearing all previously allocated GLFW resources.
     // ------------------------------------------------------------------
