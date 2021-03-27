@@ -324,7 +324,7 @@ int main() {
     while (!glfwWindowShouldClose(window)) {
         // per-frame time logic
         // --------------------
-        float currentFrame = glfwGetTime();
+        float currentFrame = static_cast<float>(glfwGetTime());
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
 
@@ -391,13 +391,13 @@ void processInput(GLFWwindow* window) {
         glfwSetWindowShouldClose(window, true);
 
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-        camera.ProcessKeyboard(FORWARD, deltaTime);
+        camera.ProcessKeyboard(Camera_Movement::FORWARD, deltaTime);
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-        camera.ProcessKeyboard(BACKWARD, deltaTime);
+        camera.ProcessKeyboard(Camera_Movement::BACKWARD, deltaTime);
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-        camera.ProcessKeyboard(LEFT, deltaTime);
+        camera.ProcessKeyboard(Camera_Movement::LEFT, deltaTime);
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-        camera.ProcessKeyboard(RIGHT, deltaTime);
+        camera.ProcessKeyboard(Camera_Movement::RIGHT, deltaTime);
 }
 
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes
@@ -413,16 +413,16 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
 // -------------------------------------------------------
 void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
     if (firstMouse) {
-        lastX = xpos;
-        lastY = ypos;
+        lastX = static_cast<float>(xpos);
+        lastY = static_cast<float>(ypos);
         firstMouse = false;
     }
 
-    float xoffset = xpos - lastX;
-    float yoffset = lastY - ypos; // reversed since y-coordinates go from bottom to top
+    float xoffset = static_cast<float>(xpos - lastX);
+    float yoffset = static_cast<float>(lastY - ypos); // reversed since y-coordinates go from bottom to top
 
-    lastX = xpos;
-    lastY = ypos;
+    lastX = static_cast<float>(xpos);
+    lastY = static_cast<float>(ypos);
 
     camera.ProcessMouseMovement(xoffset, yoffset);
 }
@@ -430,5 +430,5 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
 // glfw: whenever the mouse scroll wheel scrolls, this callback is called
 // ----------------------------------------------------------------------
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
-    camera.ProcessMouseScroll(yoffset);
+    camera.ProcessMouseScroll(static_cast<float>(yoffset));
 }

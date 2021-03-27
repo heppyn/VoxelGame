@@ -25,13 +25,13 @@ glm::mat4 Camera::GetViewMatrix() {
 
 void Camera::ProcessKeyboard(Camera_Movement direction, float deltaTime) {
     float velocity = MovementSpeed * deltaTime;
-    if (direction == FORWARD)
+    if (direction == Camera_Movement::FORWARD)
         Position += Front * velocity;
-    if (direction == BACKWARD)
+    if (direction == Camera_Movement::BACKWARD)
         Position -= Front * velocity;
-    if (direction == LEFT)
+    if (direction == Camera_Movement::LEFT)
         Position -= Right * velocity;
-    if (direction == RIGHT)
+    if (direction == Camera_Movement::RIGHT)
         Position += Right * velocity;
 
     // make sure the user stays at the ground level
@@ -58,7 +58,7 @@ void Camera::ProcessMouseMovement(float xoffset, float yoffset, GLboolean constr
 }
 
 void Camera::ProcessMouseScroll(float yoffset) {
-    Zoom -= (float)yoffset;
+    Zoom -= yoffset;
     if (Zoom < 1.0f)
         Zoom = 1.0f;
     if (Zoom > 45.0f)
