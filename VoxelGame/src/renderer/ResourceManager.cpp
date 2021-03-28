@@ -10,7 +10,6 @@ std::map<std::string, std::unique_ptr<Shader>> ResourceManager::Shaders;
 std::map<std::string, std::unique_ptr<Texture2D>> ResourceManager::Textures;
 
 Shader* ResourceManager::LoadShader(const char* vShaderFile, const char* fShaderFile, const char* gShaderFile, const std::string& name) {
-    //Shaders.emplace(name, LoadShaderFromFile(vShaderFile, fShaderFile, gShaderFile));
     Shaders[name] = std::unique_ptr<Shader>(LoadShaderFromFile(vShaderFile, fShaderFile, gShaderFile));
     return Shaders[name].get();
 }
@@ -25,7 +24,6 @@ Shader* ResourceManager::GetShader(const char* name) {
 }
 
 Texture2D* ResourceManager::LoadTexture2D(const char* file, bool alpha, const std::string& name) {
-    //Textures.emplace(name, LoadTexture2DFromFile(file, alpha));
     Textures[name] = std::unique_ptr<Texture2D>(LoadTexture2DFromFile(file, alpha));
     return Textures[name].get();
 }
