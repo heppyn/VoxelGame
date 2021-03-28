@@ -1,4 +1,4 @@
-#include "shader.h"
+#include "Shader.h"
 
 #include <iostream>
 
@@ -13,18 +13,18 @@ void Shader::Compile(const char* vertexSource, const char* fragmentSource, const
     sVertex = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource(sVertex, 1, &vertexSource, NULL);
     glCompileShader(sVertex);
-    checkCompileErrors(sVertex, "VERTEX");
+    CheckCompileErrors(sVertex, "VERTEX");
     // fragment Shader
     sFragment = glCreateShader(GL_FRAGMENT_SHADER);
     glShaderSource(sFragment, 1, &fragmentSource, NULL);
     glCompileShader(sFragment);
-    checkCompileErrors(sFragment, "FRAGMENT");
+    CheckCompileErrors(sFragment, "FRAGMENT");
     // if geometry shader source code is given, also compile geometry shader
     if (geometrySource != nullptr) {
         gShader = glCreateShader(GL_GEOMETRY_SHADER);
         glShaderSource(gShader, 1, &geometrySource, NULL);
         glCompileShader(gShader);
-        checkCompileErrors(gShader, "GEOMETRY");
+        CheckCompileErrors(gShader, "GEOMETRY");
     }
     // shader program
     m_id = glCreateProgram();
@@ -33,7 +33,7 @@ void Shader::Compile(const char* vertexSource, const char* fragmentSource, const
     if (geometrySource != nullptr)
         glAttachShader(m_id, gShader);
     glLinkProgram(m_id);
-    checkCompileErrors(m_id, "PROGRAM");
+    CheckCompileErrors(m_id, "PROGRAM");
     // delete the shaders as they're linked into our program now and no longer necessary
     glDeleteShader(sVertex);
     glDeleteShader(sFragment);
@@ -88,7 +88,7 @@ void Shader::SetMatrix4(const char* name, const glm::mat4& matrix, bool useShade
 }
 
 
-void Shader::checkCompileErrors(unsigned int object, std::string type) {
+void Shader::CheckCompileErrors(unsigned int object, const std::string& type) {
     int success;
     char infoLog[1024];
     if (type != "PROGRAM") {

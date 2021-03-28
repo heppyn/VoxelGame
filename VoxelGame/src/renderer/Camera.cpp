@@ -7,7 +7,7 @@ Camera::Camera(glm::vec3 position /*= glm::vec3(0.0f, 0.0f, 0.0f)*/, glm::vec3 u
     WorldUp = up;
     Yaw = yaw;
     Pitch = pitch;
-    updateCameraVectors();
+    UpdateCameraVectors();
 }
 
 Camera::Camera(float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw, float pitch)
@@ -16,22 +16,22 @@ Camera::Camera(float posX, float posY, float posZ, float upX, float upY, float u
     WorldUp = glm::vec3(upX, upY, upZ);
     Yaw = yaw;
     Pitch = pitch;
-    updateCameraVectors();
+    UpdateCameraVectors();
 }
 
 glm::mat4 Camera::GetViewMatrix() {
     return glm::lookAt(Position, Position + Front, Up);
 }
 
-void Camera::ProcessKeyboard(Camera_Movement direction, float deltaTime) {
+void Camera::ProcessKeyboard(CameraMovement direction, float deltaTime) {
     float velocity = MovementSpeed * deltaTime;
-    if (direction == Camera_Movement::FORWARD)
+    if (direction == CameraMovement::FORWARD)
         Position += Front * velocity;
-    if (direction == Camera_Movement::BACKWARD)
+    if (direction == CameraMovement::BACKWARD)
         Position -= Front * velocity;
-    if (direction == Camera_Movement::LEFT)
+    if (direction == CameraMovement::LEFT)
         Position -= Right * velocity;
-    if (direction == Camera_Movement::RIGHT)
+    if (direction == CameraMovement::RIGHT)
         Position += Right * velocity;
 
     // make sure the user stays at the ground level
@@ -54,7 +54,7 @@ void Camera::ProcessMouseMovement(float xoffset, float yoffset, GLboolean constr
     }
 
     // update Front, Right and Up Vectors using the updated Euler angles
-    updateCameraVectors();
+    UpdateCameraVectors();
 }
 
 void Camera::ProcessMouseScroll(float yoffset) {
@@ -65,7 +65,7 @@ void Camera::ProcessMouseScroll(float yoffset) {
         Zoom = 45.0f;
 }
 
-void Camera::updateCameraVectors() {
+void Camera::UpdateCameraVectors() {
     // calculate the new Front vector
     glm::vec3 front;
     front.x = cos(glm::radians(Yaw)) * cos(glm::radians(Pitch));

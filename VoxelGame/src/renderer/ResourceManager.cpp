@@ -9,7 +9,7 @@
 std::map<std::string, Shader> ResourceManager::m_shaders;
 std::map<std::string, Texture2D> ResourceManager::m_textures;
 
-Shader ResourceManager::LoadShader(const char* vShaderFile, const char* fShaderFile, const char* gShaderFile, std::string name) {
+Shader ResourceManager::LoadShader(const char* vShaderFile, const char* fShaderFile, const char* gShaderFile, const std::string& name) {
     m_shaders[name] = LoadShaderFromFile(vShaderFile, fShaderFile, gShaderFile);
     return m_shaders[name];
 }
@@ -19,7 +19,7 @@ Shader ResourceManager::GetShader(std::string& name) {
     return m_shaders[name];
 }
 
-Texture2D ResourceManager::LoadTexture2D(const char* file, bool alpha, std::string name) {
+Texture2D ResourceManager::LoadTexture2D(const char* file, bool alpha, const std::string& name) {
     m_textures[name] = LoadTexture2DFromFile(file, alpha);
     return m_textures[name];
 }

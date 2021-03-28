@@ -9,7 +9,6 @@
 
 class Shader {
   public:
-  public:
     // state
     unsigned int m_id{ 0 };
     // sets the current shader as active
@@ -29,5 +28,5 @@ class Shader {
 
   private:
     // checks if compilation or linking failed and if so, print the error logs
-    void checkCompileErrors(unsigned int object, std::string type);
+    static void CheckCompileErrors(unsigned int object, const std::string& type);
 };

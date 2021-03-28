@@ -12,10 +12,10 @@
 
 #include <iostream>
 
-void framebuffer_size_callback(GLFWwindow* window, int width, int height);
-void mouse_callback(GLFWwindow* window, double xpos, double ypos);
-void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
-void processInput(GLFWwindow* window);
+void FramebufferSizeCallback(GLFWwindow* window, int width, int height);
+void MouseCallback(GLFWwindow* window, double xPos, double yPos);
+void ScrollCallback(GLFWwindow* window, double xOffset, double yOffset);
+void ProcessInput(GLFWwindow* window);
 
 // settings
 const unsigned int SCR_WIDTH = 1000;
@@ -52,9 +52,9 @@ int main() {
         return -1;
     }
     glfwMakeContextCurrent(window);
-    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
-    glfwSetCursorPosCallback(window, mouse_callback);
-    glfwSetScrollCallback(window, scroll_callback);
+    glfwSetFramebufferSizeCallback(window, FramebufferSizeCallback);
+    glfwSetCursorPosCallback(window, MouseCallback);
+    glfwSetScrollCallback(window, ScrollCallback);
 
     // tell GLFW to capture our mouse
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
@@ -287,7 +287,7 @@ int main() {
 
         // input
         // -----
-        processInput(window);
+        ProcessInput(window);
 
         // render
         // ------
@@ -341,23 +341,23 @@ int main() {
 
 // process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
 // ---------------------------------------------------------------------------------------------------------
-void processInput(GLFWwindow* window) {
+void ProcessInput(GLFWwindow* window) {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
 
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-        camera.ProcessKeyboard(Camera_Movement::FORWARD, deltaTime);
+        camera.ProcessKeyboard(CameraMovement::FORWARD, deltaTime);
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-        camera.ProcessKeyboard(Camera_Movement::BACKWARD, deltaTime);
+        camera.ProcessKeyboard(CameraMovement::BACKWARD, deltaTime);
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-        camera.ProcessKeyboard(Camera_Movement::LEFT, deltaTime);
+        camera.ProcessKeyboard(CameraMovement::LEFT, deltaTime);
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-        camera.ProcessKeyboard(Camera_Movement::RIGHT, deltaTime);
+        camera.ProcessKeyboard(CameraMovement::RIGHT, deltaTime);
 }
 
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes
 // ---------------------------------------------------------------------------------------------
-void framebuffer_size_callback([[maybe_unused]] GLFWwindow* window, int width, int height) {
+void FramebufferSizeCallback([[maybe_unused]] GLFWwindow* window, int width, int height) {
     // make sure the viewport matches the new window dimensions; note that width and
     // height will be significantly larger than specified on retina displays.
     glViewport(0, 0, width, height);
@@ -366,24 +366,24 @@ void framebuffer_size_callback([[maybe_unused]] GLFWwindow* window, int width, i
 
 // glfw: whenever the mouse moves, this callback is called
 // -------------------------------------------------------
-void mouse_callback([[maybe_unused]] GLFWwindow* window, double xpos, double ypos) {
+void MouseCallback([[maybe_unused]] GLFWwindow* window, double xPos, double yPos) {
     if (firstMouse) {
-        lastX = static_cast<float>(xpos);
-        lastY = static_cast<float>(ypos);
+        lastX = static_cast<float>(xPos);
+        lastY = static_cast<float>(yPos);
         firstMouse = false;
     }
 
-    float xoffset = static_cast<float>(xpos - lastX);
-    float yoffset = static_cast<float>(lastY - ypos); // reversed since y-coordinates go from bottom to top
+    float xOffset = static_cast<float>(xPos - lastX);
+    float yOffset = static_cast<float>(lastY - yPos); // reversed since y-coordinates go from bottom to top
 
-    lastX = static_cast<float>(xpos);
-    lastY = static_cast<float>(ypos);
+    lastX = static_cast<float>(xPos);
+    lastY = static_cast<float>(yPos);
 
-    camera.ProcessMouseMovement(xoffset, yoffset);
+    camera.ProcessMouseMovement(xOffset, yOffset);
 }
 
 // glfw: whenever the mouse scroll wheel scrolls, this callback is called
 // ----------------------------------------------------------------------
-void scroll_callback([[maybe_unused]] GLFWwindow* window, [[maybe_unused]] double xoffset, double yoffset) {
-    camera.ProcessMouseScroll(static_cast<float>(yoffset));
+void ScrollCallback([[maybe_unused]] GLFWwindow* window, [[maybe_unused]] double xOffset, double yOffset) {
+    camera.ProcessMouseScroll(static_cast<float>(yOffset));
 }
