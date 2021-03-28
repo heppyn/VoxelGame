@@ -6,39 +6,49 @@
 
 #include "stb_image/stb_image.h"
 
-std::map<std::string, Shader> ResourceManager::Shaders;
-std::map<std::string, Texture2D> ResourceManager::Textures;
+std::map<std::string, std::unique_ptr<Shader>> ResourceManager::Shaders;
+std::map<std::string, std::unique_ptr<Texture2D>> ResourceManager::Textures;
 
-Shader ResourceManager::LoadShader(const char* vShaderFile, const char* fShaderFile, const char* gShaderFile, const std::string& name) {
-    Shaders[name] = LoadShaderFromFile(vShaderFile, fShaderFile, gShaderFile);
-    return Shaders[name];
+Shader* ResourceManager::LoadShader(const char* vShaderFile, const char* fShaderFile, const char* gShaderFile, const std::string& name) {
+    //Shaders.emplace(name, LoadShaderFromFile(vShaderFile, fShaderFile, gShaderFile));
+    Shaders[name] = std::unique_ptr<Shader>(LoadShaderFromFile(vShaderFile, fShaderFile, gShaderFile));
+    return Shaders[name].get();
 }
 
-Shader ResourceManager::GetShader(std::string& name) {
+Shader* ResourceManager::GetShader(std::string& name) {
+    return GetShader(name.c_str());
+}
+
+Shader* ResourceManager::GetShader(const char* name) {
     // TODO: check for existence
-    return Shaders[name];
+    return Shaders[name].get();
 }
 
-Texture2D ResourceManager::LoadTexture2D(const char* file, bool alpha, const std::string& name) {
-    Textures[name] = LoadTexture2DFromFile(file, alpha);
-    return Textures[name];
+Texture2D* ResourceManager::LoadTexture2D(const char* file, bool alpha, const std::string& name) {
+    //Textures.emplace(name, LoadTexture2DFromFile(file, alpha));
+    Textures[name] = std::unique_ptr<Texture2D>(LoadTexture2DFromFile(file, alpha));
+    return Textures[name].get();
 }
 
-Texture2D ResourceManager::GetTexture2D(std::string& name) {
+Texture2D* ResourceManager::GetTexture2D(std::string& name) {
+    return GetTexture2D(name.c_str());
+}
+
+Texture2D* ResourceManager::GetTexture2D(const char* name) {
     // TODO: check for existence
-    return Textures[name];
+    return Textures[name].get();
 }
 
 void ResourceManager::Clear() {
-    for (const auto [fst, snd] : Shaders) {
-        glDeleteProgram(snd.Id);
+    for (const auto& [fst, shader] : Shaders) {
+        glDeleteProgram(shader->Id);
     }
-    for (const auto [fst, snd] : Textures) {
-        glDeleteTextures(1, &snd.Id);
+    for (const auto& [fst, texture] : Textures) {
+        glDeleteTextures(1, &texture->Id);
     }
 }
 
-Shader ResourceManager::LoadShaderFromFile(const char* vShaderFile, const char* fShaderFile, const char* gShaderFile /*= nullptr*/) {
+Shader* ResourceManager::LoadShaderFromFile(const char* vShaderFile, const char* fShaderFile, const char* gShaderFile /*= nullptr*/) {
     // 1. retrieve the vertex/fragment source code from filePath
     std::string vertexCode;
     std::string fragmentCode;
@@ -74,17 +84,17 @@ Shader ResourceManager::LoadShaderFromFile(const char* vShaderFile, const char* 
     const char* fShaderCode = fragmentCode.c_str();
     const char* gShaderCode = geometryCode.c_str();
     // 2. now create shader object from source code
-    Shader shader;
-    shader.Compile(vShaderCode, fShaderCode, gShaderFile != nullptr ? gShaderCode : nullptr);
+    Shader* shader = new Shader;
+    shader->Compile(vShaderCode, fShaderCode, gShaderFile != nullptr ? gShaderCode : nullptr);
     return shader;
 }
 
-Texture2D ResourceManager::LoadTexture2DFromFile(const char* file, bool alpha) {
+Texture2D* ResourceManager::LoadTexture2DFromFile(const char* file, bool alpha) {
     // create texture object
-    Texture2D texture;
+    Texture2D* texture = new Texture2D;
     if (alpha) {
-        texture.InternalFormat = GL_RGBA;
-        texture.ImageFormat = GL_RGBA;
+        texture->InternalFormat = GL_RGBA;
+        texture->ImageFormat = GL_RGBA;
     }
     // load image
     stbi_set_flip_vertically_on_load(true);
@@ -92,7 +102,7 @@ Texture2D ResourceManager::LoadTexture2DFromFile(const char* file, bool alpha) {
     unsigned char* data = stbi_load(file, &width, &height, &nrChannels, 0);
     if (data) {
         // now generate texture
-        texture.Generate(width, height, data);
+        texture->Generate(width, height, data);
     }
     else {
         // TODO: handle texture not loaded

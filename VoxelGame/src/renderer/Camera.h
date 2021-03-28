@@ -1,4 +1,7 @@
 #pragma once
+#include "glm/gtx/associated_min_max.hpp"
+#include "glm/gtx/associated_min_max.hpp"
+
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -31,12 +34,12 @@ class Camera {
     glm::vec3 Right;
     glm::vec3 WorldUp;
     // euler Angles
-    float Yaw;
-    float Pitch;
+    float Yaw{YAW};
+    float Pitch{PITCH};
     // camera options
-    float MovementSpeed;
-    float MouseSensitivity;
-    float Zoom;
+    float MovementSpeed{SPEED};
+    float MouseSensitivity{SENSITIVITY};
+    float Zoom{ZOOM};
 
     // constructor with vectors
     explicit Camera(glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f), float yaw = YAW, float pitch = PITCH);
@@ -44,7 +47,7 @@ class Camera {
     Camera(float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw, float pitch);
 
     // returns the view matrix calculated using Euler Angles and the LookAt Matrix
-    glm::mat4 GetViewMatrix();
+    [[nodiscard]] glm::mat4 GetViewMatrix() const;
 
     // processes input received from any keyboard-like input system. Accepts input parameter in the form of camera defined ENUM (to abstract it from windowing systems)
     void ProcessKeyboard(CameraMovement direction, float deltaTime);

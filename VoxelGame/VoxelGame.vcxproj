@@ -151,7 +151,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\renderer\CubeRenderer.cpp" />
+    <ClCompile Include="src\engine\Game.cpp" />
     <ClCompile Include="src\renderer\ResourceManager.cpp" />
+    <ClCompile Include="src\renderer\SceneRenderer.cpp" />
     <ClCompile Include="src\renderer\Shader.cpp" />
     <ClCompile Include="src\renderer\Camera.cpp" />
     <ClCompile Include="src\main.cpp" />
@@ -309,7 +312,10 @@
     <None Include="src\vendor\glm\gtx\wrap.inl" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\engine\Game.h" />
+    <ClInclude Include="src\renderer\CubeRenderer.h" />
     <ClInclude Include="src\renderer\ResourceManager.h" />
+    <ClInclude Include="src\renderer\SceneRenderer.h" />
     <ClInclude Include="src\renderer\Shader.h" />
     <ClInclude Include="src\renderer\Camera.h" />
     <ClInclude Include="src\renderer\Texture2D.h" />

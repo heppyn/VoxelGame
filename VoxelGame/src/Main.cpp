@@ -1,14 +1,10 @@
-#include "stb_image/stb_image.h"
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
 
 #include "renderer/Camera.h"
 #include "renderer/Shader.h"
 #include "renderer/ResourceManager.h"
+#include "engine/Game.h"
 
 #include <iostream>
 
@@ -22,7 +18,8 @@ const unsigned int SCR_WIDTH = 1000;
 const unsigned int SCR_HEIGHT = 800;
 
 // camera
-Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
+Game* game = new Game(SCR_WIDTH, SCR_HEIGHT);
+Camera* camera;
 float lastX = SCR_WIDTH / 2.0f;
 float lastY = SCR_HEIGHT / 2.0f;
 bool firstMouse = true;
@@ -72,209 +69,15 @@ int main() {
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    // build and compile our shader program
-    // ------------------------------------
-
-    Shader textureShader = ResourceManager::LoadShader("./res/shaders/Texture.vs", "./res/shaders/Texture.fs", nullptr, "textureShader");
-
-    // set up vertex data (and buffer(s)) and configure vertex attributes
-    // ------------------------------------------------------------------
-    float vertices[] = {
-        -0.5f, -0.5f, -0.5f, 0.0f, 0.0f, 0.5f, -0.5f, -0.5f, 1.0f, 0.0f, 0.5f, 0.5f, -0.5f, 1.0f, 1.0f, 0.5f, 0.5f, -0.5f, 1.0f, 1.0f, -0.5f, 0.5f, -0.5f, 0.0f, 1.0f, -0.5f, -0.5f, -0.5f, 0.0f, 0.0f,
-
-        -0.5f,
-        -0.5f,
-        0.5f,
-        0.0f,
-        0.0f,
-        0.5f,
-        -0.5f,
-        0.5f,
-        1.0f,
-        0.0f,
-        0.5f,
-        0.5f,
-        0.5f,
-        1.0f,
-        1.0f,
-        0.5f,
-        0.5f,
-        0.5f,
-        1.0f,
-        1.0f,
-        -0.5f,
-        0.5f,
-        0.5f,
-        0.0f,
-        1.0f,
-        -0.5f,
-        -0.5f,
-        0.5f,
-        0.0f,
-        0.0f,
-
-        -0.5f,
-        0.5f,
-        0.5f,
-        1.0f,
-        0.0f,
-        -0.5f,
-        0.5f,
-        -0.5f,
-        1.0f,
-        1.0f,
-        -0.5f,
-        -0.5f,
-        -0.5f,
-        0.0f,
-        1.0f,
-        -0.5f,
-        -0.5f,
-        -0.5f,
-        0.0f,
-        1.0f,
-        -0.5f,
-        -0.5f,
-        0.5f,
-        0.0f,
-        0.0f,
-        -0.5f,
-        0.5f,
-        0.5f,
-        1.0f,
-        0.0f,
-
-        0.5f,
-        0.5f,
-        0.5f,
-        1.0f,
-        0.0f,
-        0.5f,
-        0.5f,
-        -0.5f,
-        1.0f,
-        1.0f,
-        0.5f,
-        -0.5f,
-        -0.5f,
-        0.0f,
-        1.0f,
-        0.5f,
-        -0.5f,
-        -0.5f,
-        0.0f,
-        1.0f,
-        0.5f,
-        -0.5f,
-        0.5f,
-        0.0f,
-        0.0f,
-        0.5f,
-        0.5f,
-        0.5f,
-        1.0f,
-        0.0f,
-
-        -0.5f,
-        -0.5f,
-        -0.5f,
-        0.0f,
-        1.0f,
-        0.5f,
-        -0.5f,
-        -0.5f,
-        1.0f,
-        1.0f,
-        0.5f,
-        -0.5f,
-        0.5f,
-        1.0f,
-        0.0f,
-        0.5f,
-        -0.5f,
-        0.5f,
-        1.0f,
-        0.0f,
-        -0.5f,
-        -0.5f,
-        0.5f,
-        0.0f,
-        0.0f,
-        -0.5f,
-        -0.5f,
-        -0.5f,
-        0.0f,
-        1.0f,
-
-        -0.5f,
-        0.5f,
-        -0.5f,
-        0.0f,
-        1.0f,
-        0.5f,
-        0.5f,
-        -0.5f,
-        1.0f,
-        1.0f,
-        0.5f,
-        0.5f,
-        0.5f,
-        1.0f,
-        0.0f,
-        0.5f,
-        0.5f,
-        0.5f,
-        1.0f,
-        0.0f,
-        -0.5f,
-        0.5f,
-        0.5f,
-        0.0f,
-        0.0f,
-        -0.5f,
-        0.5f,
-        -0.5f,
-        0.0f,
-        1.0f
-    };
-    // world space positions of our cubes
-    glm::vec3 cubePositions[] = {
-        glm::vec3(0.0f, 0.0f, 0.0f),
-        glm::vec3(2.0f, 5.0f, -15.0f),
-        glm::vec3(-1.5f, -2.2f, -2.5f),
-        glm::vec3(-3.8f, -2.0f, -12.3f),
-        glm::vec3(2.4f, -0.4f, -3.5f),
-        glm::vec3(-1.7f, 3.0f, -7.5f),
-        glm::vec3(1.3f, -2.0f, -2.5f),
-        glm::vec3(1.5f, 2.0f, -2.5f),
-        glm::vec3(1.5f, 0.2f, -1.5f),
-        glm::vec3(-1.3f, 1.0f, -1.5f)
-    };
-    unsigned int VBO, VAO;
-    glGenVertexArrays(1, &VAO);
-    glGenBuffers(1, &VBO);
-
-    glBindVertexArray(VAO);
-
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-    // position attribute
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
-    // texture coord attribute
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
-    glEnableVertexAttribArray(1);
-
-
-    // load and create a texture
-    // -------------------------
-    Texture2D bTexture = ResourceManager::LoadTexture2D("./res/textures/box.png", true, "boxTexture");
+    Shader* textureShader = ResourceManager::LoadShader("./res/shaders/Texture.vs", "./res/shaders/Texture.fs", nullptr, "textureShader");
+    ResourceManager::LoadTexture2D("./res/textures/box.png", true, "boxTexture");
+    game->Init();
+    camera = game->GetCamera();
 
     // tell opengl for each sampler to which texture unit it belongs to (only has to be done once)
     // -------------------------------------------------------------------------------------------
-    textureShader.Use();
-    textureShader.SetInteger("texture1", 0);
+    textureShader->Use();
+    textureShader->SetInteger("texture1", 0);
 
     // render loop
     // -----------
@@ -288,53 +91,16 @@ int main() {
         // input
         // -----
         ProcessInput(window);
-
-        // render
-        // ------
-        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-        // bind textures on corresponding texture units
-        bTexture.Bind();
-
-        // activate shader
-        textureShader.Use();
-
-        // pass projection matrix to shader (note that in this case it could change every frame)
-        glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
-        textureShader.SetMatrix4("projection", projection);
-
-        // camera/view transformation
-        glm::mat4 view = camera.GetViewMatrix();
-        textureShader.SetMatrix4("view", view);
-
-        // render boxes
-        glBindVertexArray(VAO);
-        for (unsigned int i = 0; i < 10; i++) {
-            // calculate the model matrix for each object and pass it to shader before drawing
-            glm::mat4 model = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
-            model = glm::translate(model, cubePositions[i]);
-            float angle = 20.0f * i;
-            model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
-            textureShader.SetMatrix4("model", model);
-
-            glDrawArrays(GL_TRIANGLES, 0, 36);
-        }
+        game->Render();
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
-
-    // optional: de-allocate all resources once they've outlived their purpose:
-    // ------------------------------------------------------------------------
-    glDeleteVertexArrays(1, &VAO);
-    glDeleteBuffers(1, &VBO);
-    ResourceManager::Clear();
-
     // glfw: terminate, clearing all previously allocated GLFW resources.
     // ------------------------------------------------------------------
+    delete game;
     glfwTerminate();
     return 0;
 }
@@ -346,13 +112,13 @@ void ProcessInput(GLFWwindow* window) {
         glfwSetWindowShouldClose(window, true);
 
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-        camera.ProcessKeyboard(CameraMovement::FORWARD, deltaTime);
+        camera->ProcessKeyboard(CameraMovement::FORWARD, deltaTime);
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-        camera.ProcessKeyboard(CameraMovement::BACKWARD, deltaTime);
+        camera->ProcessKeyboard(CameraMovement::BACKWARD, deltaTime);
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-        camera.ProcessKeyboard(CameraMovement::LEFT, deltaTime);
+        camera->ProcessKeyboard(CameraMovement::LEFT, deltaTime);
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-        camera.ProcessKeyboard(CameraMovement::RIGHT, deltaTime);
+        camera->ProcessKeyboard(CameraMovement::RIGHT, deltaTime);
 }
 
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes
@@ -379,11 +145,11 @@ void MouseCallback([[maybe_unused]] GLFWwindow* window, double xPos, double yPos
     lastX = static_cast<float>(xPos);
     lastY = static_cast<float>(yPos);
 
-    camera.ProcessMouseMovement(xOffset, yOffset);
+    camera->ProcessMouseMovement(xOffset, yOffset);
 }
 
 // glfw: whenever the mouse scroll wheel scrolls, this callback is called
 // ----------------------------------------------------------------------
 void ScrollCallback([[maybe_unused]] GLFWwindow* window, [[maybe_unused]] double xOffset, double yOffset) {
-    camera.ProcessMouseScroll(static_cast<float>(yOffset));
+    camera->ProcessMouseScroll(static_cast<float>(yOffset));
 }
