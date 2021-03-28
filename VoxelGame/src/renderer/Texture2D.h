@@ -5,15 +5,15 @@
 
 class Texture2D {
   public:
-    unsigned int m_id;
-    unsigned int m_width{ 0 }, m_height{ 0 };
-    unsigned int m_internalFormat{ GL_RGB };
-    unsigned int m_imageFormat{ GL_RGB };
+    unsigned int Id{ 0 };
+    unsigned int Width{ 0 }, Height{ 0 };
+    unsigned int InternalFormat{ GL_RGB };
+    unsigned int ImageFormat{ GL_RGB };
 
-    unsigned int m_wrapS{ GL_REPEAT };
-    unsigned int m_wrapT{ GL_REPEAT };
-    unsigned int m_filterMin{ GL_LINEAR }; // filtering mode if texture pixels < screen pixels
-    unsigned int m_filterMax{ GL_LINEAR }; // filtering mode if texture pixels > screen pixels
+    unsigned int WrapS{ GL_REPEAT };
+    unsigned int WrapT{ GL_REPEAT };
+    unsigned int FilterMin{ GL_LINEAR }; // filtering mode if texture pixels < screen pixels
+    unsigned int FilterMax{ GL_LINEAR }; // filtering mode if texture pixels > screen pixels
 
     Texture2D();
     void Generate(unsigned int width, unsigned int height, unsigned char* data);

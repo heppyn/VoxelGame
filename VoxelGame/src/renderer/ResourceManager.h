@@ -10,8 +10,8 @@
 
 class ResourceManager {
   public:
-    static std::map<std::string, Shader> m_shaders;
-    static std::map<std::string, Texture2D> m_textures;
+    static std::map<std::string, Shader> Shaders;
+    static std::map<std::string, Texture2D> Textures;
 
     static Shader LoadShader(const char* vShaderFile, const char* fShaderFile, const char* gShaderFile, const std::string& name);
     static Shader GetShader(std::string& name);

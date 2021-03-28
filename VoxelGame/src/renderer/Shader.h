@@ -10,7 +10,7 @@
 class Shader {
   public:
     // state
-    unsigned int m_id{ 0 };
+    unsigned int Id{ 0 };
     // sets the current shader as active
     Shader& Use();
     // compiles the shader from given source code
