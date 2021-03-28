@@ -50,10 +50,10 @@ class Camera {
     void ProcessKeyboard(CameraMovement direction, float deltaTime);
 
     // processes input received from a mouse input system. Expects the offset value in both the x and y direction.
-    void ProcessMouseMovement(float xoffset, float yoffset, GLboolean constrainPitch = true);
+    void ProcessMouseMovement(float xOffset, float yOffset, GLboolean constrainPitch = true);
 
     // processes input received from a mouse scroll-wheel event. Only requires input on the vertical wheel-axis
-    void ProcessMouseScroll(float yoffset);
+    void ProcessMouseScroll(float yOffset);
 
   private:
     // calculates the front vector from the Camera's (updated) Euler Angles

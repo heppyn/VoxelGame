@@ -2,11 +2,7 @@
 
 
 Camera::Camera(glm::vec3 position /*= glm::vec3(0.0f, 0.0f, 0.0f)*/, glm::vec3 up /*= glm::vec3(0.0f, 1.0f, 0.0f)*/, float yaw /*= YAW*/, float pitch /*= PITCH*/)
-  : Front(glm::vec3(0.0f, 0.0f, -1.0f)), MovementSpeed(SPEED), MouseSensitivity(SENSITIVITY), Zoom(ZOOM) {
-    Position = position;
-    WorldUp = up;
-    Yaw = yaw;
-    Pitch = pitch;
+  : Position(position), Front(glm::vec3(0.0f, 0.0f, -1.0f)), WorldUp(up), Yaw(yaw), Pitch(pitch), MovementSpeed(SPEED), MouseSensitivity(SENSITIVITY), Zoom(ZOOM) {
     UpdateCameraVectors();
 }
 
@@ -38,12 +34,12 @@ void Camera::ProcessKeyboard(CameraMovement direction, float deltaTime) {
     //Position.y = 0.0f;
 }
 
-void Camera::ProcessMouseMovement(float xoffset, float yoffset, GLboolean constrainPitch /*= true*/) {
-    xoffset *= MouseSensitivity;
-    yoffset *= MouseSensitivity;
+void Camera::ProcessMouseMovement(float xOffset, float yOffset, GLboolean constrainPitch /*= true*/) {
+    xOffset *= MouseSensitivity;
+    yOffset *= MouseSensitivity;
 
-    Yaw += xoffset;
-    Pitch += yoffset;
+    Yaw += xOffset;
+    Pitch += yOffset;
 
     // make sure that when pitch is out of bounds, screen doesn't get flipped
     if (constrainPitch) {
@@ -57,8 +53,8 @@ void Camera::ProcessMouseMovement(float xoffset, float yoffset, GLboolean constr
     UpdateCameraVectors();
 }
 
-void Camera::ProcessMouseScroll(float yoffset) {
-    Zoom -= yoffset;
+void Camera::ProcessMouseScroll(float yOffset) {
+    Zoom -= yOffset;
     if (Zoom < 1.0f)
         Zoom = 1.0f;
     if (Zoom > 45.0f)
