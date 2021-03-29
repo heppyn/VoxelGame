@@ -3,7 +3,7 @@
 
 #include "renderer/Camera.h"
 #include "renderer/Shader.h"
-#include "renderer/ResourceManager.h"
+#include "engine/ResourceManager.h"
 #include "engine/Game.h"
 
 #include <iostream>
@@ -68,28 +68,14 @@ int main() {
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-    Renderer::Shader* textureShader = ResourceManager::LoadShader("./res/shaders/Texture.vs", "./res/shaders/Texture.fs", nullptr, "textureShader");
-    ResourceManager::LoadTexture2D("./res/textures/box.png", true, "boxTexture");
     game->Init();
     camera = game->GetCamera();
 
-    // tell opengl for each sampler to which texture unit it belongs to (only has to be done once)
-    // -------------------------------------------------------------------------------------------
-    textureShader->Use();
-    textureShader->SetInteger("texture1", 0);
-
-    // render loop
-    // -----------
     while (!glfwWindowShouldClose(window)) {
-        // per-frame time logic
-        // --------------------
         const float currentFrame = static_cast<float>(glfwGetTime());
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
 
-        // input
-        // -----
         ProcessInput(window);
         game->Render();
 

@@ -1,6 +1,6 @@
 #include "Game.h"
 
-#include "renderer/ResourceManager.h"
+#include "ResourceManager.h"
 
 Game::Game(unsigned width, unsigned height)
   : Width(width), Height(height) {
@@ -23,6 +23,12 @@ Game::~Game() {
 }
 
 void Game::Init() {
+    auto* textureShader = ResourceManager::LoadShader("./res/shaders/Texture.vs", "./res/shaders/Texture.fs", nullptr, "textureShader");
+    // texture is loaded from texture unit 0
+    textureShader->SetInteger("texture1", 0);
+
+    ResourceManager::LoadTexture2D("./res/textures/box.png", true, "boxTexture");
+
     Camera = std::make_unique<Renderer::Camera>(glm::vec3(0.0f, 0.0f, 3.0f));
     Renderer = std::make_unique<Renderer::SceneRenderer>(Camera.get());
 }

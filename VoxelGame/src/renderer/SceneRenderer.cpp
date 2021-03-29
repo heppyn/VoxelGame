@@ -1,6 +1,6 @@
 #include "SceneRenderer.h"
 
-#include "ResourceManager.h"
+#include "engine/ResourceManager.h"
 
 Renderer::SceneRenderer::SceneRenderer(Renderer::Camera* camera)
   : Camera(camera) {

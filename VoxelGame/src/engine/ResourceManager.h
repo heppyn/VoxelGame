@@ -4,8 +4,8 @@
 #include <string>
 #include <memory>
 
-#include "Shader.h"
-#include "Texture2D.h"
+#include "renderer/Shader.h"
+#include "renderer/Texture2D.h"
 
 class ResourceManager {
   public:
