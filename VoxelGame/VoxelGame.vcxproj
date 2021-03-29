@@ -151,6 +151,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\engine\GameObject.cpp" />
     <ClCompile Include="src\renderer\CubeRenderer.cpp" />
     <ClCompile Include="src\engine\Game.cpp" />
     <ClCompile Include="src\engine\ResourceManager.cpp" />
@@ -313,6 +314,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\engine\Game.h" />
+    <ClInclude Include="src\engine\GameObject.h" />
     <ClInclude Include="src\renderer\CubeRenderer.h" />
     <ClInclude Include="src\engine\ResourceManager.h" />
     <ClInclude Include="src\renderer\SceneRenderer.h" />

@@ -1,6 +1,8 @@
 #pragma once
 #include <memory>
 
+
+#include "GameObject.h"
 #include "renderer/Camera.h"
 #include "renderer/SceneRenderer.h"
 
@@ -21,5 +23,7 @@ class Game {
   private:
     std::unique_ptr<Renderer::Camera> Camera{ nullptr };
     std::unique_ptr<Renderer::SceneRenderer> Renderer{ nullptr };
-    std::vector<glm::vec3> Scene{};
+    std::vector<GameObject> Scene{};
+
+    void InitScene();
 };

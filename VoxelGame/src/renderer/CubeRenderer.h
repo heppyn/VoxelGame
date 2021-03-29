@@ -10,6 +10,7 @@ namespace Renderer {
 class CubeRenderer {
   public:
     CubeRenderer();
+    CubeRenderer(const CubeRenderer&) = default;
     ~CubeRenderer();
     void DrawCube(Texture2D* texture, const glm::vec3& position) const;
     void SetShader(Shader* shader) { Shader = shader; }

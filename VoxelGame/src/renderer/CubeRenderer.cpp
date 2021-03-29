@@ -9,7 +9,7 @@ Renderer::CubeRenderer::~CubeRenderer() {
     glDeleteVertexArrays(1, &CubeVao);
 }
 
-void Renderer::CubeRenderer::DrawCube(Renderer::Texture2D* texture, const glm::vec3& position) const {
+void Renderer::CubeRenderer::DrawCube(Texture2D* texture, const glm::vec3& position) const {
     // TODO: cache shader and texture binding
     Shader->Use();
     texture->Bind();
