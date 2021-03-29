@@ -23,8 +23,8 @@ Game::~Game() {
 }
 
 void Game::Init() {
-    Camera = std::make_unique<::Camera>(glm::vec3(0.0f, 0.0f, 3.0f));
-    Renderer = std::make_unique<SceneRenderer>(Camera.get());
+    Camera = std::make_unique<Renderer::Camera>(glm::vec3(0.0f, 0.0f, 3.0f));
+    Renderer = std::make_unique<Renderer::SceneRenderer>(Camera.get());
 }
 
 void Game::ProcessInput(float delta) {

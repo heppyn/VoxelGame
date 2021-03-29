@@ -1,7 +1,11 @@
 #pragma once
+#include <vector>
+
 #include "Camera.h"
 #include "CubeRenderer.h"
 
+
+namespace Renderer {
 class SceneRenderer {
   public:
     explicit SceneRenderer(Camera* camera);
@@ -9,5 +13,6 @@ class SceneRenderer {
 
   private:
     Camera* Camera;
-    Renderer::CubeRenderer CubeRenderer{};
+    CubeRenderer CubeRenderer{};
 };
+} // namespace Renderer

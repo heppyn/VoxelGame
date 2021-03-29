@@ -1,10 +1,10 @@
 #include "Texture2D.h"
 
-Texture2D::Texture2D() {
+Renderer::Texture2D::Texture2D() {
     glGenTextures(1, &Id);
 }
 
-void Texture2D::Generate(unsigned int width, unsigned int height, unsigned char* data) {
+void Renderer::Texture2D::Generate(unsigned int width, unsigned int height, unsigned char* data) {
     Width = width;
     Height = height;
 
@@ -22,7 +22,7 @@ void Texture2D::Generate(unsigned int width, unsigned int height, unsigned char*
 }
 
 
-void Texture2D::Bind(unsigned int slot /* = 0 */) const {
+void Renderer::Texture2D::Bind(unsigned int slot /*= 0 */) const {
     glActiveTexture(GL_TEXTURE0 + slot);
     glBindTexture(GL_TEXTURE_2D, Id);
 }

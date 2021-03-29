@@ -7,6 +7,7 @@
 #include <glm/gtc/type_ptr.hpp>
 
 
+namespace Renderer {
 class Shader {
   public:
     // state
@@ -30,3 +31,4 @@ class Shader {
     // checks if compilation or linking failed and if so, print the error logs
     static void CheckCompileErrors(unsigned int object, const std::string& type);
 };
+} // namespace Renderer

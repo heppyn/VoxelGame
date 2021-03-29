@@ -19,7 +19,7 @@ const unsigned int SCR_HEIGHT = 800;
 
 // camera
 Game* game = new Game(SCR_WIDTH, SCR_HEIGHT);
-Camera* camera;
+Renderer::Camera* camera;
 float lastX = SCR_WIDTH / 2.0f;
 float lastY = SCR_HEIGHT / 2.0f;
 bool firstMouse = true;
@@ -69,7 +69,7 @@ int main() {
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    Shader* textureShader = ResourceManager::LoadShader("./res/shaders/Texture.vs", "./res/shaders/Texture.fs", nullptr, "textureShader");
+    Renderer::Shader* textureShader = ResourceManager::LoadShader("./res/shaders/Texture.vs", "./res/shaders/Texture.fs", nullptr, "textureShader");
     ResourceManager::LoadTexture2D("./res/textures/box.png", true, "boxTexture");
     game->Init();
     camera = game->GetCamera();
@@ -84,7 +84,7 @@ int main() {
     while (!glfwWindowShouldClose(window)) {
         // per-frame time logic
         // --------------------
-        float currentFrame = static_cast<float>(glfwGetTime());
+        const float currentFrame = static_cast<float>(glfwGetTime());
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
 
@@ -112,13 +112,13 @@ void ProcessInput(GLFWwindow* window) {
         glfwSetWindowShouldClose(window, true);
 
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-        camera->ProcessKeyboard(CameraMovement::FORWARD, deltaTime);
+        camera->ProcessKeyboard(Renderer::CameraMovement::FORWARD, deltaTime);
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-        camera->ProcessKeyboard(CameraMovement::BACKWARD, deltaTime);
+        camera->ProcessKeyboard(Renderer::CameraMovement::BACKWARD, deltaTime);
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-        camera->ProcessKeyboard(CameraMovement::LEFT, deltaTime);
+        camera->ProcessKeyboard(Renderer::CameraMovement::LEFT, deltaTime);
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-        camera->ProcessKeyboard(CameraMovement::RIGHT, deltaTime);
+        camera->ProcessKeyboard(Renderer::CameraMovement::RIGHT, deltaTime);
 }
 
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes
@@ -139,8 +139,8 @@ void MouseCallback([[maybe_unused]] GLFWwindow* window, double xPos, double yPos
         firstMouse = false;
     }
 
-    float xOffset = static_cast<float>(xPos - lastX);
-    float yOffset = static_cast<float>(lastY - yPos); // reversed since y-coordinates go from bottom to top
+    const float xOffset = static_cast<float>(xPos) - lastX;
+    const float yOffset = lastY - static_cast<float>(yPos); // reversed since y-coordinates go from bottom to top
 
     lastX = static_cast<float>(xPos);
     lastY = static_cast<float>(yPos);

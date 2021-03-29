@@ -6,33 +6,33 @@
 
 #include "stb_image/stb_image.h"
 
-std::map<std::string, std::unique_ptr<Shader>> ResourceManager::Shaders;
-std::map<std::string, std::unique_ptr<Texture2D>> ResourceManager::Textures;
+std::map<std::string, std::unique_ptr<Renderer::Shader>> ResourceManager::Shaders;
+std::map<std::string, std::unique_ptr<Renderer::Texture2D>> ResourceManager::Textures;
 
-Shader* ResourceManager::LoadShader(const char* vShaderFile, const char* fShaderFile, const char* gShaderFile, const std::string& name) {
-    Shaders[name] = std::unique_ptr<Shader>(LoadShaderFromFile(vShaderFile, fShaderFile, gShaderFile));
+Renderer::Shader* ResourceManager::LoadShader(const char* vShaderFile, const char* fShaderFile, const char* gShaderFile, const std::string& name) {
+    Shaders[name] = std::unique_ptr<Renderer::Shader>(LoadShaderFromFile(vShaderFile, fShaderFile, gShaderFile));
     return Shaders[name].get();
 }
 
-Shader* ResourceManager::GetShader(std::string& name) {
+Renderer::Shader* ResourceManager::GetShader(std::string& name) {
     return GetShader(name.c_str());
 }
 
-Shader* ResourceManager::GetShader(const char* name) {
+Renderer::Shader* ResourceManager::GetShader(const char* name) {
     // TODO: check for existence
     return Shaders[name].get();
 }
 
-Texture2D* ResourceManager::LoadTexture2D(const char* file, bool alpha, const std::string& name) {
-    Textures[name] = std::unique_ptr<Texture2D>(LoadTexture2DFromFile(file, alpha));
+Renderer::Texture2D* ResourceManager::LoadTexture2D(const char* file, bool alpha, const std::string& name) {
+    Textures[name] = std::unique_ptr<Renderer::Texture2D>(LoadTexture2DFromFile(file, alpha));
     return Textures[name].get();
 }
 
-Texture2D* ResourceManager::GetTexture2D(std::string& name) {
+Renderer::Texture2D* ResourceManager::GetTexture2D(std::string& name) {
     return GetTexture2D(name.c_str());
 }
 
-Texture2D* ResourceManager::GetTexture2D(const char* name) {
+Renderer::Texture2D* ResourceManager::GetTexture2D(const char* name) {
     // TODO: check for existence
     return Textures[name].get();
 }
@@ -46,7 +46,7 @@ void ResourceManager::Clear() {
     }
 }
 
-Shader* ResourceManager::LoadShaderFromFile(const char* vShaderFile, const char* fShaderFile, const char* gShaderFile /*= nullptr*/) {
+Renderer::Shader* ResourceManager::LoadShaderFromFile(const char* vShaderFile, const char* fShaderFile, const char* gShaderFile /*= nullptr*/) {
     // 1. retrieve the vertex/fragment source code from filePath
     std::string vertexCode;
     std::string fragmentCode;
@@ -74,7 +74,7 @@ Shader* ResourceManager::LoadShaderFromFile(const char* vShaderFile, const char*
             geometryCode = gShaderStream.str();
         }
     }
-    catch (std::exception) {
+    catch (std::exception&) {
         // TODO: handle failed load
         std::cout << "ERROR::SHADER: Failed to read shader files" << std::endl;
     }
@@ -82,14 +82,14 @@ Shader* ResourceManager::LoadShaderFromFile(const char* vShaderFile, const char*
     const char* fShaderCode = fragmentCode.c_str();
     const char* gShaderCode = geometryCode.c_str();
     // 2. now create shader object from source code
-    Shader* shader = new Shader;
+    auto* shader = new Renderer::Shader;
     shader->Compile(vShaderCode, fShaderCode, gShaderFile != nullptr ? gShaderCode : nullptr);
     return shader;
 }
 
-Texture2D* ResourceManager::LoadTexture2DFromFile(const char* file, bool alpha) {
+Renderer::Texture2D* ResourceManager::LoadTexture2DFromFile(const char* file, bool alpha) {
     // create texture object
-    Texture2D* texture = new Texture2D;
+    auto* texture = new Renderer::Texture2D;
     if (alpha) {
         texture->InternalFormat = GL_RGBA;
         texture->ImageFormat = GL_RGBA;

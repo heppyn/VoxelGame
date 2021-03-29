@@ -3,6 +3,7 @@
 #include <glad/glad.h>
 
 
+namespace Renderer {
 class Texture2D {
   public:
     unsigned int Id{ 0 };
@@ -19,3 +20,4 @@ class Texture2D {
     void Generate(unsigned int width, unsigned int height, unsigned char* data);
     void Bind(unsigned int slot = 0) const;
 };
+} // namespace Renderer

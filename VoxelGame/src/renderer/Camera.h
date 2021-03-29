@@ -1,13 +1,10 @@
 #pragma once
-#include "glm/gtx/associated_min_max.hpp"
-#include "glm/gtx/associated_min_max.hpp"
-
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-#include <vector>
 
+namespace Renderer {
 // Defines several possible options for camera movement. Used as abstraction to stay away from window-system specific input methods
 enum class CameraMovement {
     FORWARD,
@@ -34,12 +31,12 @@ class Camera {
     glm::vec3 Right;
     glm::vec3 WorldUp;
     // euler Angles
-    float Yaw{YAW};
-    float Pitch{PITCH};
+    float Yaw{ YAW };
+    float Pitch{ PITCH };
     // camera options
-    float MovementSpeed{SPEED};
-    float MouseSensitivity{SENSITIVITY};
-    float Zoom{ZOOM};
+    float MovementSpeed{ SPEED };
+    float MouseSensitivity{ SENSITIVITY };
+    float Zoom{ ZOOM };
 
     // constructor with vectors
     explicit Camera(glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f), float yaw = YAW, float pitch = PITCH);
@@ -62,3 +59,4 @@ class Camera {
     // calculates the front vector from the Camera's (updated) Euler Angles
     void UpdateCameraVectors();
 };
+} // namespace Renderer

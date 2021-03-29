@@ -16,10 +16,10 @@ class Game {
     void Update(float delta);
     void Render() const;
 
-    [[nodiscard]] Camera* GetCamera() const { return Camera.get(); }
+    [[nodiscard]] Renderer::Camera* GetCamera() const { return Camera.get(); }
 
   private:
-    std::unique_ptr<Camera> Camera{ nullptr };
-    std::unique_ptr<SceneRenderer> Renderer{ nullptr };
+    std::unique_ptr<Renderer::Camera> Camera{ nullptr };
+    std::unique_ptr<Renderer::SceneRenderer> Renderer{ nullptr };
     std::vector<glm::vec3> Scene{};
 };
