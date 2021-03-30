@@ -61,6 +61,21 @@ void Renderer::Camera::ProcessMouseScroll(float yOffset) {
         Zoom = 45.0f;
 }
 
+void Renderer::Camera::Move(float delta, float x, float y, float z) {
+    if (x > 0) {
+        ProcessKeyboard(CameraMovement::RIGHT, delta);
+    }
+    else if (x < 0) {
+        ProcessKeyboard(CameraMovement::LEFT, delta);
+    }
+    if (y > 0) {
+        ProcessKeyboard(CameraMovement::FORWARD, delta);
+    }
+    else if (y < 0) {
+        ProcessKeyboard(CameraMovement::BACKWARD, delta);
+    }
+}
+
 void Renderer::Camera::UpdateCameraVectors() {
     // calculate the new Front vector
     glm::vec3 front;

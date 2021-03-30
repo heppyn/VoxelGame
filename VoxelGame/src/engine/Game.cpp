@@ -21,9 +21,11 @@ void Game::Init() {
     Renderer = std::make_unique<Renderer::SceneRenderer>(Camera.get());
 
     InitScene();
+    InputHandler->Init(Camera.get());
 }
 
 void Game::ProcessInput(float delta) {
+    InputHandler->ProcessInput(delta);
 }
 
 void Game::Update(float delta) {

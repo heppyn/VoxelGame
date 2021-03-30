@@ -10,6 +10,7 @@ class WindowManagerGl {
     static unsigned int Height;
 
     static GLFWwindow* CreateMainWindow();
+    static void CloseMainWindow();
 
 private:
     // singleton

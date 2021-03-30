@@ -36,3 +36,7 @@ GLFWwindow* WindowManagerGl::CreateMainWindow() {
 
     return MainWindow;
 }
+
+void WindowManagerGl::CloseMainWindow() {
+    glfwSetWindowShouldClose(MainWindow, true);
+}

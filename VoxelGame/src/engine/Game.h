@@ -1,14 +1,13 @@
 #pragma once
 #include <memory>
 
-
 #include "GameObject.h"
 #include "renderer/Camera.h"
 #include "renderer/SceneRenderer.h"
+#include "open_gl/InputHandlerGl.h"
 
 class Game {
   public:
-    bool Keys[1024];
     unsigned int Width, Height;
 
     Game(unsigned int width, unsigned int height);
@@ -24,6 +23,8 @@ class Game {
     std::unique_ptr<Renderer::Camera> Camera{ nullptr };
     std::unique_ptr<Renderer::SceneRenderer> Renderer{ nullptr };
     std::vector<GameObject> Scene{};
+
+    std::unique_ptr<Input::InputHandler> InputHandler{ new Input::InputHandlerGl };
 
     void InitScene();
 };
