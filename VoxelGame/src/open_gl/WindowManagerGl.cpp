@@ -40,3 +40,12 @@ GLFWwindow* WindowManagerGl::CreateMainWindow() {
 void WindowManagerGl::CloseMainWindow() {
     glfwSetWindowShouldClose(MainWindow, true);
 }
+
+void WindowManagerGl::FramebufferSizeCallback(GLFWwindow* window, int width, int height) {
+    // make sure the viewport matches the new window dimensions
+    // TODO: implement observer to update
+    // TODO: more windows?
+    Width = static_cast<unsigned int>(width);
+    Height = static_cast<unsigned int>(height);
+    glViewport(0, 0, width, height);
+}

@@ -8,7 +8,6 @@
 
 #include <iostream>
 
-void FramebufferSizeCallback(GLFWwindow* window, int width, int height);
 void MouseCallback(GLFWwindow* window, double xPos, double yPos);
 void ScrollCallback(GLFWwindow* window, double xOffset, double yOffset);
 
@@ -17,7 +16,7 @@ const unsigned int SCR_WIDTH = 1000;
 const unsigned int SCR_HEIGHT = 800;
 
 // camera
-Game* game = new Game(SCR_WIDTH, SCR_HEIGHT);
+Game* game = new Game;
 Renderer::Camera* camera;
 float lastX = SCR_WIDTH / 2.0f;
 float lastY = SCR_HEIGHT / 2.0f;
@@ -30,7 +29,7 @@ float lastFrame = 0.0f;
 int main() {
     auto* window = WindowManagerGl::CreateMainWindow();
 
-    glfwSetFramebufferSizeCallback(window, FramebufferSizeCallback);
+    glfwSetFramebufferSizeCallback(window, WindowManagerGl::FramebufferSizeCallback);
     glfwSetCursorPosCallback(window, MouseCallback);
     glfwSetScrollCallback(window, ScrollCallback);
 
@@ -61,15 +60,6 @@ int main() {
     glfwTerminate();
     return 0;
 }
-
-// glfw: whenever the window size changed (by OS or user resize) this callback function executes
-// ---------------------------------------------------------------------------------------------
-void FramebufferSizeCallback([[maybe_unused]] GLFWwindow* window, int width, int height) {
-    // make sure the viewport matches the new window dimensions; note that width and
-    // height will be significantly larger than specified on retina displays.
-    glViewport(0, 0, width, height);
-}
-
 
 // glfw: whenever the mouse moves, this callback is called
 // -------------------------------------------------------

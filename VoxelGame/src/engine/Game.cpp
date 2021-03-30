@@ -1,10 +1,8 @@
 #include "Game.h"
 
 #include "ResourceManager.h"
+#include "../open_gl/WindowManagerGl.h"
 
-Game::Game(unsigned width, unsigned height)
-  : Width(width), Height(height) {
-}
 
 Game::~Game() {
     ResourceManager::Clear();
@@ -32,7 +30,15 @@ void Game::Update(float delta) {
 }
 
 void Game::Render() const {
-    Renderer->Render(Scene, Width, Height);
+    Renderer->Render(Scene, Width(), Height());
+}
+
+unsigned Game::Width() const {
+    return WindowManagerGl::Width;
+}
+
+unsigned Game::Height() const {
+    return WindowManagerGl::Height;
 }
 
 void Game::InitScene() {

@@ -8,15 +8,15 @@
 
 class Game {
   public:
-    unsigned int Width, Height;
-
-    Game(unsigned int width, unsigned int height);
+    Game() = default;
     ~Game();
     void Init();
     void ProcessInput(float delta);
     void Update(float delta);
     void Render() const;
 
+    [[nodiscard]] unsigned int Width() const;
+    [[nodiscard]] unsigned int Height() const;
     [[nodiscard]] Renderer::Camera* GetCamera() const { return Camera.get(); }
 
   private:

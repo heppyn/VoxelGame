@@ -11,8 +11,15 @@ class WindowManagerGl {
 
     static GLFWwindow* CreateMainWindow();
     static void CloseMainWindow();
+    /**
+     * \brief glfw: whenever the window size changed (by OS or user resize) this callback function executes
+     * \param window window which size is changed
+     * \param width new width
+     * \param height new height
+     */
+    static void FramebufferSizeCallback([[maybe_unused]] GLFWwindow* window, int width, int height);
 
-private:
+  private:
     // singleton
     WindowManagerGl() = default;
 };
