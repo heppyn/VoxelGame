@@ -12,6 +12,7 @@ class GameObject {
   public:
     GameObject() = default;
     GameObject(glm::vec3 position, Renderer::Texture2D* texture);
+    virtual ~GameObject() = default;
 
     virtual void Draw(const Renderer::CubeRenderer& renderer) const;
 };

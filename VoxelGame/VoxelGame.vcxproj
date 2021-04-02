@@ -153,6 +153,7 @@
   <ItemGroup>
     <ClCompile Include="src\engine\Commands.cpp" />
     <ClCompile Include="src\engine\InputHandler.cpp" />
+    <ClCompile Include="src\game\TerrainGen.cpp" />
     <ClCompile Include="src\open_gl\InputHandlerGl.cpp" />
     <ClCompile Include="src\open_gl\WindowManagerGl.cpp" />
     <ClCompile Include="src\engine\GameObject.cpp" />
@@ -319,6 +320,7 @@
   <ItemGroup>
     <ClInclude Include="src\engine\Commands.h" />
     <ClInclude Include="src\engine\InputHandler.h" />
+    <ClInclude Include="src\game\TerrainGen.h" />
     <ClInclude Include="src\open_gl\InputHandlerGl.h" />
     <ClInclude Include="src\open_gl\WindowManagerGl.h" />
     <ClInclude Include="src\engine\Game.h" />

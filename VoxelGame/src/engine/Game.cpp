@@ -2,6 +2,7 @@
 
 #include "ResourceManager.h"
 #include "../open_gl/WindowManagerGl.h"
+#include "../game/TerrainGen.h"
 
 
 Game::~Game() {
@@ -42,16 +43,12 @@ unsigned Game::Height() const {
 }
 
 void Game::InitScene() {
-    Scene = {
-        GameObject(glm::vec3(2.0f, 5.0f, -15.0f), ResourceManager::GetTexture2D("boxTexture")),
-        GameObject(glm::vec3(-1.5f, -2.2f, -2.5f), ResourceManager::GetTexture2D("boxTexture")),
-        GameObject(glm::vec3(-3.8f, -2.0f, -12.3f), ResourceManager::GetTexture2D("boxTexture")),
-        GameObject(glm::vec3(2.4f, -0.4f, -3.5f), ResourceManager::GetTexture2D("boxTexture")),
-        GameObject(glm::vec3(-1.7f, 3.0f, -7.5f), ResourceManager::GetTexture2D("boxTexture")),
-        GameObject(glm::vec3(1.3f, -2.0f, -2.5f), ResourceManager::GetTexture2D("boxTexture")),
-        GameObject(glm::vec3(1.5f, 2.0f, -2.5f), ResourceManager::GetTexture2D("boxTexture")),
-        GameObject(glm::vec3(0.0f, 0.0f, 0.0f), ResourceManager::GetTexture2D("boxTexture")),
-        GameObject(glm::vec3(1.5f, 0.2f, -1.5f), ResourceManager::GetTexture2D("boxTexture")),
-        GameObject(glm::vec3(-1.3f, 1.0f, -1.5f), ResourceManager::GetTexture2D("boxTexture")),
-    };
+    const auto size = Terrain::TerrainGen::GetChunkSize();
+
+    for (unsigned int i = 0; i < 16; ++i) {
+        for (unsigned int j = 0; j < 16; ++j) {
+            auto tmp = Terrain::TerrainGen::GenerateChunk(glm::vec2(i * size, j * size));
+            Scene.insert(Scene.end(), tmp.begin(), tmp.end());
+        }
+    }
 }

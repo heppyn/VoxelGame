@@ -84,6 +84,9 @@
     <ClCompile Include="src\open_gl\InputHandlerGl.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\game\TerrainGen.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\vendor\glm\detail\func_common.inl">
@@ -1406,6 +1409,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\open_gl\InputHandlerGl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\game\TerrainGen.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
