@@ -17,7 +17,7 @@ class Command {
 class NullCommand : public Command {
   public:
     NullCommand() : NullCommand(nullptr) {}
-    explicit NullCommand(Renderer::Camera* actor) : Command(actor) {}
+    explicit NullCommand(Renderer::Camera*) : Command(nullptr) {}
     void Execute(float) override {}
 };
 
@@ -40,5 +40,31 @@ class MoveRightCommand : public Command {
   public:
     explicit MoveRightCommand(Renderer::Camera* actor) : Command(actor) {}
     void Execute(float delta) override;
+};
+
+class MouseCommand {
+  protected:
+    // TODO: change to game object
+    Renderer::Camera* Actor;
+    bool FirstMouse{ true };
+    float LastX{ 0 };
+    float LastY{ 0 };
+
+  public:
+    explicit MouseCommand(Renderer::Camera* actor) : Actor(actor) {}
+    virtual ~MouseCommand() = default;
+
+    virtual void ExecuteMove(float xPos, float yPos);
+    virtual void ExecuteScroll(float yOffset);
+};
+
+class MouseCommandNull : public MouseCommand
+{
+public:
+    MouseCommandNull() : MouseCommandNull(nullptr) {}
+    explicit MouseCommandNull(Renderer::Camera* actor) : MouseCommand(actor) {}
+
+    void ExecuteMove(float, float) override {}
+    void ExecuteScroll(float) override {}
 };
 } // namespace Commands

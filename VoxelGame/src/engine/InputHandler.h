@@ -19,12 +19,13 @@ namespace Keys {
 class InputHandler {
   protected:
     std::array<std::unique_ptr<Commands::Command>, Keys::Count> Commands;
+    std::unique_ptr<Commands::MouseCommand> MouseCommand;
 
 public:
     InputHandler();
     virtual ~InputHandler() = default;
 
-    void Init(Renderer::Camera* actor);
+    virtual void Init(Renderer::Camera* actor);
     virtual void ProcessInput(float delta) const = 0;
 };
 } // namespace Input

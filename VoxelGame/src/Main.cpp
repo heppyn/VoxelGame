@@ -8,9 +8,6 @@
 
 #include <iostream>
 
-void MouseCallback(GLFWwindow* window, double xPos, double yPos);
-void ScrollCallback(GLFWwindow* window, double xOffset, double yOffset);
-
 // settings
 const unsigned int SCR_WIDTH = 1000;
 const unsigned int SCR_HEIGHT = 800;
@@ -28,10 +25,7 @@ float lastFrame = 0.0f;
 
 int main() {
     auto* window = WindowManagerGl::CreateMainWindow();
-
     glfwSetFramebufferSizeCallback(window, WindowManagerGl::FramebufferSizeCallback);
-    glfwSetCursorPosCallback(window, MouseCallback);
-    glfwSetScrollCallback(window, ScrollCallback);
 
     // configure global opengl state
     // -----------------------------
@@ -59,28 +53,4 @@ int main() {
     delete game;
     glfwTerminate();
     return 0;
-}
-
-// glfw: whenever the mouse moves, this callback is called
-// -------------------------------------------------------
-void MouseCallback([[maybe_unused]] GLFWwindow* window, double xPos, double yPos) {
-    if (firstMouse) {
-        lastX = static_cast<float>(xPos);
-        lastY = static_cast<float>(yPos);
-        firstMouse = false;
-    }
-
-    const float xOffset = static_cast<float>(xPos) - lastX;
-    const float yOffset = lastY - static_cast<float>(yPos); // reversed since y-coordinates go from bottom to top
-
-    lastX = static_cast<float>(xPos);
-    lastY = static_cast<float>(yPos);
-
-    camera->ProcessMouseMovement(xOffset, yOffset);
-}
-
-// glfw: whenever the mouse scroll wheel scrolls, this callback is called
-// ----------------------------------------------------------------------
-void ScrollCallback([[maybe_unused]] GLFWwindow* window, [[maybe_unused]] double xOffset, double yOffset) {
-    camera->ProcessMouseScroll(static_cast<float>(yOffset));
 }

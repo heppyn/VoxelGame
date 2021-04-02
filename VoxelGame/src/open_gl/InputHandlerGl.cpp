@@ -1,8 +1,17 @@
 #include "InputHandlerGl.h"
 
-#include <GLFW/glfw3.h>
-
 #include "WindowManagerGl.h"
+
+
+namespace Input::Detail {
+void CursorPosCallback(GLFWwindow*, double xPos, double yPos) {
+    Details::currentHandler->ProcessMouse(static_cast<float>(xPos), static_cast<float>(yPos));
+}
+
+void ScrollCallback(GLFWwindow*, double, double yOffset) {
+    Details::currentHandler->ProcessMouseScroll(static_cast<float>(yOffset));
+}
+} // namespace Input::Detail
 
 void Input::InputHandlerGl::ProcessInput(float delta) const {
     auto* window = WindowManagerGl::MainWindow;
@@ -24,4 +33,23 @@ void Input::InputHandlerGl::ProcessInput(float delta) const {
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
         Commands[Keys::D]->Execute(delta);
     }
+}
+
+void Input::InputHandlerGl::ProcessMouse(float xPos, float yPos) const {
+    MouseCommand->ExecuteMove(xPos, yPos);
+}
+
+void Input::InputHandlerGl::ProcessMouseScroll(float yOffset) const {
+    MouseCommand->ExecuteScroll(yOffset);
+}
+
+void Input::InputHandlerGl::Init(Renderer::Camera* actor) {
+    InputHandler::Init(actor);
+    SetCallBacks();
+}
+
+void Input::InputHandlerGl::SetCallBacks() {
+    Details::currentHandler = this;
+    WindowManagerGl::SetCursorPosCallback(Detail::CursorPosCallback);
+    WindowManagerGl::SetScrollCallback(Detail::ScrollCallback);
 }

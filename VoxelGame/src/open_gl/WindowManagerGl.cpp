@@ -2,6 +2,7 @@
 
 #include <iostream>
 
+
 GLFWwindow* WindowManagerGl::MainWindow = nullptr;
 unsigned int WindowManagerGl::Width = 1000;
 unsigned int WindowManagerGl::Height = 800;
@@ -39,6 +40,14 @@ GLFWwindow* WindowManagerGl::CreateMainWindow() {
 
 void WindowManagerGl::CloseMainWindow() {
     glfwSetWindowShouldClose(MainWindow, true);
+}
+
+void WindowManagerGl::SetCursorPosCallback(GLFWcursorposfun callback) {
+    glfwSetCursorPosCallback(MainWindow, callback);
+}
+
+void WindowManagerGl::SetScrollCallback(GLFWcursorposfun callback) {
+    glfwSetScrollCallback(MainWindow, callback);
 }
 
 void WindowManagerGl::FramebufferSizeCallback(GLFWwindow* window, int width, int height) {
