@@ -160,6 +160,8 @@
     <ClCompile Include="src\renderer\CubeRenderer.cpp" />
     <ClCompile Include="src\engine\Game.cpp" />
     <ClCompile Include="src\engine\ResourceManager.cpp" />
+    <ClCompile Include="src\renderer\Debug.cpp" />
+    <ClCompile Include="src\renderer\Mesh.cpp" />
     <ClCompile Include="src\renderer\SceneRenderer.cpp" />
     <ClCompile Include="src\renderer\Shader.cpp" />
     <ClCompile Include="src\renderer\Camera.cpp" />
@@ -178,6 +180,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include=".clang-format" />
+    <None Include="res\shaders\BatchTexture.frag" />
+    <None Include="res\shaders\BatchTexture.vert" />
+    <None Include="res\shaders\Mesh.frag" />
+    <None Include="res\shaders\Mesh.vert" />
     <None Include="res\shaders\Texture.fs" />
     <None Include="res\shaders\Texture.vs" />
     <None Include="src\vendor\glm\detail\func_common.inl" />
@@ -327,6 +333,8 @@
     <ClInclude Include="src\engine\GameObject.h" />
     <ClInclude Include="src\renderer\CubeRenderer.h" />
     <ClInclude Include="src\engine\ResourceManager.h" />
+    <ClInclude Include="src\renderer\Debug.h" />
+    <ClInclude Include="src\renderer\Mesh.h" />
     <ClInclude Include="src\renderer\SceneRenderer.h" />
     <ClInclude Include="src\renderer\Shader.h" />
     <ClInclude Include="src\renderer\Camera.h" />

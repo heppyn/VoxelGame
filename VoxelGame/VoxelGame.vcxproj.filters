@@ -87,6 +87,12 @@
     <ClCompile Include="src\game\TerrainGen.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\renderer\Debug.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\renderer\Mesh.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\vendor\glm\detail\func_common.inl">
@@ -500,6 +506,10 @@
     <None Include=".clang-format" />
     <None Include="res\shaders\Texture.vs" />
     <None Include="res\shaders\Texture.fs" />
+    <None Include="res\shaders\BatchTexture.vert" />
+    <None Include="res\shaders\BatchTexture.frag" />
+    <None Include="res\shaders\Mesh.vert" />
+    <None Include="res\shaders\Mesh.frag" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\vendor\stb_image\stb_image.h">
@@ -1412,6 +1422,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\game\TerrainGen.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\renderer\Debug.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\renderer\Mesh.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

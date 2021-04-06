@@ -1,5 +1,6 @@
 #pragma once
 
+#include <string>
 #include <glad/glad.h>
 
 
@@ -7,6 +8,9 @@ namespace Renderer {
 class Texture2D {
   public:
     unsigned int Id{ 0 };
+    // texture_diffuse, texture_specular, texture_normal, texture_height
+    // default is diffuse
+    std::string Type{ "texture_diffuse" };
     unsigned int Width{ 0 }, Height{ 0 };
     unsigned int InternalFormat{ GL_RGB };
     unsigned int ImageFormat{ GL_RGB };

@@ -11,8 +11,11 @@ Game::~Game() {
 
 void Game::Init() {
     auto* textureShader = ResourceManager::LoadShader("./res/shaders/Texture.vs", "./res/shaders/Texture.fs", nullptr, "textureShader");
+    auto* textureBatchShader = ResourceManager::LoadShader("./res/shaders/BatchTexture.vert", "./res/shaders/BatchTexture.frag", nullptr, "tBatchShader");
+    ResourceManager::LoadShader("./res/shaders/Mesh.vert", "./res/shaders/Mesh.frag", nullptr, "meshShader");
     // texture is loaded from texture unit 0
-    textureShader->SetInteger("texture1", 0);
+    textureShader->SetInteger("texture1", 0, true);
+    textureBatchShader->SetInteger("texture1", 0, true);
 
     ResourceManager::LoadTexture2D("./res/textures/box.png", true, "boxTexture");
 
@@ -23,7 +26,7 @@ void Game::Init() {
     InputHandler->Init(Camera.get());
 }
 
-void Game::ProcessInput(float delta) {
+void Game::ProcessInput(float delta) const {
     InputHandler->ProcessInput(delta);
 }
 
@@ -43,11 +46,12 @@ unsigned Game::Height() const {
 }
 
 void Game::InitScene() {
-    const auto size = Terrain::TerrainGen::GetChunkSize();
+    const auto size = static_cast<int>(Terrain::TerrainGen::GetChunkSize());
 
-    for (unsigned int i = 0; i < 16; ++i) {
-        for (unsigned int j = 0; j < 16; ++j) {
-            auto tmp = Terrain::TerrainGen::GenerateChunk(glm::vec2(i * size, j * size));
+    for (int i = -4; i < 4; ++i) {
+        for (int j = -4; j < 4; ++j) {
+            auto tmp = Terrain::TerrainGen::GenerateChunk(
+              glm::vec2(static_cast<float>(i * size), static_cast<float>(j * size)));
             Scene.insert(Scene.end(), tmp.begin(), tmp.end());
         }
     }

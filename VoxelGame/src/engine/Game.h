@@ -11,7 +11,7 @@ class Game {
     Game() = default;
     ~Game();
     void Init();
-    void ProcessInput(float delta);
+    void ProcessInput(float delta) const;
     void Update(float delta);
     void Render() const;
 

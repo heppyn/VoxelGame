@@ -7,6 +7,7 @@ class GameObject {
   private:
     glm::vec3 Position{ 0 };
     // TODO: set default "missing texture"
+    Renderer::Mesh Mesh{};
     Renderer::Texture2D* Texture{ nullptr };
 
   public:
@@ -15,4 +16,6 @@ class GameObject {
     virtual ~GameObject() = default;
 
     virtual void Draw(const Renderer::CubeRenderer& renderer) const;
+    [[nodiscard]] const glm::vec3& GetPosition() const { return Position; }
+    [[nodiscard]] Renderer::Texture2D* GetTexture() const { return Texture; }
 };
