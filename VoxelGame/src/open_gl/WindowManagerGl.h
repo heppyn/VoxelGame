@@ -9,7 +9,7 @@ class WindowManagerGl {
     static unsigned int Width;
     static unsigned int Height;
 
-    static GLFWwindow* CreateMainWindow();
+    static GLFWwindow* CreateMainWindow(bool debug = false);
     static void CloseMainWindow();
     static void SetCursorPosCallback(GLFWcursorposfun callback);
     static void SetScrollCallback(GLFWcursorposfun callback);

@@ -2,17 +2,23 @@
 
 #include <iostream>
 
+#include "renderer/Debug.h"
+
+//#include "../renderer/Debug.h"
+
 
 GLFWwindow* WindowManagerGl::MainWindow = nullptr;
 unsigned int WindowManagerGl::Width = 1000;
 unsigned int WindowManagerGl::Height = 800;
 
-GLFWwindow* WindowManagerGl::CreateMainWindow() {
+GLFWwindow* WindowManagerGl::CreateMainWindow(bool debug /*= false*/) {
     // glfw: initialize and configure
     glfwInit();
+    // debug is supported from 4.3
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, debug);
 
 #ifdef __APPLE__
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
@@ -33,6 +39,19 @@ GLFWwindow* WindowManagerGl::CreateMainWindow() {
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
         std::cout << "Failed to initialize GLAD" << std::endl;
         return nullptr;
+    }
+
+    if (debug) {
+        int flags;
+        glGetIntegerv(GL_CONTEXT_FLAGS, &flags);
+        if (flags & GL_CONTEXT_FLAG_DEBUG_BIT) {
+            // initialize debug output
+            glEnable(GL_DEBUG_OUTPUT);
+            glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+            glDebugMessageCallback(GlDebugOutput, nullptr);
+            glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, nullptr, GL_TRUE);
+            std::cout << "Debug initialized\n";
+        }
     }
 
     return MainWindow;
