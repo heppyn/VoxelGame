@@ -17,14 +17,11 @@ class CubeRenderer {
     void DrawCubesBatched(Texture2D* texture, unsigned int batchSize) const;
     void SetShader(Shader* shader) { Shader = shader; }
 
-    static Mesh GetCubeMesh();
+    static Mesh GetCubeMesh(bool batched = false);
 
   private:
     Shader* Shader{ nullptr };
     unsigned int CubeVao{ 0 };
     unsigned int CubeVbo{ 0 };
-
-    void InitRenderData();
-    void InitBatchRenderData() const;
 };
 } // namespace Renderer

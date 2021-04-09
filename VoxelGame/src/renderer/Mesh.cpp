@@ -9,11 +9,11 @@ Renderer::Vertex::Vertex(float px, float py, float pz, float nx, float ny, float
     TexCoords(tx, ty) {
 }
 
-Renderer::Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned> indices, std::vector<Texture2D> textures)
+Renderer::Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned> indices, std::vector<Texture2D> textures, bool batched /*= false*/)
   : Vertices(std::move(vertices)),
     Indices(std::move(indices)),
     Textures(std::move(textures)) {
-    SetupMesh();
+    SetupMesh(batched);
 }
 
 void Renderer::Mesh::Draw(Shader& shader) const {
@@ -52,7 +52,7 @@ void Renderer::Mesh::Draw(Shader& shader) const {
     glActiveTexture(GL_TEXTURE0);
 }
 
-void Renderer::Mesh::SetupMesh() {
+void Renderer::Mesh::SetupMesh(bool batched) {
     glGenVertexArrays(1, &Vao);
     glGenBuffers(1, &Vbo);
     glGenBuffers(1, &Ebo);
@@ -75,6 +75,22 @@ void Renderer::Mesh::SetupMesh() {
     // vertex texture coords
     glEnableVertexAttribArray(2);
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, TexCoords));
+
+    if (batched) {
+        glEnableVertexAttribArray(3);
+        glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)0);
+        glEnableVertexAttribArray(4);
+        glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(sizeof(glm::vec4)));
+        glEnableVertexAttribArray(5);
+        glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(2 * sizeof(glm::vec4)));
+        glEnableVertexAttribArray(6);
+        glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(3 * sizeof(glm::vec4)));
+
+        glVertexAttribDivisor(3, 1);
+        glVertexAttribDivisor(4, 1);
+        glVertexAttribDivisor(5, 1);
+        glVertexAttribDivisor(6, 1);
+    }
 
     glBindVertexArray(0);
 }

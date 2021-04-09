@@ -1,8 +1,8 @@
 #include "GameObject.h"
 
-GameObject::GameObject(glm::vec3 position, Renderer::Texture2D* texture)
+GameObject::GameObject(glm::vec3 position, Renderer::Texture2D* texture, bool batched /*= false*/)
   : Position(position),
-    Mesh(Renderer::CubeRenderer::GetCubeMesh()) {
+    Mesh(Renderer::CubeRenderer::GetCubeMesh(batched)) {
     Mesh.Textures.push_back(*texture);
 }
 

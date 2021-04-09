@@ -48,8 +48,8 @@ unsigned Game::Height() const {
 void Game::InitScene() {
     const auto size = static_cast<int>(Terrain::TerrainGen::GetChunkSize());
 
-    for (int i = -4; i < 4; ++i) {
-        for (int j = -4; j < 4; ++j) {
+    for (int i = -2; i < 2; ++i) {
+        for (int j = -2; j < 2; ++j) {
             auto tmp = Terrain::TerrainGen::GenerateChunk(
               glm::vec2(static_cast<float>(i * size), static_cast<float>(j * size)));
             Scene.insert(Scene.end(), tmp.begin(), tmp.end());

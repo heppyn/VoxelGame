@@ -11,7 +11,8 @@ std::vector<GameObject> Terrain::TerrainGen::GenerateChunk(const glm::vec2& posi
         for (unsigned int j = 0; j < ChunkSize; ++j) {
             res.emplace_back(
               glm::vec3(position.x + static_cast<float>(i), 0.0f, position.y + static_cast<float>(j)),
-              ResourceManager::GetTexture2D("boxTexture"));
+              ResourceManager::GetTexture2D("boxTexture"),
+              true);
         }
     }
 

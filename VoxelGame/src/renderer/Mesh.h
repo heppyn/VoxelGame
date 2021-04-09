@@ -30,12 +30,12 @@ class Mesh {
     std::vector<Texture2D> Textures{};
 
     Mesh() = default;
-    Mesh(std::vector<Vertex> vertices, std::vector<unsigned> indices, std::vector<Texture2D> textures);
+    Mesh(std::vector<Vertex> vertices, std::vector<unsigned> indices, std::vector<Texture2D> textures, bool batched = false);
     void Draw(Shader& shader) const;
 
   private:
     unsigned Vao{ 0 }, Vbo{ 0 }, Ebo{ 0 };
 
-    void SetupMesh();
+    void SetupMesh(bool batched);
 };
 } // namespace Renderer
