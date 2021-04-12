@@ -8,10 +8,10 @@ Renderer::SceneRenderer::SceneRenderer(Renderer::Camera* camera)
     CubeRenderer.SetShader(ResourceManager::GetShader("textureShader"));
 }
 
-void Renderer::SceneRenderer::Render(const std::vector<GameObject>& objects, unsigned width, unsigned height) {
+void Renderer::SceneRenderer::Render(const Scene& scene, unsigned width, unsigned height) {
     if (ModelMat.empty()) {
         // TODO: check for change in terrain
-        CalculateModelMat(objects);
+        CalculateModelMat(scene.GetObjects());
     }
     // TODO: disable this for rendering multiple scenes
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
@@ -19,24 +19,35 @@ void Renderer::SceneRenderer::Render(const std::vector<GameObject>& objects, uns
 
     //auto* shader = ResourceManager::GetShader("tBatchShader");
     //auto* shader = ResourceManager::GetShader("textureShader");
-    auto* shader = ResourceManager::GetShader("meshShader");
-    // TODO: set matrices in uniform block for all shaders
-    // camera may have moved, set new matrices
-    shader->SetMatrix4("view", Camera->GetViewMatrix(), true);
-    const glm::mat4 projection = glm::perspective(
-      glm::radians(Camera->Zoom),
-      static_cast<float>(width) / static_cast<float>(height),
-      0.1f,
-      100.0f);
-    shader->SetMatrix4("projection", projection);
+    std::vector<Shader*> shaders = {
+        ResourceManager::GetShader("meshShader"),
+        ResourceManager::GetShader("light"),
+    };
+    for (auto *shader : shaders) {
+        // TODO: set matrices in uniform block for all shaders
+        // camera may have moved, set new matrices
+        shader->SetMatrix4("view", Camera->GetViewMatrix(), true);
+        const glm::mat4 projection = glm::perspective(
+          glm::radians(Camera->Zoom),
+          static_cast<float>(width) / static_cast<float>(height),
+          0.1f,
+          100.0f);
+        shader->SetMatrix4("projection", projection);
+        //shader->SetVector3f("light_color", 1.0f, 1.0f, 1.0f);
+        shader->SetVector3f("light_color", 0.5f, 0.5f, 0.5f);
+    }
 
-    CubeRenderer.SetShader(shader);
+    CubeRenderer.SetShader(shaders[1]);
     //CubeRenderer.DrawCubesBatched(objects.front().GetTexture(), ModelMat.size());
 
     // render one object at a time
-    for (const auto& o : objects) {
+    for (const auto& o : scene.GetObjects()) {
         o.Draw(CubeRenderer);
     }
+
+    // draw light separately
+    CubeRenderer.SetShader(shaders[0]);
+    scene.GetLights().front().Draw(CubeRenderer);
 }
 
 void Renderer::SceneRenderer::CalculateModelMat(const std::vector<GameObject>& objects) {

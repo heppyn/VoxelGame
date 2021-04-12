@@ -93,6 +93,9 @@
     <ClCompile Include="src\renderer\Mesh.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\engine\Scene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\vendor\glm\detail\func_common.inl">
@@ -511,6 +514,8 @@
     <None Include="res\shaders\Mesh.vert" />
     <None Include="res\shaders\Mesh.frag" />
     <None Include="res\shaders\meshBatch.vert" />
+    <None Include="res\shaders\Light.vert" />
+    <None Include="res\shaders\Light.frag" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\vendor\stb_image\stb_image.h">
@@ -1431,12 +1436,18 @@
     <ClInclude Include="src\renderer\Mesh.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\engine\Scene.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\textures\doge.png">
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="res\textures\box.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\white.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

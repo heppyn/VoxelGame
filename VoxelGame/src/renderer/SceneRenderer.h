@@ -4,6 +4,7 @@
 #include "Camera.h"
 #include "CubeRenderer.h"
 #include "engine/GameObject.h"
+#include "engine/Scene.h"
 
 
 namespace Renderer {
@@ -16,7 +17,7 @@ class SceneRenderer {
 
   public:
     explicit SceneRenderer(Renderer::Camera* camera);
-    void Render(const std::vector<GameObject>& objects, unsigned int width, unsigned int height);
+    void Render(const Scene& scene, unsigned int width, unsigned int height);
 
   private:
     void CalculateModelMat(const std::vector<GameObject>& objects);

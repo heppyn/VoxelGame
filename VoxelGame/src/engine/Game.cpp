@@ -12,12 +12,15 @@ Game::~Game() {
 void Game::Init() {
     auto* textureShader = ResourceManager::LoadShader("./res/shaders/Texture.vs", "./res/shaders/Texture.fs", nullptr, "textureShader");
     auto* textureBatchShader = ResourceManager::LoadShader("./res/shaders/BatchTexture.vert", "./res/shaders/BatchTexture.frag", nullptr, "tBatchShader");
+    auto* lightShader = ResourceManager::LoadShader("./res/shaders/Light.vert", "./res/shaders/Light.frag", nullptr, "light");
     ResourceManager::LoadShader("./res/shaders/Mesh.vert", "./res/shaders/Mesh.frag", nullptr, "meshShader");
     // texture is loaded from texture unit 0
     textureShader->SetInteger("texture1", 0, true);
     textureBatchShader->SetInteger("texture1", 0, true);
+    lightShader->SetInteger("texture1", 0, true);
 
     ResourceManager::LoadTexture2D("./res/textures/box.png", true, "boxTexture");
+    ResourceManager::LoadTexture2D("./res/textures/white.png", true, "white");
 
     Camera = std::make_unique<Renderer::Camera>(glm::vec3(0.0f, 0.0f, 3.0f));
     Renderer = std::make_unique<Renderer::SceneRenderer>(Camera.get());
@@ -34,7 +37,7 @@ void Game::Update(float delta) {
 }
 
 void Game::Render() const {
-    Renderer->Render(Scene, Width(), Height());
+    Renderer->Render(Scene_, Width(), Height());
 }
 
 unsigned Game::Width() const {
@@ -46,13 +49,5 @@ unsigned Game::Height() const {
 }
 
 void Game::InitScene() {
-    const auto size = static_cast<int>(Terrain::TerrainGen::GetChunkSize());
-
-    for (int i = -1; i < 2; ++i) {
-        for (int j = -1; j < 2; ++j) {
-            auto tmp = Terrain::TerrainGen::GenerateChunk(
-              glm::vec2(static_cast<float>(i * size), static_cast<float>(j * size)));
-            Scene.insert(Scene.end(), tmp.begin(), tmp.end());
-        }
-    }
+    Scene_.Init();
 }

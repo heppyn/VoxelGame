@@ -153,6 +153,7 @@
   <ItemGroup>
     <ClCompile Include="src\engine\Commands.cpp" />
     <ClCompile Include="src\engine\InputHandler.cpp" />
+    <ClCompile Include="src\engine\Scene.cpp" />
     <ClCompile Include="src\game\TerrainGen.cpp" />
     <ClCompile Include="src\open_gl\InputHandlerGl.cpp" />
     <ClCompile Include="src\open_gl\WindowManagerGl.cpp" />
@@ -182,6 +183,8 @@
     <None Include=".clang-format" />
     <None Include="res\shaders\BatchTexture.frag" />
     <None Include="res\shaders\BatchTexture.vert" />
+    <None Include="res\shaders\Light.frag" />
+    <None Include="res\shaders\Light.vert" />
     <None Include="res\shaders\Mesh.frag" />
     <None Include="res\shaders\Mesh.vert" />
     <None Include="res\shaders\meshBatch.vert" />
@@ -327,6 +330,7 @@
   <ItemGroup>
     <ClInclude Include="src\engine\Commands.h" />
     <ClInclude Include="src\engine\InputHandler.h" />
+    <ClInclude Include="src\engine\Scene.h" />
     <ClInclude Include="src\game\TerrainGen.h" />
     <ClInclude Include="src\open_gl\InputHandlerGl.h" />
     <ClInclude Include="src\open_gl\WindowManagerGl.h" />
@@ -635,6 +639,7 @@
   <ItemGroup>
     <Image Include="res\textures\box.png" />
     <Image Include="res\textures\doge.png" />
+    <Image Include="res\textures\white.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

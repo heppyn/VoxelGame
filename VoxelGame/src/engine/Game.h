@@ -5,6 +5,7 @@
 #include "renderer/Camera.h"
 #include "renderer/SceneRenderer.h"
 #include "open_gl/InputHandlerGl.h"
+#include "Scene.h"
 
 class Game {
   public:
@@ -22,7 +23,7 @@ class Game {
   private:
     std::unique_ptr<Renderer::Camera> Camera{ nullptr };
     std::unique_ptr<Renderer::SceneRenderer> Renderer{ nullptr };
-    std::vector<GameObject> Scene{};
+    Scene Scene_;
 
     std::unique_ptr<Input::InputHandler> InputHandler{ new Input::InputHandlerGl };
 
