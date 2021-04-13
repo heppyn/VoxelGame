@@ -22,7 +22,7 @@ void Game::Init() {
     ResourceManager::LoadTexture2D("./res/textures/box.png", true, "boxTexture");
     ResourceManager::LoadTexture2D("./res/textures/white.png", true, "white");
 
-    Camera = std::make_unique<Renderer::Camera>(glm::vec3(0.0f, 0.0f, 3.0f));
+    Camera = std::make_unique<Renderer::Camera>(glm::vec3(0.0f, 3.0f, 0.0f));
     Renderer = std::make_unique<Renderer::SceneRenderer>(Camera.get());
 
     InitScene();

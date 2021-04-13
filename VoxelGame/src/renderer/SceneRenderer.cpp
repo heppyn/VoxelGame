@@ -35,6 +35,8 @@ void Renderer::SceneRenderer::Render(const Scene& scene, unsigned width, unsigne
         shader->SetMatrix4("projection", projection);
         //shader->SetVector3f("light_color", 1.0f, 1.0f, 1.0f);
         shader->SetVector3f("light_color", 0.5f, 0.5f, 0.5f);
+        shader->SetVector3f("light_pos", scene.GetLights().front().GetPosition());
+        shader->SetVector3f("view_pos", Camera->Position);
     }
 
     CubeRenderer.SetShader(shaders[1]);
