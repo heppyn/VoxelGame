@@ -33,11 +33,15 @@ void Renderer::SceneRenderer::Render(const Scene& scene, unsigned width, unsigne
           0.1f,
           100.0f);
         shader->SetMatrix4("projection", projection);
-        //shader->SetVector3f("light_color", 1.0f, 1.0f, 1.0f);
-        shader->SetVector3f("light_color", 0.5f, 0.5f, 0.5f);
-        shader->SetVector3f("light_pos", scene.GetLights().front().GetPosition());
-        shader->SetVector3f("view_pos", Camera->Position);
     }
+
+    // only light shader
+    shaders[1]->SetVector3f("light.ambient", glm::vec3(0.2f));
+    shaders[1]->SetVector3f("light.diffuse", glm::vec3(0.5f));
+    shaders[1]->SetVector3f("light.specular", glm::vec3(1.0f));
+    shaders[1]->SetVector3f("light.position", scene.GetLights().front().GetPosition());
+    shaders[1]->SetFloat("material.shininess", 32.0f);
+    shaders[1]->SetVector3f("view_pos", Camera->Position);
 
     CubeRenderer.SetShader(shaders[1]);
     //CubeRenderer.DrawCubesBatched(objects.front().GetTexture(), ModelMat.size());

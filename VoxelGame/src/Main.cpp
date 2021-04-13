@@ -39,7 +39,7 @@ int main() {
         const float currentFrame = static_cast<float>(glfwGetTime());
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
-        std::cout << "FPS: " << 1.0f / deltaTime << '\n';
+        //std::cout << "FPS: " << 1.0f / deltaTime << '\n';
 
         game->ProcessInput(deltaTime);
         game->Render();
