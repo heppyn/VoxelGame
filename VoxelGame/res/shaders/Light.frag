@@ -22,30 +22,30 @@ struct Light {
 uniform Light light; 
 
 uniform sampler2D texture_diffuse1;
-uniform vec3 light_color;
+uniform sampler2D texture_specular1;
+// you don't need this if you move to view space
 uniform vec3 view_pos;
 
 void main()
 {
     // ambient
-    vec3 ambient = light.ambient;
+    vec3 ambient = light.ambient * vec3(texture(texture_diffuse1, TexCoord));
 
     // diffuse
     vec3 norm = normalize(Normal);
     vec3 lightDir = normalize(light.position - FragPos);
     // angle > 90 is negative - don't be nagative
     float diff = max(dot(norm, lightDir), 0.0);
-    vec3 diffuse = diff * light.diffuse;
+    vec3 diffuse = diff * light.diffuse * vec3(texture(texture_diffuse1, TexCoord));
 
     // specular
     vec3 viewDir = normalize(view_pos - FragPos);
     // direction from light to fragment -> -lightDir
     vec3 reflectDir = reflect(-lightDir, norm);
     float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
-    vec3 specular = spec * light.specular;
+    vec3 specular = spec * light.specular * vec3(texture(texture_specular1, TexCoord));
 
     vec3 resultColor = ambient + diffuse + specular;
 
-//    FragColor = vec4(specular, 1.0);
-    FragColor = vec4(resultColor, 1.0) * texture(texture_diffuse1, TexCoord);
+    FragColor = vec4(resultColor, 1.0);
 }

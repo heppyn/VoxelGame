@@ -18,11 +18,6 @@ struct Vertex {
     Vertex(float px, float py, float pz, float nx, float ny, float nz, float tx, float ty);
 };
 
-struct Texture {
-    unsigned Id;
-    std::string Type;
-};
-
 class Mesh {
   public:
     std::vector<Vertex> Vertices{};

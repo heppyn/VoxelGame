@@ -42,7 +42,7 @@ void ResourceManager::Clear() {
         glDeleteProgram(shader->Id);
     }
     for (const auto& [fst, texture] : Textures) {
-        glDeleteTextures(1, &texture->Id);
+        glDeleteTextures(1, &texture->Id_);
     }
 }
 
@@ -91,8 +91,8 @@ Renderer::Texture2D* ResourceManager::LoadTexture2DFromFile(const char* file, bo
     // create texture object
     auto* texture = new Renderer::Texture2D;
     if (alpha) {
-        texture->InternalFormat = GL_RGBA;
-        texture->ImageFormat = GL_RGBA;
+        texture->InternalFormat_ = GL_RGBA;
+        texture->ImageFormat_ = GL_RGBA;
     }
     // load image
     stbi_set_flip_vertically_on_load(true);

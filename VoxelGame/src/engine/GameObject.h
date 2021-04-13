@@ -13,6 +13,7 @@ class GameObject {
   public:
     GameObject() = default;
     GameObject(glm::vec3 position, Renderer::Texture2D* texture, bool batched = false);
+    GameObject(glm::vec3 position, const std::vector<Renderer::Texture2D*>& textures, bool batched = false);
     virtual ~GameObject() = default;
 
     virtual void Draw(const Renderer::CubeRenderer& renderer) const;
