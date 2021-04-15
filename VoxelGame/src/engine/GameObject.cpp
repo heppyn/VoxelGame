@@ -15,6 +15,5 @@ GameObject::GameObject(glm::vec3 position, const std::vector<Renderer::Texture2D
 }
 
 void GameObject::Draw(const Renderer::CubeRenderer& renderer) const {
-    renderer.DrawCube(Mesh, Position);
-    //renderer.DrawCube(Texture, Position);
+    renderer.DrawCube(Mesh, Position, Scale_);
 }

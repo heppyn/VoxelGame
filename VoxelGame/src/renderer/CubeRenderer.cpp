@@ -7,15 +7,15 @@ Renderer::CubeRenderer::~CubeRenderer() {
     glDeleteVertexArrays(1, &CubeVao);
 }
 
-void Renderer::CubeRenderer::DrawCube(const Mesh& mesh, const glm::vec3& position) const
-{
+void Renderer::CubeRenderer::DrawCube(const Mesh& mesh, const glm::vec3& position, const glm::vec3& scale) const {
     Shader->Use();
 
     // view and projection matrix are set once per frame
     glm::mat4 model = glm::mat4(1.0f); // identity matrix
     model = glm::translate(model, position);
+    model = glm::scale(model, scale);
 
-    // TODO: scaling and rotation
+    // TODO: rotation
     Shader->SetMatrix4("model", model);
 
     mesh.Draw(*Shader);

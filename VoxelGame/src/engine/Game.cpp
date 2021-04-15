@@ -22,6 +22,7 @@ void Game::Init() {
     ResourceManager::LoadTexture2D("./res/textures/box.png", true, "box");
     ResourceManager::LoadTexture2D("./res/textures/box_specular.png", true, "boxSpec")->SetTypeSpecular();
     ResourceManager::LoadTexture2D("./res/textures/white.png", true, "white");
+    ResourceManager::LoadTexture2D("./res/textures/concrete2.jpg", false, "concrete");
 
     Camera = std::make_unique<Renderer::Camera>(glm::vec3(0.0f, 3.0f, 0.0f));
     Renderer = std::make_unique<Renderer::SceneRenderer>(Camera.get());

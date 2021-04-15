@@ -8,6 +8,7 @@ void Scene::Init() {
 
     // add white light
     Lights_.emplace_back(glm::vec3(0.0f, 6.0f, 0.0f), ResourceManager::GetTexture2D("white"));
+    Lights_.front().Scale(glm::vec3(0.25f));
 
     for (int i = -1; i < 2; ++i) {
         for (int j = -1; j < 2; ++j) {
