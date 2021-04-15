@@ -14,7 +14,7 @@ void Renderer::SceneRenderer::Render(const Scene& scene, unsigned width, unsigne
         CalculateModelMat(scene.GetObjects());
     }
     // TODO: disable this for rendering multiple scenes
-    glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+    glClearColor(0.15f, 0.15f, 0.15f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     //auto* shader = ResourceManager::GetShader("tBatchShader");
@@ -42,6 +42,10 @@ void Renderer::SceneRenderer::Render(const Scene& scene, unsigned width, unsigne
     shaders[1]->SetVector3f("light.position", scene.GetLights().front().GetPosition());
     shaders[1]->SetFloat("material.shininess", 32.0f);
     shaders[1]->SetVector3f("view_pos", Camera->Position);
+
+    shaders[1]->SetFloat("light.constant", 1.0f);
+    shaders[1]->SetFloat("light.linear", 0.09f);
+    shaders[1]->SetFloat("light.quadratic", 0.032f);
 
     CubeRenderer.SetShader(shaders[1]);
     //CubeRenderer.DrawCubesBatched(objects.front().GetTexture(), ModelMat.size());
