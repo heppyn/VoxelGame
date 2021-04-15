@@ -54,7 +54,7 @@ void main()
 
     // lesser ambient so multiple lights dont add up
     // TODO: add directional light
-    vec3 resultColor = attenuation * (ambient + diffuse + specular);
+    vec3 resultColor = ambient + attenuation * (diffuse + specular);
 
     FragColor = vec4(resultColor, 1.0);
 }

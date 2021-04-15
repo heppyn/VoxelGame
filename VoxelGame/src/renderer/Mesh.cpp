@@ -18,6 +18,11 @@ Renderer::Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned> indices
 
 void Renderer::Mesh::Draw(Shader& shader) const {
     assert(Vao);
+    // only diffuse texture present - unbind others
+    // https://stackoverflow.com/questions/28411686/opengl-reading-from-unbound-texture-unit
+    if (Textures.size() == 1) {
+        UnbindTextures(4);
+    }
     // bind appropriate textures
     unsigned int diffuseNr = 1;
     unsigned int specularNr = 1;
@@ -92,4 +97,11 @@ void Renderer::Mesh::SetupMesh(bool batched) {
     }
 
     glBindVertexArray(0);
+}
+
+void Renderer::Mesh::UnbindTextures(unsigned num) const {
+    for (unsigned i = 0; i < num; ++i) {
+        glActiveTexture(GL_TEXTURE0 + i);
+        glBindTexture(GL_TEXTURE_2D, 0);
+    }
 }

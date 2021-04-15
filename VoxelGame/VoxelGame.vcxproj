@@ -639,6 +639,7 @@
   <ItemGroup>
     <Image Include="res\textures\box.png" />
     <Image Include="res\textures\box_specular.png" />
+    <Image Include="res\textures\concrete.png" />
     <Image Include="res\textures\doge.png" />
     <Image Include="res\textures\white.png" />
   </ItemGroup>

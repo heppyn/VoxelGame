@@ -36,16 +36,17 @@ void Renderer::SceneRenderer::Render(const Scene& scene, unsigned width, unsigne
     }
 
     // only light shader
-    shaders[1]->SetVector3f("light.ambient", glm::vec3(0.2f));
+    shaders[1]->SetVector3f("light.ambient", glm::vec3(0.1f));
     shaders[1]->SetVector3f("light.diffuse", glm::vec3(0.5f));
     shaders[1]->SetVector3f("light.specular", glm::vec3(1.0f));
     shaders[1]->SetVector3f("light.position", scene.GetLights().front().GetPosition());
     shaders[1]->SetFloat("material.shininess", 32.0f);
     shaders[1]->SetVector3f("view_pos", Camera->Position);
 
+    // values taken from http://wiki.ogre3d.org/tiki-index.php?page=-Point+Light+Attenuation
     shaders[1]->SetFloat("light.constant", 1.0f);
-    shaders[1]->SetFloat("light.linear", 0.09f);
-    shaders[1]->SetFloat("light.quadratic", 0.032f);
+    shaders[1]->SetFloat("light.linear", 0.027f);
+    shaders[1]->SetFloat("light.quadratic", 0.0028f);
 
     CubeRenderer.SetShader(shaders[1]);
     //CubeRenderer.DrawCubesBatched(objects.front().GetTexture(), ModelMat.size());

@@ -1453,5 +1453,8 @@
     <Image Include="res\textures\box_specular.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="res\textures\concrete.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

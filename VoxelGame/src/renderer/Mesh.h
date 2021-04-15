@@ -32,5 +32,6 @@ class Mesh {
     unsigned Vao{ 0 }, Vbo{ 0 }, Ebo{ 0 };
 
     void SetupMesh(bool batched);
+    void UnbindTextures(unsigned num) const;
 };
 } // namespace Renderer
