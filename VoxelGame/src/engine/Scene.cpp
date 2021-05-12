@@ -14,7 +14,7 @@ void Scene::Init() {
         for (int j = -1; j < 2; ++j) {
             auto tmp = Terrain::TerrainGen::GenerateChunk(
               glm::vec2(static_cast<float>(i * size), static_cast<float>(j * size)));
-            Objects_.insert(Objects_.end(), tmp.begin(), tmp.end());
+            Objects_.insert(Objects_.end(), std::make_move_iterator(tmp.begin()), std::make_move_iterator(tmp.end()));
         }
     }
 }

@@ -17,7 +17,7 @@ void Renderer::SceneRenderer::Render(const Scene& scene, unsigned width, unsigne
     glClearColor(0.15f, 0.15f, 0.15f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    //auto* shader = ResourceManager::GetShader("tBatchShader");
+    //auto* shader = ResourceManager::GetShader("lightBatch");
     //auto* shader = ResourceManager::GetShader("textureShader");
     std::vector<Shader*> shaders = {
         ResourceManager::GetShader("meshShader"),
@@ -39,7 +39,7 @@ void Renderer::SceneRenderer::Render(const Scene& scene, unsigned width, unsigne
     shaders[1]->SetVector3f("light.ambient", glm::vec3(0.1f));
     shaders[1]->SetVector3f("light.diffuse", glm::vec3(0.5f));
     shaders[1]->SetVector3f("light.specular", glm::vec3(1.0f));
-    shaders[1]->SetVector3f("light.position", scene.GetLights().front().GetPosition());
+    shaders[1]->SetVector3f("light.position", scene.GetLights().front().Position());
     shaders[1]->SetFloat("material.shininess", 32.0f);
     shaders[1]->SetVector3f("view_pos", Camera->Position);
 
@@ -49,7 +49,7 @@ void Renderer::SceneRenderer::Render(const Scene& scene, unsigned width, unsigne
     shaders[1]->SetFloat("light.quadratic", 0.0028f);
 
     CubeRenderer.SetShader(shaders[1]);
-    //CubeRenderer.DrawCubesBatched(objects.front().GetTexture(), ModelMat.size());
+    //CubeRenderer.DrawCubesBatched(scene.GetObjects().front().GetTexture(), ModelMat.size());
 
     // render one object at a time
     for (const auto& o : scene.GetObjects()) {
@@ -63,7 +63,7 @@ void Renderer::SceneRenderer::Render(const Scene& scene, unsigned width, unsigne
 
 void Renderer::SceneRenderer::CalculateModelMat(const std::vector<GameObject>& objects) {
     for (const auto& o : objects) {
-        ModelMat.emplace_back(glm::translate(glm::mat4(1.0f), o.GetPosition()));
+        ModelMat.emplace_back(glm::translate(glm::mat4(1.0f), o.Position()));
     }
 
     // configure instanced array

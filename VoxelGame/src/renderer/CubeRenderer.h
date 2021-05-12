@@ -14,7 +14,7 @@ class CubeRenderer {
     ~CubeRenderer();
     void DrawCube(const Mesh& mesh, const glm::vec3& position, const glm::vec3& scale) const;
     void DrawCube(Texture2D* texture, const glm::vec3& position) const;
-    void DrawCubesBatched(Texture2D* texture, unsigned int batchSize) const;
+    void DrawCubesBatched(const Mesh& mesh, unsigned int batchSize) const;
     void SetShader(Shader* shader) { Shader = shader; }
 
     static Mesh GetCubeMesh(bool batched = false);

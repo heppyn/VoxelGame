@@ -16,6 +16,37 @@ Renderer::Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned> indices
     SetupMesh(batched);
 }
 
+//Renderer::Mesh::Mesh(const Mesh& other)
+//  : Vertices(other.Vertices), Indices(other.Indices), Textures(other.Textures), Vao(other.Vao), Vbo(other.Vbo), Ebo(other.Ebo) {
+//}
+//
+//Renderer::Mesh& Renderer::Mesh::operator=(const Mesh& other) {
+//    if (this != &other) {
+//        Vertices = other.Vertices;
+//        Indices = other.Indices;
+//        Textures = other.Textures;
+//    }
+//
+//    return *this;
+//}
+
+Renderer::Mesh::Mesh(Mesh&& other) noexcept
+  : Vertices(std::move(other.Vertices)), Indices(std::move(other.Indices)), Textures(std::move(other.Textures)), Vao(other.Vao), Vbo(other.Vbo), Ebo(other.Ebo) {
+}
+
+Renderer::Mesh& Renderer::Mesh::operator=(Mesh&& other) noexcept {
+    if (this != &other) {
+        Vertices = std::move(other.Vertices);
+        Indices = std::move(other.Indices);
+        Textures = std::move(other.Textures);
+        Vao = other.Vao;
+        Vbo = other.Vbo;
+        Ebo = other.Ebo;
+    }
+
+    return *this;
+}
+
 void Renderer::Mesh::Draw(Shader& shader) const {
     assert(Vao);
     // only diffuse texture present - unbind others

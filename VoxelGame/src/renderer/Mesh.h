@@ -22,10 +22,16 @@ class Mesh {
   public:
     std::vector<Vertex> Vertices{};
     std::vector<unsigned int> Indices{};
+    // TODO: set default "missing texture"
     std::vector<Texture2D> Textures{};
 
     Mesh() = default;
+    ~Mesh() = default;
     Mesh(std::vector<Vertex> vertices, std::vector<unsigned> indices, std::vector<Texture2D> textures, bool batched = false);
+    Mesh(const Mesh& other) = default;
+    Mesh& operator=(const Mesh& other) = default;
+    Mesh(Mesh&& other) noexcept;
+    Mesh& operator=(Mesh&& other) noexcept;
     void Draw(Shader& shader) const;
 
   private:

@@ -185,6 +185,7 @@
     <None Include="res\shaders\BatchTexture.vert" />
     <None Include="res\shaders\Light.frag" />
     <None Include="res\shaders\Light.vert" />
+    <None Include="res\shaders\LightBatch.vert" />
     <None Include="res\shaders\Mesh.frag" />
     <None Include="res\shaders\Mesh.vert" />
     <None Include="res\shaders\meshBatch.vert" />
@@ -329,6 +330,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\engine\Commands.h" />
+    <ClInclude Include="src\engine\Components\Component.h" />
+    <ClInclude Include="src\engine\Components\Mesh.h" />
+    <ClInclude Include="src\engine\Components\Transform.h" />
     <ClInclude Include="src\engine\InputHandler.h" />
     <ClInclude Include="src\engine\Scene.h" />
     <ClInclude Include="src\game\TerrainGen.h" />

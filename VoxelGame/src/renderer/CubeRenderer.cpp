@@ -41,10 +41,10 @@ void Renderer::CubeRenderer::DrawCube(Texture2D* texture, const glm::vec3& posit
     glBindVertexArray(0);
 }
 
-void Renderer::CubeRenderer::DrawCubesBatched(Texture2D* texture, unsigned batchSize) const {
+void Renderer::CubeRenderer::DrawCubesBatched(const Mesh& mesh, unsigned batchSize) const {
     // TODO: cache shader and texture binding
     Shader->Use();
-    texture->Bind();
+    //mesh->Bind();
 
     //GL_CALL(glBindBuffer(GL_ARRAY_BUFFER, CubeVbo));
     glBindVertexArray(CubeVao);

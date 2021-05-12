@@ -13,11 +13,13 @@ void Game::Init() {
     auto* textureShader = ResourceManager::LoadShader("./res/shaders/Texture.vs", "./res/shaders/Texture.fs", nullptr, "textureShader");
     auto* textureBatchShader = ResourceManager::LoadShader("./res/shaders/BatchTexture.vert", "./res/shaders/BatchTexture.frag", nullptr, "tBatchShader");
     auto* lightShader = ResourceManager::LoadShader("./res/shaders/Light.vert", "./res/shaders/Light.frag", nullptr, "light");
+    auto* lightBatchShader = ResourceManager::LoadShader("./res/shaders/LightBatch.vert", "./res/shaders/Light.frag", nullptr, "lightBatch");
     ResourceManager::LoadShader("./res/shaders/Mesh.vert", "./res/shaders/Mesh.frag", nullptr, "meshShader");
     // texture is loaded from texture unit 0
     textureShader->SetInteger("texture1", 0, true);
     textureBatchShader->SetInteger("texture1", 0, true);
     lightShader->SetInteger("texture1", 0, true);
+    lightBatchShader->SetInteger("texture1", 0, true);
 
     ResourceManager::LoadTexture2D("./res/textures/box.png", true, "box");
     ResourceManager::LoadTexture2D("./res/textures/box_specular.png", true, "boxSpec")->SetTypeSpecular();
