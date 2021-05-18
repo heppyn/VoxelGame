@@ -513,7 +513,7 @@
     <None Include="res\shaders\BatchTexture.frag" />
     <None Include="res\shaders\Mesh.vert" />
     <None Include="res\shaders\Mesh.frag" />
-    <None Include="res\shaders\meshBatch.vert" />
+    <None Include="res\shaders\MeshBatch.vert" />
     <None Include="res\shaders\Light.vert" />
     <None Include="res\shaders\Light.frag" />
     <None Include="res\shaders\LightBatch.vert" />

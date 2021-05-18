@@ -1,6 +1,7 @@
 #include "SceneRenderer.h"
 
 #include "engine/ResourceManager.h"
+#include "engine/Components/Mesh.h"
 
 Renderer::SceneRenderer::SceneRenderer(Renderer::Camera* camera)
   : Camera(camera) {
@@ -22,6 +23,7 @@ void Renderer::SceneRenderer::Render(const Scene& scene, unsigned width, unsigne
     std::vector<Shader*> shaders = {
         ResourceManager::GetShader("meshShader"),
         ResourceManager::GetShader("light"),
+        ResourceManager::GetShader("lightBatch"),
     };
     for (auto *shader : shaders) {
         // TODO: set matrices in uniform block for all shaders
@@ -36,25 +38,30 @@ void Renderer::SceneRenderer::Render(const Scene& scene, unsigned width, unsigne
     }
 
     // only light shader
-    shaders[1]->SetVector3f("light.ambient", glm::vec3(0.1f));
-    shaders[1]->SetVector3f("light.diffuse", glm::vec3(0.5f));
-    shaders[1]->SetVector3f("light.specular", glm::vec3(1.0f));
-    shaders[1]->SetVector3f("light.position", scene.GetLights().front().Position());
-    shaders[1]->SetFloat("material.shininess", 32.0f);
-    shaders[1]->SetVector3f("view_pos", Camera->Position);
+    for (auto i = 1; i <= 2; ++i)
+    {
+        shaders[i]->SetVector3f("light.ambient", glm::vec3(0.1f), true);
+        shaders[i]->SetVector3f("light.diffuse", glm::vec3(0.5f));
+        shaders[i]->SetVector3f("light.specular", glm::vec3(1.0f));
+        shaders[i]->SetVector3f("light.position", scene.GetLights().front().Position());
+        shaders[i]->SetFloat("material.shininess", 32.0f);
+        shaders[i]->SetVector3f("view_pos", Camera->Position);
 
-    // values taken from http://wiki.ogre3d.org/tiki-index.php?page=-Point+Light+Attenuation
-    shaders[1]->SetFloat("light.constant", 1.0f);
-    shaders[1]->SetFloat("light.linear", 0.027f);
-    shaders[1]->SetFloat("light.quadratic", 0.0028f);
+        // values taken from http://wiki.ogre3d.org/tiki-index.php?page=-Point+Light+Attenuation
+        shaders[i]->SetFloat("light.constant", 1.0f);
+        shaders[i]->SetFloat("light.linear", 0.027f);
+        shaders[i]->SetFloat("light.quadratic", 0.0028f);
+    }
 
-    CubeRenderer.SetShader(shaders[1]);
-    //CubeRenderer.DrawCubesBatched(scene.GetObjects().front().GetTexture(), ModelMat.size());
+    // render all objects at once
+    CubeRenderer.SetShader(shaders[2]);
+    CubeRenderer.DrawCubesBatched(scene.GetObjects().front(), ModelMat.size());
 
     // render one object at a time
-    for (const auto& o : scene.GetObjects()) {
-        o.Draw(CubeRenderer);
-    }
+    //CubeRenderer.SetShader(shaders[1]);
+    //for (const auto& o : scene.GetObjects()) {
+    //    o.Draw(CubeRenderer);
+    //}
 
     // draw light separately
     CubeRenderer.SetShader(shaders[0]);
@@ -63,11 +70,19 @@ void Renderer::SceneRenderer::Render(const Scene& scene, unsigned width, unsigne
 
 void Renderer::SceneRenderer::CalculateModelMat(const std::vector<GameObject>& objects) {
     for (const auto& o : objects) {
-        ModelMat.emplace_back(glm::translate(glm::mat4(1.0f), o.Position()));
+        auto model = glm::mat4(1.0f); // identity matrix
+        model = glm::translate(model, o.Position());
+        model = glm::scale(model, o.Scale());
+        ModelMat.push_back(model);
     }
 
     // configure instanced array
     glGenBuffers(1, &ModelMatBufferId);
     glBindBuffer(GL_ARRAY_BUFFER, ModelMatBufferId);
     glBufferData(GL_ARRAY_BUFFER, ModelMat.size() * sizeof(glm::mat4), ModelMat.data(), GL_STATIC_DRAW);
+
+    if (!objects.empty())
+    {
+        objects.front().GetComponent<Components::Mesh>().Mesh_.BindBatchAttribPtrs();
+    }
 }

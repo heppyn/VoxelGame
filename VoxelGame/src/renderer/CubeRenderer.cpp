@@ -1,7 +1,8 @@
 #include "CubeRenderer.h"
 
-Renderer::CubeRenderer::CubeRenderer() {
-}
+#include "engine/Components/Mesh.h"
+#include "engine/GameObject.h"
+
 
 Renderer::CubeRenderer::~CubeRenderer() {
     glDeleteVertexArrays(1, &CubeVao);
@@ -21,36 +22,10 @@ void Renderer::CubeRenderer::DrawCube(const Mesh& mesh, const glm::vec3& positio
     mesh.Draw(*Shader);
 }
 
-void Renderer::CubeRenderer::DrawCube(Texture2D* texture, const glm::vec3& position) const {
-    // TODO: cache shader and texture binding
-    Shader->Use();
-    texture->Bind();
-
-    // view and projection matrix are set once per frame
-    glm::mat4 model = glm::mat4(1.0f); // identity matrix
-    model = glm::translate(model, position);
-
-    // TODO: scaling and rotation
-    Shader->SetMatrix4("model", model);
-
-    // TODO: share vertex array for all cubes
-    glBindVertexArray(CubeVao);
-    // TODO: QL_QUADS
-    // 36 = 6 * 2 * 3
-    glDrawArrays(GL_TRIANGLES, 0, 36);
-    glBindVertexArray(0);
-}
-
-void Renderer::CubeRenderer::DrawCubesBatched(const Mesh& mesh, unsigned batchSize) const {
-    // TODO: cache shader and texture binding
-    Shader->Use();
-    //mesh->Bind();
-
-    //GL_CALL(glBindBuffer(GL_ARRAY_BUFFER, CubeVbo));
-    glBindVertexArray(CubeVao);
-    glDrawArraysInstanced(GL_TRIANGLES, 0, 36, batchSize);
-    //glDrawElementsInstanced(GL_TRIANGLES, 36, GL_UNSIGNED_INT, nullptr, batchSize);
-    glBindVertexArray(0);
+void Renderer::CubeRenderer::DrawCubesBatched(const GameObject& go, unsigned amount) const
+{
+    assert(go.HasComponent<Components::Mesh>());
+    go.GetComponent<Components::Mesh>().Mesh_.DrawBatched(*Shader, amount);
 }
 
 Renderer::Mesh Renderer::CubeRenderer::GetCubeMesh(bool batched /*= false*/) {

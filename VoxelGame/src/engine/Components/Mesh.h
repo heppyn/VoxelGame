@@ -8,7 +8,6 @@ namespace Components {
 class Mesh : public Component {
   public:
     Renderer::Mesh Mesh_;
-    Renderer::Shader* Shader{ nullptr };
 
     Mesh() = delete;
     explicit Mesh(Renderer::Mesh mesh) : Mesh_(std::move(mesh)) {}
@@ -17,9 +16,5 @@ class Mesh : public Component {
     Mesh& operator=(const Mesh&) = default;
     Mesh(Mesh&&) = default;
     Mesh& operator=(Mesh&&) = default;
-
-    void Render() const override {
-        Mesh_.Draw(*Shader);
-    }
 };
 } // namespace Components

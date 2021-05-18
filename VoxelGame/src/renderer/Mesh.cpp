@@ -49,38 +49,24 @@ Renderer::Mesh& Renderer::Mesh::operator=(Mesh&& other) noexcept {
 
 void Renderer::Mesh::Draw(Shader& shader) const {
     assert(Vao);
-    // only diffuse texture present - unbind others
-    // https://stackoverflow.com/questions/28411686/opengl-reading-from-unbound-texture-unit
-    if (Textures.size() == 1) {
-        UnbindTextures(4);
-    }
-    // bind appropriate textures
-    unsigned int diffuseNr = 1;
-    unsigned int specularNr = 1;
-    unsigned int normalNr = 1;
-    unsigned int heightNr = 1;
-    for (unsigned int i = 0; i < Textures.size(); i++) {
-        // retrieve texture number (the N in diffuse_textureN)
-        std::string number;
-        std::string name = Textures[i].Type_;
-        if (name == "texture_diffuse")
-            number = std::to_string(diffuseNr++);
-        else if (name == "texture_specular")
-            number = std::to_string(specularNr++);
-        else if (name == "texture_normal")
-            number = std::to_string(normalNr++);
-        else if (name == "texture_height")
-            number = std::to_string(heightNr++);
-
-        // now set the sampler to the correct texture unit
-        glUniform1i(glGetUniformLocation(shader.Id, (name + number).c_str()), i);
-        // and finally bind the texture
-        Textures[i].Bind(i);
-    }
+    BindTextures(shader);
 
     // draw mesh
     glBindVertexArray(Vao);
     glDrawElements(GL_TRIANGLES, Indices.size(), GL_UNSIGNED_INT, 0);
+    glBindVertexArray(0);
+
+    // set to default
+    glActiveTexture(GL_TEXTURE0);
+}
+
+void Renderer::Mesh::DrawBatched(Shader& shader, unsigned amount) const
+{
+    assert(Vao);
+    BindTextures(shader);
+
+    glBindVertexArray(Vao);
+    glDrawElementsInstanced(GL_TRIANGLES, Indices.size(), GL_UNSIGNED_INT, 0, amount);
     glBindVertexArray(0);
 
     // set to default
@@ -112,22 +98,41 @@ void Renderer::Mesh::SetupMesh(bool batched) {
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, TexCoords));
 
     if (batched) {
-        glEnableVertexAttribArray(3);
-        glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)0);
-        glEnableVertexAttribArray(4);
-        glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(sizeof(glm::vec4)));
-        glEnableVertexAttribArray(5);
-        glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(2 * sizeof(glm::vec4)));
-        glEnableVertexAttribArray(6);
-        glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(3 * sizeof(glm::vec4)));
-
-        glVertexAttribDivisor(3, 1);
-        glVertexAttribDivisor(4, 1);
-        glVertexAttribDivisor(5, 1);
-        glVertexAttribDivisor(6, 1);
+        BindBatchAttribPtrs();
     }
 
     glBindVertexArray(0);
+}
+
+void Renderer::Mesh::BindTextures(Shader& shader) const {
+    // only diffuse texture present - unbind others
+    // https://stackoverflow.com/questions/28411686/opengl-reading-from-unbound-texture-unit
+    if (Textures.size() == 1) {
+        UnbindTextures(4);
+    }
+    // bind appropriate textures
+    unsigned int diffuseNr = 1;
+    unsigned int specularNr = 1;
+    unsigned int normalNr = 1;
+    unsigned int heightNr = 1;
+    for (unsigned int i = 0; i < Textures.size(); i++) {
+        // retrieve texture number (the N in diffuse_textureN)
+        std::string number;
+        std::string name = Textures[i].Type_;
+        if (name == "texture_diffuse")
+            number = std::to_string(diffuseNr++);
+        else if (name == "texture_specular")
+            number = std::to_string(specularNr++);
+        else if (name == "texture_normal")
+            number = std::to_string(normalNr++);
+        else if (name == "texture_height")
+            number = std::to_string(heightNr++);
+
+        // now set the sampler to the correct texture unit
+        glUniform1i(glGetUniformLocation(shader.Id, (name + number).c_str()), i);
+        // and finally bind the texture
+        Textures[i].Bind(i);
+    }
 }
 
 void Renderer::Mesh::UnbindTextures(unsigned num) const {
@@ -135,4 +140,28 @@ void Renderer::Mesh::UnbindTextures(unsigned num) const {
         glActiveTexture(GL_TEXTURE0 + i);
         glBindTexture(GL_TEXTURE_2D, 0);
     }
+}
+
+void Renderer::Mesh::BindMesh() const
+{
+    glBindVertexArray(Vao);
+}
+
+void Renderer::Mesh::BindBatchAttribPtrs() const
+{
+    glBindVertexArray(Vao);
+
+    glEnableVertexAttribArray(3);
+    glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)0);
+    glEnableVertexAttribArray(4);
+    glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(sizeof(glm::vec4)));
+    glEnableVertexAttribArray(5);
+    glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(2 * sizeof(glm::vec4)));
+    glEnableVertexAttribArray(6);
+    glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(3 * sizeof(glm::vec4)));
+
+    glVertexAttribDivisor(3, 1);
+    glVertexAttribDivisor(4, 1);
+    glVertexAttribDivisor(5, 1);
+    glVertexAttribDivisor(6, 1);
 }

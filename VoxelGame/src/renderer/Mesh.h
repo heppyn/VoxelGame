@@ -33,11 +33,15 @@ class Mesh {
     Mesh(Mesh&& other) noexcept;
     Mesh& operator=(Mesh&& other) noexcept;
     void Draw(Shader& shader) const;
+    void DrawBatched(Shader& shader, unsigned amount) const;
+    void BindMesh() const;
+    void BindBatchAttribPtrs() const;
 
   private:
     unsigned Vao{ 0 }, Vbo{ 0 }, Ebo{ 0 };
 
     void SetupMesh(bool batched);
+    void BindTextures(Shader& shader) const;
     void UnbindTextures(unsigned num) const;
 };
 } // namespace Renderer

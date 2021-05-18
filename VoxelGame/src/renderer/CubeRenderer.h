@@ -6,15 +6,16 @@
 #include "Texture2D.h"
 #include "Mesh.h"
 
+class GameObject;
+
 namespace Renderer {
 class CubeRenderer {
   public:
-    CubeRenderer();
+    CubeRenderer() = default;
     CubeRenderer(const CubeRenderer&) = default;
     ~CubeRenderer();
     void DrawCube(const Mesh& mesh, const glm::vec3& position, const glm::vec3& scale) const;
-    void DrawCube(Texture2D* texture, const glm::vec3& position) const;
-    void DrawCubesBatched(const Mesh& mesh, unsigned int batchSize) const;
+    void DrawCubesBatched(const GameObject& go, unsigned amount) const;
     void SetShader(Shader* shader) { Shader = shader; }
 
     static Mesh GetCubeMesh(bool batched = false);
