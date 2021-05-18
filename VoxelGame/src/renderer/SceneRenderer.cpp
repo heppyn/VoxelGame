@@ -6,7 +6,6 @@
 Renderer::SceneRenderer::SceneRenderer(Renderer::Camera* camera)
   : Camera(camera) {
     // default shader is the not batch one
-    CubeRenderer.SetShader(ResourceManager::GetShader("textureShader"));
 }
 
 void Renderer::SceneRenderer::Render(const Scene& scene, unsigned width, unsigned height) {
@@ -18,8 +17,6 @@ void Renderer::SceneRenderer::Render(const Scene& scene, unsigned width, unsigne
     glClearColor(0.15f, 0.15f, 0.15f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    //auto* shader = ResourceManager::GetShader("lightBatch");
-    //auto* shader = ResourceManager::GetShader("textureShader");
     std::vector<Shader*> shaders = {
         ResourceManager::GetShader("meshShader"),
         ResourceManager::GetShader("light"),
