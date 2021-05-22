@@ -9,9 +9,9 @@ Renderer::SceneRenderer::SceneRenderer(Renderer::Camera* camera)
 }
 
 void Renderer::SceneRenderer::Render(const Scene& scene, unsigned width, unsigned height) {
-    if (ModelMat.empty()) {
+    if (InstancesData_.empty()) {
         // TODO: check for change in terrain
-        CalculateModelMat(scene.GetObjects());
+        CalculateInstanceData(scene.GetObjects());
     }
     // TODO: disable this for rendering multiple scenes
     glClearColor(0.15f, 0.15f, 0.15f, 1.0f);
@@ -22,7 +22,7 @@ void Renderer::SceneRenderer::Render(const Scene& scene, unsigned width, unsigne
         ResourceManager::GetShader("light"),
         ResourceManager::GetShader("lightBatch"),
     };
-    for (auto *shader : shaders) {
+    for (auto* shader : shaders) {
         // TODO: set matrices in uniform block for all shaders
         // camera may have moved, set new matrices
         shader->SetMatrix4("view", Camera->GetViewMatrix(), true);
@@ -35,9 +35,11 @@ void Renderer::SceneRenderer::Render(const Scene& scene, unsigned width, unsigne
     }
 
     // only light shader
-    for (auto i = 1; i <= 2; ++i)
-    {
-        shaders[i]->SetVector3f("light.ambient", glm::vec3(0.1f), true);
+    for (auto i = 1; i <= 2; ++i) {
+        // set sprite sheet size for instancing
+        shaders[i]->SetVector2f("tex_size", ResourceManager::GetSpriteSheetSize(), true);
+
+        shaders[i]->SetVector3f("light.ambient", glm::vec3(0.1f));
         shaders[i]->SetVector3f("light.diffuse", glm::vec3(0.5f));
         shaders[i]->SetVector3f("light.specular", glm::vec3(1.0f));
         shaders[i]->SetVector3f("light.position", scene.GetLights().front().Position());
@@ -52,7 +54,7 @@ void Renderer::SceneRenderer::Render(const Scene& scene, unsigned width, unsigne
 
     // render all objects at once
     CubeRenderer.SetShader(shaders[2]);
-    CubeRenderer.DrawCubesBatched(scene.GetObjects().front(), ModelMat.size());
+    CubeRenderer.DrawCubesBatched(scene.GetObjects().front(), InstancesData_.size());
 
     // render one object at a time
     //CubeRenderer.SetShader(shaders[1]);
@@ -65,21 +67,28 @@ void Renderer::SceneRenderer::Render(const Scene& scene, unsigned width, unsigne
     scene.GetLights().front().Draw(CubeRenderer);
 }
 
-void Renderer::SceneRenderer::CalculateModelMat(const std::vector<GameObject>& objects) {
+void Renderer::SceneRenderer::CalculateInstanceData(const std::vector<GameObject>& objects) {
     for (const auto& o : objects) {
         auto model = glm::mat4(1.0f); // identity matrix
         model = glm::translate(model, o.Position());
         model = glm::scale(model, o.Scale());
-        ModelMat.push_back(model);
+
+        assert(o.HasComponent<Components::Mesh>());
+        const auto& texPos = o.GetComponent<Components::Mesh>().Mesh_.GetTexPos();
+        InstancesData_.push_back({ model,
+          { texPos.x, texPos.y, 0, 0 } });
     }
 
     // configure instanced array
-    glGenBuffers(1, &ModelMatBufferId);
-    glBindBuffer(GL_ARRAY_BUFFER, ModelMatBufferId);
-    glBufferData(GL_ARRAY_BUFFER, ModelMat.size() * sizeof(glm::mat4), ModelMat.data(), GL_STATIC_DRAW);
+    glGenBuffers(1, &InstanceDataBufferId_);
+    glBindBuffer(GL_ARRAY_BUFFER, InstanceDataBufferId_);
+    glBufferData(
+      GL_ARRAY_BUFFER,
+      InstancesData_.size() * sizeof(Detail::InstanceData),
+      InstancesData_.data(),
+      GL_STATIC_DRAW);
 
-    if (!objects.empty())
-    {
+    if (!objects.empty()) {
         objects.front().GetComponent<Components::Mesh>().Mesh_.BindBatchAttribPtrs();
     }
 }

@@ -1449,6 +1449,9 @@
     <ClInclude Include="src\engine\Components\Mesh.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\helpers\Constants.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\textures\doge.png">
@@ -1464,6 +1467,12 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="res\textures\concrete.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\atlas.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\atlas_specular.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

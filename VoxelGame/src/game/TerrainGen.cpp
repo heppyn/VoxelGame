@@ -21,12 +21,12 @@ std::vector<GameObject> Terrain::TerrainGen::GenerateChunk(const glm::vec2& posi
             const auto r = std::rand() / ((RAND_MAX + 1u) / 10);
             res.emplace_back(
               glm::vec3(position.x + static_cast<float>(i), 0.0f, position.y + static_cast<float>(j)),
-              concrete,
+              glm::vec2(0, 1),
               true);
             if (r % 10 == 0) {
                 res.emplace_back(
                   glm::vec3(position.x + static_cast<float>(i), 1.0f, position.y + static_cast<float>(j)),
-                  textures,
+                  glm::vec2(0, 0),
                   true);
             }
         }

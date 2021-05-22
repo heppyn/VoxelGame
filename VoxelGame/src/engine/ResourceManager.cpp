@@ -5,6 +5,7 @@
 #include <sstream>
 
 #include "stb_image/stb_image.h"
+#include "../helpers/Constants.h"
 
 std::map<std::string, std::unique_ptr<Renderer::Shader>> ResourceManager::Shaders;
 std::map<std::string, std::unique_ptr<Renderer::Texture2D>> ResourceManager::Textures;
@@ -35,6 +36,18 @@ Renderer::Texture2D* ResourceManager::GetTexture2D(std::string& name) {
 Renderer::Texture2D* ResourceManager::GetTexture2D(const char* name) {
     // TODO: check for existence
     return Textures[name].get();
+}
+
+glm::vec2 ResourceManager::GetSpriteSheetSize() {
+    if (!Textures.contains(Constants::SPRITE_SHEET)) {
+        // TODO: log message
+        // sprite sheet was not loaded
+        assert(false);
+    }
+    return {
+        static_cast<float>(Textures[Constants::SPRITE_SHEET].get()->Width_) / 500.0f,
+        static_cast<float>(Textures[Constants::SPRITE_SHEET].get()->Height_) / 500.0f
+    };
 }
 
 void ResourceManager::Clear() {

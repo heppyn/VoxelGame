@@ -1,7 +1,10 @@
 #include "CubeRenderer.h"
 
+#include <algorithm>
+
 #include "engine/Components/Mesh.h"
 #include "engine/GameObject.h"
+#include "engine/ResourceManager.h"
 
 
 Renderer::CubeRenderer::~CubeRenderer() {
@@ -22,14 +25,33 @@ void Renderer::CubeRenderer::DrawCube(const Mesh& mesh, const glm::vec3& positio
     mesh.Draw(*Shader);
 }
 
-void Renderer::CubeRenderer::DrawCubesBatched(const GameObject& go, unsigned amount) const
-{
+void Renderer::CubeRenderer::DrawCubesBatched(const GameObject& go, unsigned amount) const {
     assert(go.HasComponent<Components::Mesh>());
     go.GetComponent<Components::Mesh>().Mesh_.DrawBatched(*Shader, amount);
 }
 
 Renderer::Mesh Renderer::CubeRenderer::GetCubeMesh(bool batched /*= false*/) {
-    std::vector<Vertex> vertices = {
+    return Mesh(GetVertices(), GetIndices(), {}, batched);
+}
+
+Renderer::Mesh Renderer::CubeRenderer::GetCubeMesh(glm::vec2 texPos, bool batched /*= false*/) {
+    const auto& texSize = ResourceManager::GetSpriteSheetSize();
+    texPos.y = texSize.y - 1 - texPos.y;
+    //const auto shiftX = 1.0f / texSizeX * texPos.x;
+    //const auto shiftY = 1.0f / texSizeY * texPos.y;
+    auto vertices = GetVertices();
+
+    std::ranges::for_each(vertices, [texSize](Vertex& v) {
+        v.TexCoords = {
+            v.TexCoords.x / texSize.x,
+            v.TexCoords.y / texSize.y,
+        };
+    });
+    return Mesh(vertices, GetIndices(), texPos, batched);
+}
+
+std::vector<Renderer::Vertex> Renderer::CubeRenderer::GetVertices() {
+    return {
         // clang-format off
         // pos                        // normals                 // tex
         // front
@@ -43,10 +65,10 @@ Renderer::Mesh Renderer::CubeRenderer::GetCubeMesh(bool batched /*= false*/) {
         {  0.5f,  0.5f, -0.5f, 0.0f, 0.0f, -1.0f, 0.0f, 1.0f },
         { -0.5f,  0.5f, -0.5f, 0.0f, 0.0f, -1.0f, 1.0f, 1.0f },
         // top
-        { -0.5f, 0.5f,  0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f },
-        {  0.5f, 0.5f,  0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f },
-        {  0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f },
-        { -0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f },
+        { -0.5f, 0.5f,  0.5f,  0.0f, 1.0f, 0.0f,  0.0f, 0.0f },
+        {  0.5f, 0.5f,  0.5f,  0.0f, 1.0f, 0.0f,  1.0f, 0.0f },
+        {  0.5f, 0.5f, -0.5f,  0.0f, 1.0f, 0.0f,  1.0f, 1.0f },
+        { -0.5f, 0.5f, -0.5f,  0.0f, 1.0f, 0.0f,  0.0f, 1.0f },
         // bottom
         { -0.5f, -0.5f,  0.5f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f },
         {  0.5f, -0.5f,  0.5f, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f },
@@ -58,14 +80,16 @@ Renderer::Mesh Renderer::CubeRenderer::GetCubeMesh(bool batched /*= false*/) {
         { 0.5f,  0.5f,  -0.5f, 1.0f, 0.0f,  0.0f, 1.0f, 1.0f },
         { 0.5f,  0.5f,   0.5f, 1.0f, 0.0f,  0.0f, 0.0f, 1.0f },
         // left
-        { -0.5f, -0.5f, -0.5f, -1.0f, 0.0f,  0.0f, 0.0f, 0.0f },
-        { -0.5f, -0.5f,  0.5f, -1.0f, 0.0f,  0.0f, 1.0f, 0.0f },
-        { -0.5f,  0.5f,  0.5f, -1.0f, 0.0f,  0.0f, 1.0f, 1.0f },
-        { -0.5f,  0.5f, -0.5f, -1.0f, 0.0f,  0.0f, 0.0f, 1.0f },
+        { -0.5f, -0.5f, -0.5f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f },
+        { -0.5f, -0.5f,  0.5f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f },
+        { -0.5f,  0.5f,  0.5f, -1.0f, 0.0f, 0.0f, 1.0f, 1.0f },
+        { -0.5f,  0.5f, -0.5f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f },
         // clang-format on
     };
+}
 
-    std::vector<unsigned> indices = {
+std::vector<unsigned> Renderer::CubeRenderer::GetIndices() {
+    return {
         // clang-format off
         // front
         0, 1, 3,
@@ -87,6 +111,4 @@ Renderer::Mesh Renderer::CubeRenderer::GetCubeMesh(bool batched /*= false*/) {
         21, 22, 23,
         // clang-format on
     };
-
-    return Mesh(vertices, indices, {}, batched);
 }

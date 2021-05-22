@@ -92,7 +92,7 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>src;src\vendor;$(SolutionDir)Dependencies\GLFW\include;$(SolutionDir)Dependencies\GLEW\include;$(SolutionDir)Dependencies\GLAD\include</AdditionalIncludeDirectories>
       <TreatWarningAsError>false</TreatWarningAsError>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -111,7 +111,7 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>src;src\vendor;$(SolutionDir)Dependencies\GLFW\include;$(SolutionDir)Dependencies\GLEW\include;$(SolutionDir)Dependencies\GLAD\include</AdditionalIncludeDirectories>
       <TreatWarningAsError>false</TreatWarningAsError>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -336,6 +336,7 @@
     <ClInclude Include="src\engine\InputHandler.h" />
     <ClInclude Include="src\engine\Scene.h" />
     <ClInclude Include="src\game\TerrainGen.h" />
+    <ClInclude Include="src\helpers\Constants.h" />
     <ClInclude Include="src\open_gl\InputHandlerGl.h" />
     <ClInclude Include="src\open_gl\WindowManagerGl.h" />
     <ClInclude Include="src\engine\Game.h" />
@@ -641,6 +642,8 @@
     <ClInclude Include="src\vendor\stb_image\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="res\textures\atlas.jpg" />
+    <Image Include="res\textures\atlas_specular.png" />
     <Image Include="res\textures\box.png" />
     <Image Include="res\textures\box_specular.png" />
     <Image Include="res\textures\concrete.png" />

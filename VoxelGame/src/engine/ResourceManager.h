@@ -20,6 +20,8 @@ class ResourceManager {
     static Renderer::Texture2D* GetTexture2D(std::string& name);
     static Renderer::Texture2D* GetTexture2D(const char* name);
 
+    static glm::vec2 GetSpriteSheetSize();
+
     static void Clear();
 
   private:

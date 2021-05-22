@@ -3,6 +3,13 @@
 #include "Components/Mesh.h"
 #include "Components/Transform.h"
 
+GameObject::GameObject(glm::vec3 position, glm::vec2 texPos, bool batched) {
+    auto mesh = Renderer::CubeRenderer::GetCubeMesh(texPos, batched);
+
+    AddComponent<Components::Mesh>(mesh);
+    AddComponent<Components::Transform>(position);
+}
+
 GameObject::GameObject(glm::vec3 position, Renderer::Texture2D* texture, bool batched /*= false*/) {
     auto mesh = Renderer::CubeRenderer::GetCubeMesh(batched);
     mesh.Textures.push_back(*texture);

@@ -25,7 +25,7 @@ float lastFrame = 0.0f;
 
 int main() {
     // enable debug by passing true
-    auto* window = WindowManagerGl::CreateMainWindow();
+    auto* window = WindowManagerGl::CreateMainWindow(true);
     glfwSetFramebufferSizeCallback(window, WindowManagerGl::FramebufferSizeCallback);
 
     // configure global opengl state

@@ -2,7 +2,6 @@
 
 #include "Component.h"
 #include "renderer/Mesh.h"
-#include "renderer/Shader.h"
 
 namespace Components {
 class Mesh : public Component {

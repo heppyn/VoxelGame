@@ -2,6 +2,9 @@
 
 #include <utility>
 
+#include "../engine/ResourceManager.h"
+#include "../helpers/Constants.h"
+
 
 Renderer::Vertex::Vertex(float px, float py, float pz, float nx, float ny, float nz, float tx, float ty)
   : Position(px, py, pz),
@@ -9,10 +12,17 @@ Renderer::Vertex::Vertex(float px, float py, float pz, float nx, float ny, float
     TexCoords(tx, ty) {
 }
 
-Renderer::Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned> indices, std::vector<Texture2D> textures, bool batched /*= false*/)
+//Renderer::Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned> indices, std::vector<Texture2D> textures, bool batched /*= false*/)
+//  : Vertices(std::move(vertices)),
+//    Indices(std::move(indices)),
+//    Textures(std::move(textures)) {
+//    SetupMesh(batched);
+//}
+
+Renderer::Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned> indices, const glm::vec2& texPos, bool batched)
   : Vertices(std::move(vertices)),
     Indices(std::move(indices)),
-    Textures(std::move(textures)) {
+    TexPos_(texPos) {
     SetupMesh(batched);
 }
 
@@ -31,7 +41,13 @@ Renderer::Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned> indices
 //}
 
 Renderer::Mesh::Mesh(Mesh&& other) noexcept
-  : Vertices(std::move(other.Vertices)), Indices(std::move(other.Indices)), Textures(std::move(other.Textures)), Vao(other.Vao), Vbo(other.Vbo), Ebo(other.Ebo) {
+  : Vertices(std::move(other.Vertices)),
+    Indices(std::move(other.Indices)),
+    Textures(std::move(other.Textures)),
+    Vao(other.Vao),
+    Vbo(other.Vbo),
+    Ebo(other.Ebo),
+    TexPos_(other.TexPos_) {
 }
 
 Renderer::Mesh& Renderer::Mesh::operator=(Mesh&& other) noexcept {
@@ -42,6 +58,7 @@ Renderer::Mesh& Renderer::Mesh::operator=(Mesh&& other) noexcept {
         Vao = other.Vao;
         Vbo = other.Vbo;
         Ebo = other.Ebo;
+        TexPos_ = other.TexPos_;
     }
 
     return *this;
@@ -60,10 +77,10 @@ void Renderer::Mesh::Draw(Shader& shader) const {
     glActiveTexture(GL_TEXTURE0);
 }
 
-void Renderer::Mesh::DrawBatched(Shader& shader, unsigned amount) const
-{
+void Renderer::Mesh::DrawBatched(Shader& shader, unsigned amount) const {
     assert(Vao);
-    BindTextures(shader);
+    //BindTextures(shader);
+    BindSpriteSheets(shader);
 
     glBindVertexArray(Vao);
     glDrawElementsInstanced(GL_TRIANGLES, Indices.size(), GL_UNSIGNED_INT, 0, amount);
@@ -135,6 +152,14 @@ void Renderer::Mesh::BindTextures(Shader& shader) const {
     }
 }
 
+void Renderer::Mesh::BindSpriteSheets(Shader& shader) const {
+    // set sampler to the correct texture unit
+    glUniform1i(glGetUniformLocation(shader.Id, "texture_diffuse1"), 0);
+    ResourceManager::GetTexture2D(Constants::SPRITE_SHEET.c_str())->Bind(0);
+    glUniform1i(glGetUniformLocation(shader.Id, "texture_specular1"), 1);
+    ResourceManager::GetTexture2D(Constants::SPRITE_SHEET_SPEC.c_str())->Bind(1);
+}
+
 void Renderer::Mesh::UnbindTextures(unsigned num) const {
     for (unsigned i = 0; i < num; ++i) {
         glActiveTexture(GL_TEXTURE0 + i);
@@ -142,26 +167,31 @@ void Renderer::Mesh::UnbindTextures(unsigned num) const {
     }
 }
 
-void Renderer::Mesh::BindMesh() const
-{
+void Renderer::Mesh::BindMesh() const {
     glBindVertexArray(Vao);
 }
 
-void Renderer::Mesh::BindBatchAttribPtrs() const
-{
+void Renderer::Mesh::BindBatchAttribPtrs() const {
     glBindVertexArray(Vao);
 
     glEnableVertexAttribArray(3);
-    glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)0);
+    glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4) + sizeof(glm::vec4), (void*)0);
     glEnableVertexAttribArray(4);
-    glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(sizeof(glm::vec4)));
+    glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4) + sizeof(glm::vec4), (void*)(sizeof(glm::vec4)));
     glEnableVertexAttribArray(5);
-    glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(2 * sizeof(glm::vec4)));
+    glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4) + sizeof(glm::vec4), (void*)(2 * sizeof(glm::vec4)));
     glEnableVertexAttribArray(6);
-    glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(3 * sizeof(glm::vec4)));
+    glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4) + sizeof(glm::vec4), (void*)(3 * sizeof(glm::vec4)));
+    glEnableVertexAttribArray(7);
+    glVertexAttribPointer(7, 4, GL_FLOAT, GL_FALSE, sizeof(glm::vec4) + sizeof(glm::vec4), (void*)(4 * sizeof(glm::vec4)));
 
     glVertexAttribDivisor(3, 1);
     glVertexAttribDivisor(4, 1);
     glVertexAttribDivisor(5, 1);
     glVertexAttribDivisor(6, 1);
+    glVertexAttribDivisor(7, 1);
+}
+
+const glm::vec2& Renderer::Mesh::GetTexPos() const {
+    return TexPos_;
 }

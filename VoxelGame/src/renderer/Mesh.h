@@ -27,7 +27,8 @@ class Mesh {
 
     Mesh() = default;
     ~Mesh() = default;
-    Mesh(std::vector<Vertex> vertices, std::vector<unsigned> indices, std::vector<Texture2D> textures, bool batched = false);
+    //Mesh(std::vector<Vertex> vertices, std::vector<unsigned> indices, std::vector<Texture2D> textures, bool batched = false);
+    Mesh(std::vector<Vertex> vertices, std::vector<unsigned> indices, const glm::vec2& texPos, bool batched = false);
     Mesh(const Mesh& other) = default;
     Mesh& operator=(const Mesh& other) = default;
     Mesh(Mesh&& other) noexcept;
@@ -37,11 +38,16 @@ class Mesh {
     void BindMesh() const;
     void BindBatchAttribPtrs() const;
 
+    [[nodiscard]] const glm::vec2& GetTexPos() const;
+
   private:
     unsigned Vao{ 0 }, Vbo{ 0 }, Ebo{ 0 };
+    // TODO: is this needed?
+    glm::vec2 TexPos_ = { 0, 0 };
 
     void SetupMesh(bool batched);
     void BindTextures(Shader& shader) const;
+    void BindSpriteSheets(Shader& shader) const;
     void UnbindTextures(unsigned num) const;
 };
 } // namespace Renderer
