@@ -17,7 +17,7 @@ std::vector<GameObject> Terrain::TerrainGen::GenerateChunk(const glm::vec2& posi
               (position.y + static_cast<float>(j)) / static_cast<float>(ChunkSize));
             res.emplace_back(
               glm::vec3(position.x + static_cast<float>(i), std::floor(h * 10), position.y + static_cast<float>(j)),
-              glm::vec2(0, 0),
+              h > 0.0f ? glm::vec2(0, 0) : glm::vec2(0, 1),
               true);
         }
     }

@@ -2,6 +2,7 @@
 
 #include "engine/ResourceManager.h"
 #include "engine/Components/Mesh.h"
+#include "helpers/Math.h"
 
 Renderer::SceneRenderer::SceneRenderer(Renderer::Camera* camera)
   : Camera(camera) {
@@ -75,8 +76,9 @@ void Renderer::SceneRenderer::CalculateInstanceData(const std::vector<GameObject
 
         assert(o.HasComponent<Components::Mesh>());
         const auto& texPos = o.GetComponent<Components::Mesh>().Mesh_.GetTexPos();
-        InstancesData_.push_back({ model,
-          { texPos.x, texPos.y, 0, 0 } });
+        Helpers::Math::PackVecToMatrix(model, texPos);
+
+        InstancesData_.push_back(model);
     }
 
     // configure instanced array
@@ -84,7 +86,7 @@ void Renderer::SceneRenderer::CalculateInstanceData(const std::vector<GameObject
     glBindBuffer(GL_ARRAY_BUFFER, InstanceDataBufferId_);
     glBufferData(
       GL_ARRAY_BUFFER,
-      InstancesData_.size() * sizeof(Detail::InstanceData),
+      InstancesData_.size() * sizeof(glm::mat4),
       InstancesData_.data(),
       GL_STATIC_DRAW);
 

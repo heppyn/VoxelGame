@@ -8,18 +8,11 @@
 
 
 namespace Renderer {
-namespace Detail {
-    struct InstanceData {
-        glm::mat4 ModelMat;
-        glm::vec4 TexCoords;
-    };
-} // namespace Detail
-
 class SceneRenderer {
   private:
     Camera* Camera;
     CubeRenderer CubeRenderer{};
-    std::vector<Detail::InstanceData> InstancesData_{};
+    std::vector<glm::mat4> InstancesData_{};
     unsigned int InstanceDataBufferId_{ 0 };
 
   public:
