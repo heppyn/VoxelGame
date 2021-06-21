@@ -21,7 +21,7 @@ class Game {
     [[nodiscard]] Renderer::Camera* GetCamera() const { return Camera.get(); }
 
   private:
-    std::unique_ptr<Renderer::Camera> Camera{ nullptr };
+    std::shared_ptr<Renderer::Camera> Camera{ nullptr };
     std::unique_ptr<Renderer::SceneRenderer> Renderer{ nullptr };
     Scene Scene_;
 

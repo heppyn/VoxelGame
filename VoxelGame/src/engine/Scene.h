@@ -2,14 +2,19 @@
 #include <vector>
 
 #include "GameObject.h"
+#include "renderer/Camera.h"
 
 class Scene {
   private:
     std::vector<GameObject> Lights_{};
     std::vector<GameObject> Objects_{};
+    std::shared_ptr<Renderer::Camera> Camera_{ nullptr };
+    int RenderDistance_{ 4 };
 
   public:
-    void Init();
+    void Init(std::shared_ptr<Renderer::Camera> camera);
+    void Update();
+    void SetCamera(std::shared_ptr<Renderer::Camera> camera);
 
     [[nodiscard]] std::vector<GameObject>& GetLights() {
         return Lights_;

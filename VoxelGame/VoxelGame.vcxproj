@@ -151,6 +151,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\engine\Chunk.cpp" />
     <ClCompile Include="src\engine\Commands.cpp" />
     <ClCompile Include="src\engine\InputHandler.cpp" />
     <ClCompile Include="src\engine\Scene.cpp" />
@@ -332,6 +333,7 @@
     <None Include="src\vendor\perlin_noise\LICENSE" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\engine\Chunk.h" />
     <ClInclude Include="src\engine\Commands.h" />
     <ClInclude Include="src\engine\Components\Component.h" />
     <ClInclude Include="src\engine\Components\Mesh.h" />

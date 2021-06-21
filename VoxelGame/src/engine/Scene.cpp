@@ -1,9 +1,13 @@
 #include "Scene.h"
 
+#include <utility>
+
 #include "ResourceManager.h"
 #include "game/TerrainGen.h"
 
-void Scene::Init() {
+void Scene::Init(std::shared_ptr<Renderer::Camera> camera) {
+    SetCamera(std::move(camera));
+
     const auto size = static_cast<int>(Terrain::TerrainGen::GetChunkSize());
 
     // add white light
@@ -17,4 +21,8 @@ void Scene::Init() {
             Objects_.insert(Objects_.end(), std::make_move_iterator(tmp.begin()), std::make_move_iterator(tmp.end()));
         }
     }
+}
+
+void Scene::SetCamera(std::shared_ptr<Renderer::Camera> camera) {
+    Camera_ = std::move(camera);
 }

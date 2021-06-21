@@ -99,6 +99,9 @@
     <ClCompile Include="src\helpers\Math.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\engine\Chunk.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\vendor\glm\detail\func_common.inl">
@@ -1464,6 +1467,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\helpers\Math.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\Chunk.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

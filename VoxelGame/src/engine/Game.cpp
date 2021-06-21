@@ -24,7 +24,7 @@ void Game::Init() {
     ResourceManager::LoadTexture2D("./res/textures/atlas.jpg", false, Constants::SPRITE_SHEET);
     ResourceManager::LoadTexture2D("./res/textures/atlas_specular.png", true, Constants::SPRITE_SHEET_SPEC)->SetTypeSpecular();
 
-    Camera = std::make_unique<Renderer::Camera>(glm::vec3(0.0f, 3.0f, 0.0f));
+    Camera = std::make_shared<Renderer::Camera>(glm::vec3(0.0f, 3.0f, 0.0f));
     Renderer = std::make_unique<Renderer::SceneRenderer>(Camera.get());
 
     InitScene();
@@ -51,5 +51,5 @@ unsigned Game::Height() const {
 }
 
 void Game::InitScene() {
-    Scene_.Init();
+    Scene_.Init(Camera);
 }
