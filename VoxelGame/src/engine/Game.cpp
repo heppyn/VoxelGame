@@ -36,6 +36,7 @@ void Game::ProcessInput(float delta) const {
 }
 
 void Game::Update(float delta) {
+    Scene_.Update();
 }
 
 void Game::Render() const {

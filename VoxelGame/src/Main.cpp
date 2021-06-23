@@ -43,6 +43,7 @@ int main() {
         //std::cout << "FPS: " << 1.0f / deltaTime << '\n';
 
         game->ProcessInput(deltaTime);
+        game->Update(deltaTime);
         game->Render();
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)

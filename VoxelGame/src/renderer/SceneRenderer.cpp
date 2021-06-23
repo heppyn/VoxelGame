@@ -2,7 +2,6 @@
 
 #include "engine/ResourceManager.h"
 #include "engine/Components/Mesh.h"
-#include "helpers/Math.h"
 
 Renderer::SceneRenderer::SceneRenderer(Renderer::Camera* camera)
   : Camera(camera) {
@@ -10,10 +9,9 @@ Renderer::SceneRenderer::SceneRenderer(Renderer::Camera* camera)
 }
 
 void Renderer::SceneRenderer::Render(const Scene& scene, unsigned width, unsigned height) {
-    if (InstancesData_.empty()) {
-        // TODO: check for change in terrain
-        CalculateInstanceData(scene.GetObjects());
-    }
+    // TODO: check for change in terrain
+    BindInstancesData(scene);
+
     // TODO: disable this for rendering multiple scenes
     glClearColor(0.15f, 0.15f, 0.15f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -55,42 +53,42 @@ void Renderer::SceneRenderer::Render(const Scene& scene, unsigned width, unsigne
 
     // render all objects at once
     CubeRenderer.SetShader(shaders[2]);
-    CubeRenderer.DrawCubesBatched(scene.GetObjects().front(), InstancesData_.size());
-
-    // render one object at a time
-    //CubeRenderer.SetShader(shaders[1]);
-    //for (const auto& o : scene.GetObjects()) {
-    //    o.Draw(CubeRenderer);
-    //}
+    CubeRenderer.DrawCubesBatched(
+      scene.GetChunks().begin()->second.GetObjects().front(),
+      scene.GetSceneSize());
 
     // draw light separately
     CubeRenderer.SetShader(shaders[0]);
     scene.GetLights().front().Draw(CubeRenderer);
 }
 
-void Renderer::SceneRenderer::CalculateInstanceData(const std::vector<GameObject>& objects) {
-    for (const auto& o : objects) {
-        auto model = glm::mat4(1.0f); // identity matrix
-        model = glm::translate(model, o.Position());
-        model = glm::scale(model, o.Scale());
-
-        assert(o.HasComponent<Components::Mesh>());
-        const auto& texPos = o.GetComponent<Components::Mesh>().Mesh_.GetTexPos();
-        Helpers::Math::PackVecToMatrix(model, texPos);
-
-        InstancesData_.push_back(model);
-    }
+void Renderer::SceneRenderer::BindInstancesData(const Scene& scene) {
+    const auto instancesData = scene.GetRenderableObjectsData();
+    const size_t objectsCnt = scene.GetSceneSize();
 
     // configure instanced array
-    glGenBuffers(1, &InstanceDataBufferId_);
-    glBindBuffer(GL_ARRAY_BUFFER, InstanceDataBufferId_);
-    glBufferData(
-      GL_ARRAY_BUFFER,
-      InstancesData_.size() * sizeof(glm::mat4),
-      InstancesData_.data(),
-      GL_STATIC_DRAW);
+    if (!InstanceDataBufferId_) {
+        glGenBuffers(1, &InstanceDataBufferId_);
+        glBindBuffer(GL_ARRAY_BUFFER, InstanceDataBufferId_);
+        // allocate memory
+        // TODO: reallocate for different number of objects
+        glBufferData(
+          GL_ARRAY_BUFFER,
+          objectsCnt * sizeof(glm::mat4),
+          nullptr,
+          GL_DYNAMIC_DRAW);
+    }
 
-    if (!objects.empty()) {
-        objects.front().GetComponent<Components::Mesh>().Mesh_.BindBatchAttribPtrs();
+    // bind data
+    glBindBuffer(GL_ARRAY_BUFFER, InstanceDataBufferId_);
+    unsigned offset = 0;
+    for (const auto& chunk : instancesData) {
+        glBufferSubData(GL_ARRAY_BUFFER, offset * sizeof(glm::mat4), chunk->size() * sizeof(glm::mat4), chunk->data());
+        offset += chunk->size();
+    }
+
+    const auto& firstChunkObjects = scene.GetChunks().begin()->second.GetObjects();
+    if (!firstChunkObjects.empty()) {
+        firstChunkObjects.front().GetComponent<Components::Mesh>().Mesh_.BindBatchAttribPtrs();
     }
 }
