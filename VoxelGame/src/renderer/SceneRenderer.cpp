@@ -13,7 +13,7 @@ void Renderer::SceneRenderer::Render(const Scene& scene, unsigned width, unsigne
     BindInstancesData(scene);
 
     // TODO: disable this for rendering multiple scenes
-    glClearColor(0.15f, 0.15f, 0.15f, 1.0f);
+    glClearColor(103/255.0f, 157/255.0f, 245/255.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     std::vector<Shader*> shaders = {
