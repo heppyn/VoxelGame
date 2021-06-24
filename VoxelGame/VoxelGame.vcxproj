@@ -161,6 +161,8 @@
     <ClCompile Include="src\engine\Commands.cpp" />
     <ClCompile Include="src\engine\InputHandler.cpp" />
     <ClCompile Include="src\engine\Scene.cpp" />
+    <ClCompile Include="src\game\BlockFactory.cpp" />
+    <ClCompile Include="src\game\Terrain.cpp" />
     <ClCompile Include="src\game\TerrainGen.cpp" />
     <ClCompile Include="src\helpers\Math.cpp" />
     <ClCompile Include="src\open_gl\InputHandlerGl.cpp" />
@@ -346,6 +348,8 @@
     <ClInclude Include="src\engine\Components\Transform.h" />
     <ClInclude Include="src\engine\InputHandler.h" />
     <ClInclude Include="src\engine\Scene.h" />
+    <ClInclude Include="src\game\BlockFactory.h" />
+    <ClInclude Include="src\game\Terrain.h" />
     <ClInclude Include="src\game\TerrainGen.h" />
     <ClInclude Include="src\helpers\Constants.h" />
     <ClInclude Include="src\helpers\Math.h" />

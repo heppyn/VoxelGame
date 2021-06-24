@@ -2,7 +2,6 @@
 
 #include "engine/Chunk.h"
 #include "glm/vec2.hpp"
-#include "engine/GameObject.h"
 
 namespace Terrain {
 class TerrainGen {

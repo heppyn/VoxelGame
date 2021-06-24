@@ -4,6 +4,8 @@
 
 #include "engine/ResourceManager.h"
 #include "engine/Chunk.h"
+#include "Terrain.h"
+#include "BlockFactory.h"
 
 
 Chunk Terrain::TerrainGen::GenerateChunk(const glm::vec2& position) {
@@ -18,9 +20,9 @@ Chunk Terrain::TerrainGen::GenerateChunk(const glm::vec2& position) {
               (position.x + static_cast<float>(i)) / Chunk::ChunkSize,
               (position.y + static_cast<float>(j)) / Chunk::ChunkSize);
             objects.emplace_back(
-              glm::vec3(position.x + static_cast<float>(i), std::floor(h * 10), position.y + static_cast<float>(j)),
-              h > 0.0f ? glm::vec2(0, 0) : glm::vec2(0, 1),
-              true);
+              BlockFactory::CreateBlock(
+                glm::vec3(position.x + static_cast<float>(i), std::floor(h * 10), position.y + static_cast<float>(j)),
+                h > 0.0f ? BlockType::Grass : BlockType::Stone));
         }
     }
 
