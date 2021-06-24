@@ -6,11 +6,13 @@
 
 #include "renderer/Shader.h"
 #include "renderer/Texture2D.h"
+#include "renderer/SpriteSheet.h"
 
 class ResourceManager {
   public:
     static std::map<std::string, std::unique_ptr<Renderer::Shader>> Shaders;
     static std::map<std::string, std::unique_ptr<Renderer::Texture2D>> Textures;
+    static Renderer::SpriteSheet SpriteSheet;
 
     static Renderer::Shader* LoadShader(const char* vShaderFile, const char* fShaderFile, const char* gShaderFile, const std::string& name);
     static Renderer::Shader* GetShader(std::string& name);

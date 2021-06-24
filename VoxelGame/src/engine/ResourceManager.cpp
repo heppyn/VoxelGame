@@ -9,6 +9,7 @@
 
 std::map<std::string, std::unique_ptr<Renderer::Shader>> ResourceManager::Shaders;
 std::map<std::string, std::unique_ptr<Renderer::Texture2D>> ResourceManager::Textures;
+Renderer::SpriteSheet ResourceManager::SpriteSheet;
 
 Renderer::Shader* ResourceManager::LoadShader(const char* vShaderFile, const char* fShaderFile, const char* gShaderFile, const std::string& name) {
     Shaders[name] = std::unique_ptr<Renderer::Shader>(LoadShaderFromFile(vShaderFile, fShaderFile, gShaderFile));
@@ -45,8 +46,8 @@ glm::vec2 ResourceManager::GetSpriteSheetSize() {
         assert(false);
     }
     return {
-        static_cast<float>(Textures[Constants::SPRITE_SHEET].get()->Width_) / 500.0f,
-        static_cast<float>(Textures[Constants::SPRITE_SHEET].get()->Height_) / 500.0f
+        static_cast<float>(Textures[SpriteSheet.TextureName].get()->Width_) / SpriteSheet.ItemWidth,
+        static_cast<float>(Textures[SpriteSheet.TextureName].get()->Height_) / SpriteSheet.ItemHeight
     };
 }
 

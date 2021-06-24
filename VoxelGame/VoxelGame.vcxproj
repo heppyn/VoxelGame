@@ -361,6 +361,7 @@
     <ClInclude Include="src\renderer\SceneRenderer.h" />
     <ClInclude Include="src\renderer\Shader.h" />
     <ClInclude Include="src\renderer\Camera.h" />
+    <ClInclude Include="src\renderer\SpriteSheet.h" />
     <ClInclude Include="src\renderer\Texture2D.h" />
     <ClInclude Include="src\vendor\glm\common.hpp" />
     <ClInclude Include="src\vendor\glm\detail\compute_common.hpp" />
