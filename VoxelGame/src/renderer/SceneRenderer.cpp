@@ -8,12 +8,16 @@ Renderer::SceneRenderer::SceneRenderer(Renderer::Camera* camera)
     // default shader is the not batch one
 }
 
+void Renderer::SceneRenderer::Init() {
+    CubeRenderer.Init();
+}
+
 void Renderer::SceneRenderer::Render(const Scene& scene, unsigned width, unsigned height) {
     // TODO: check for change in terrain
     BindInstancesData(scene);
 
     // TODO: disable this for rendering multiple scenes
-    glClearColor(103/255.0f, 157/255.0f, 245/255.0f, 1.0f);
+    glClearColor(103 / 255.0f, 157 / 255.0f, 245 / 255.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     std::vector<Shader*> shaders = {
@@ -55,9 +59,7 @@ void Renderer::SceneRenderer::Render(const Scene& scene, unsigned width, unsigne
 
     // render all objects at once
     CubeRenderer.SetShader(shaders[2]);
-    CubeRenderer.DrawCubesBatched(
-      scene.GetChunks().begin()->second.GetObjects().front(),
-      scene.GetSceneSize());
+    CubeRenderer.DrawCubesBatched(scene.GetSceneSize());
 
     // draw light separately
     CubeRenderer.SetShader(shaders[0]);
@@ -89,8 +91,5 @@ void Renderer::SceneRenderer::BindInstancesData(const Scene& scene) {
         offset += chunk->size();
     }
 
-    const auto& firstChunkObjects = scene.GetChunks().begin()->second.GetObjects();
-    if (!firstChunkObjects.empty()) {
-        firstChunkObjects.front().GetComponent<Components::Mesh>().Mesh_.BindBatchAttribPtrs();
-    }
+    CubeRenderer.GetDefaultMesh().BindBatchAttribPtrs();
 }

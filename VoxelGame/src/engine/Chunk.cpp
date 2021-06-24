@@ -1,6 +1,6 @@
 #include "Chunk.h"
 
-#include "Components/Mesh.h"
+#include "Components/SpritesheetTex.h"
 #include "helpers/Math.h"
 
 float Chunk::ChunkSize{ 16 };
@@ -25,8 +25,8 @@ void Chunk::GenerateInstanceData() {
         model = glm::translate(model, o.Position());
         model = glm::scale(model, o.Scale());
 
-        assert(o.HasComponent<Components::Mesh>());
-        const auto& texPos = o.GetComponent<Components::Mesh>().Mesh_.GetTexPos();
+        assert(o.HasComponent<Components::SpritesheetTex>());
+        const auto& texPos = o.GetComponent<Components::SpritesheetTex>().GetTexPos();
         Helpers::Math::PackVecToMatrix(model, texPos);
 
         InstancesData_->push_back(model);

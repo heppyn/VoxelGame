@@ -11,6 +11,10 @@ Renderer::CubeRenderer::~CubeRenderer() {
     glDeleteVertexArrays(1, &CubeVao);
 }
 
+void Renderer::CubeRenderer::Init() {
+    DefaultMesh_ = GetCubeMesh(true);
+}
+
 void Renderer::CubeRenderer::DrawCube(const Mesh& mesh, const glm::vec3& position, const glm::vec3& scale) const {
     Shader->Use();
 
@@ -25,20 +29,23 @@ void Renderer::CubeRenderer::DrawCube(const Mesh& mesh, const glm::vec3& positio
     mesh.Draw(*Shader);
 }
 
+void Renderer::CubeRenderer::DrawCubesBatched(unsigned amount) const {
+    DefaultMesh_.DrawBatched(*Shader, amount);
+}
+
 void Renderer::CubeRenderer::DrawCubesBatched(const GameObject& go, unsigned amount) const {
     assert(go.HasComponent<Components::Mesh>());
     go.GetComponent<Components::Mesh>().Mesh_.DrawBatched(*Shader, amount);
 }
 
 Renderer::Mesh Renderer::CubeRenderer::GetCubeMesh(bool batched /*= false*/) {
-    return Mesh(GetVertices(), GetIndices(), {}, batched);
+    return GetCubeMesh({ 0, 0 }, batched);
 }
 
 Renderer::Mesh Renderer::CubeRenderer::GetCubeMesh(glm::vec2 texPos, bool batched /*= false*/) {
     const auto& texSize = ResourceManager::GetSpriteSheetSize();
     texPos.y = texSize.y - 1 - texPos.y;
-    //const auto shiftX = 1.0f / texSizeX * texPos.x;
-    //const auto shiftY = 1.0f / texSizeY * texPos.y;
+
     auto vertices = GetVertices();
 
     std::ranges::for_each(vertices, [texSize](Vertex& v) {

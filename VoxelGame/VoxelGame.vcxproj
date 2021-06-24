@@ -345,6 +345,7 @@
     <ClInclude Include="src\engine\Commands.h" />
     <ClInclude Include="src\engine\Components\Component.h" />
     <ClInclude Include="src\engine\Components\Mesh.h" />
+    <ClInclude Include="src\engine\Components\SpritesheetTex.h" />
     <ClInclude Include="src\engine\Components\Transform.h" />
     <ClInclude Include="src\engine\InputHandler.h" />
     <ClInclude Include="src\engine\Scene.h" />

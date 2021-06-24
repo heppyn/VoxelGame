@@ -2,11 +2,10 @@
 
 #include "Components/Mesh.h"
 #include "Components/Transform.h"
+#include "Components/SpritesheetTex.h"
 
 GameObject::GameObject(glm::vec3 position, glm::vec2 texPos, bool batched) {
-    auto mesh = Renderer::CubeRenderer::GetCubeMesh(texPos, batched);
-
-    AddComponent<Components::Mesh>(mesh);
+    AddComponent<Components::SpritesheetTex>(texPos);
     AddComponent<Components::Transform>(position);
 }
 

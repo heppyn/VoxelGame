@@ -16,6 +16,7 @@ class SceneRenderer {
 
   public:
     explicit SceneRenderer(Renderer::Camera* camera);
+    void Init();
     void Render(const Scene& scene, unsigned int width, unsigned int height);
 
   private:
