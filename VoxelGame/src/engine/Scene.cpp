@@ -19,13 +19,15 @@ void Scene::Init(std::shared_ptr<Renderer::Camera> camera) {
 
 void Scene::Update() {
     const auto centerChunkPos = GetCenterChunkPos();
+    auto updated{ false };
 
     // deallocate chunk out of render distance
     for (auto it = Chunks_.begin(), nextIt = it; it != Chunks_.end(); it = nextIt) {
         ++nextIt;
         if (!IsInRenderDistance(it->second)) {
-            std::cout << "Erasing chunk at:" << it->first.x << ", " << it->first.y << '\n';
+            //std::cout << "Erasing chunk at:" << it->first.x << ", " << it->first.y << '\n';
             Chunks_.erase(it);
+            updated = true;
         }
     }
 
@@ -36,9 +38,13 @@ void Scene::Update() {
               centerChunkPos.y + static_cast<float>(j) * Chunk::ChunkSize);
             if (!Chunks_.contains(chunkPos)) {
                 Chunks_.emplace(chunkPos, Terrain::TerrainGen::GenerateChunk(chunkPos));
+                updated = true;
             }
         }
     }
+
+    if (updated)
+        UpdateObjectsData();
 }
 
 void Scene::SetCamera(std::shared_ptr<Renderer::Camera> camera) {
@@ -50,23 +56,7 @@ const std::map<glm::vec2, Chunk, Helpers::CmpGlmVec<glm::vec2>>& Scene::GetChunk
 }
 
 std::vector<std::shared_ptr<std::vector<glm::mat4>>> Scene::GetRenderableObjectsData() const {
-    // TODO: add caching
-    std::vector<std::shared_ptr<std::vector<glm::mat4>>> objectsData;
-
-    const auto centerChunkPos = GetCenterChunkPos();
-
-    for (auto i = -RenderDistance_; i <= RenderDistance_; ++i) {
-        for (auto j = -RenderDistance_; j <= RenderDistance_; ++j) {
-            const auto chunkPos = glm::vec2(
-              centerChunkPos.x + static_cast<float>(i) * Chunk::ChunkSize,
-              centerChunkPos.y + static_cast<float>(j) * Chunk::ChunkSize);
-            assert(Chunks_.contains(chunkPos));
-
-            objectsData.push_back(Chunks_.at(chunkPos).GetInstancesData());
-        }
-    }
-
-    return objectsData;
+    return ObjectsDataCache_;
 }
 
 size_t Scene::GetSceneSize() const {
@@ -84,6 +74,22 @@ glm::vec2 Scene::GetCenterChunkPos() const {
                                  : ceil(Camera_->Position.x / Chunk::ChunkSize) * Chunk::ChunkSize,
       Camera_->Position.z > 0.0f ? floor(Camera_->Position.z / Chunk::ChunkSize) * Chunk::ChunkSize
                                  : ceil(Camera_->Position.z / Chunk::ChunkSize) * Chunk::ChunkSize);
+}
+
+void Scene::UpdateObjectsData() {
+    ObjectsDataCache_.clear();
+    const auto centerChunkPos = GetCenterChunkPos();
+
+    for (auto i = -RenderDistance_; i <= RenderDistance_; ++i) {
+        for (auto j = -RenderDistance_; j <= RenderDistance_; ++j) {
+            const auto chunkPos = glm::vec2(
+              centerChunkPos.x + static_cast<float>(i) * Chunk::ChunkSize,
+              centerChunkPos.y + static_cast<float>(j) * Chunk::ChunkSize);
+            assert(Chunks_.contains(chunkPos));
+
+            ObjectsDataCache_.push_back(Chunks_.at(chunkPos).GetInstancesData());
+        }
+    }
 }
 
 bool Scene::IsInRenderDistance(const Chunk& chunk) const {

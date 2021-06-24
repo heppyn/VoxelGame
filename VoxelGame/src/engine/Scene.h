@@ -21,6 +21,8 @@ class Scene {
     std::shared_ptr<Renderer::Camera> Camera_{ nullptr };
     int RenderDistance_{ 2 };
 
+    std::vector<std::shared_ptr<std::vector<glm::mat4>>> ObjectsDataCache_{};
+
   public:
     void Init(std::shared_ptr<Renderer::Camera> camera);
     void Update();
@@ -48,4 +50,5 @@ class Scene {
 
   private:
     [[nodiscard]] glm::vec2 GetCenterChunkPos() const;
+    void UpdateObjectsData();
 };
