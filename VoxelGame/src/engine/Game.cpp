@@ -17,10 +17,7 @@ void Game::Init() {
     lightShader->SetInteger("texture1", 0, true);
     lightBatchShader->SetInteger("texture1", 0, true);
 
-    ResourceManager::LoadTexture2D("./res/textures/box.png", true, "box");
-    ResourceManager::LoadTexture2D("./res/textures/box_specular.png", true, "boxSpec")->SetTypeSpecular();
     ResourceManager::LoadTexture2D("./res/textures/white.png", true, "white");
-    ResourceManager::LoadTexture2D("./res/textures/concrete.jpg", false, "concrete");
     ResourceManager::LoadTexture2D("./res/textures/atlas.jpg", false, Constants::SPRITE_SHEET);
     ResourceManager::LoadTexture2D("./res/textures/atlas_specular.png", true, Constants::SPRITE_SHEET_SPEC)->SetTypeSpecular();
 
