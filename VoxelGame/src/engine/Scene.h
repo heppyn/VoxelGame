@@ -28,10 +28,13 @@ class Scene {
         return Lights_;
     }
 
+    void SetRenderDistance(int distance) { RenderDistance_ = distance; }
+
     [[nodiscard]] const std::map<glm::vec2, Chunk, Helpers::CmpGlmVec<glm::vec2>>& GetChunks() const;
     [[nodiscard]] std::vector<std::shared_ptr<std::vector<glm::mat4>>> GetRenderableObjectsData() const;
     [[nodiscard]] size_t GetSceneSize() const;
+    [[nodiscard]] bool IsInRenderDistance(const Chunk& chunk) const;
 
-private:
+  private:
     [[nodiscard]] glm::vec2 GetCenterChunkPos() const;
 };

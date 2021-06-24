@@ -1,5 +1,6 @@
 #include "Scene.h"
 
+#include <iostream>
 #include <utility>
 
 #include "ResourceManager.h"
@@ -18,6 +19,15 @@ void Scene::Init(std::shared_ptr<Renderer::Camera> camera) {
 
 void Scene::Update() {
     const auto centerChunkPos = GetCenterChunkPos();
+
+    // deallocate chunk out of render distance
+    for (auto it = Chunks_.begin(), nextIt = it; it != Chunks_.end(); it = nextIt) {
+        ++nextIt;
+        if (!IsInRenderDistance(it->second)) {
+            std::cout << "Erasing chunk at:" << it->first.x << ", " << it->first.y << '\n';
+            Chunks_.erase(it);
+        }
+    }
 
     for (auto i = -RenderDistance_; i <= RenderDistance_; ++i) {
         for (auto j = -RenderDistance_; j <= RenderDistance_; ++j) {
@@ -74,4 +84,14 @@ glm::vec2 Scene::GetCenterChunkPos() const {
                                  : ceil(Camera_->Position.x / Chunk::ChunkSize) * Chunk::ChunkSize,
       Camera_->Position.z > 0.0f ? floor(Camera_->Position.z / Chunk::ChunkSize) * Chunk::ChunkSize
                                  : ceil(Camera_->Position.z / Chunk::ChunkSize) * Chunk::ChunkSize);
+}
+
+bool Scene::IsInRenderDistance(const Chunk& chunk) const {
+    const auto centerChunkPos = GetCenterChunkPos();
+    const float distance = static_cast<float>(RenderDistance_) * Chunk::ChunkSize;
+
+    return centerChunkPos.x - distance <= chunk.Position.x
+           && centerChunkPos.x + distance >= chunk.Position.x
+           && centerChunkPos.y - distance <= chunk.Position.y
+           && centerChunkPos.y + distance >= chunk.Position.y;
 }
