@@ -68,19 +68,24 @@ void Renderer::SceneRenderer::Render(const Scene& scene, unsigned width, unsigne
 
 void Renderer::SceneRenderer::BindInstancesData(const Scene& scene) {
     const auto instancesData = scene.GetRenderableObjectsData();
-    const size_t objectsCnt = scene.GetSceneSize();
+    const size_t newSize = 3 * sizeof(glm::mat4) * scene.GetSceneSize();
 
     // configure instanced array
     if (!InstanceDataBufferId_) {
         glGenBuffers(1, &InstanceDataBufferId_);
         glBindBuffer(GL_ARRAY_BUFFER, InstanceDataBufferId_);
-        // allocate memory
-        // TODO: reallocate for different number of objects
+    }
+
+    // allocate memory
+    if (BufferSize_ < newSize) {
+        BufferSize_ = newSize;
+
+        glBindBuffer(GL_ARRAY_BUFFER, InstanceDataBufferId_);
         glBufferData(
           GL_ARRAY_BUFFER,
-          objectsCnt * sizeof(glm::mat4),
+          BufferSize_,
           nullptr,
-          GL_DYNAMIC_DRAW);
+          GL_STATIC_DRAW);
     }
 
     // bind data
