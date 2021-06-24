@@ -24,7 +24,7 @@ GLFWwindow* WindowManagerGl::CreateMainWindow(bool debug /*= false*/) {
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 #endif
 
-    MainWindow = glfwCreateWindow(Width, Height, "LearnOpenGL", nullptr, nullptr);
+    MainWindow = glfwCreateWindow(Width, Height, "Voxel Game", nullptr, nullptr);
     if (MainWindow == nullptr) {
         std::cout << "Failed to create GLFW window" << std::endl;
         glfwTerminate();
