@@ -12,6 +12,9 @@ struct Material {
 uniform Material material;
 
 struct Light {
+    vec3 global;
+    vec3 globalDir;
+
     vec3 position;
   
     vec3 ambient;
@@ -32,11 +35,16 @@ uniform vec3 view_pos;
 
 void main()
 {
+    vec3 norm = normalize(Normal);
+
+    // global 
+    float globalInt = max(dot(norm, normalize(-light.globalDir)), 0.0);
+    vec3 global = globalInt * light.global * vec3(texture(texture_diffuse1, TexCoord));
+
     // ambient
     vec3 ambient = light.ambient * vec3(texture(texture_diffuse1, TexCoord));
 
     // diffuse
-    vec3 norm = normalize(Normal);
     vec3 lightDir = normalize(light.position - FragPos);
     // angle > 90 is negative - don't be nagative
     float diff = max(dot(norm, lightDir), 0.0);
@@ -54,7 +62,7 @@ void main()
 
     // lesser ambient so multiple lights dont add up
     // TODO: add directional light
-    vec3 resultColor = ambient + attenuation * (diffuse + specular);
+    vec3 resultColor = global + ambient + attenuation * (diffuse + specular);
 
     FragColor = vec4(resultColor, 1.0);
 }

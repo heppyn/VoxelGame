@@ -28,6 +28,7 @@ void Game::Init() {
     Renderer = std::make_unique<Renderer::SceneRenderer>(Camera.get());
 
     InitScene();
+    Scene_.SetGlobalLight({ glm::vec3(-0.2f, -1.0f, -0.3f), glm::vec3(0.7f) });
     InputHandler->Init(Camera.get());
 }
 

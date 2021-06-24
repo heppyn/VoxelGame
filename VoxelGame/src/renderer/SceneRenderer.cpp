@@ -38,6 +38,8 @@ void Renderer::SceneRenderer::Render(const Scene& scene, unsigned width, unsigne
         // set sprite sheet size for instancing
         shaders[i]->SetVector2f("tex_size", ResourceManager::GetSpriteSheetSize(), true);
 
+        shaders[i]->SetVector3f("light.globalDir", scene.GetGlobalLight().Direction);
+        shaders[i]->SetVector3f("light.global", scene.GetGlobalLight().Color);
         shaders[i]->SetVector3f("light.ambient", glm::vec3(0.1f));
         shaders[i]->SetVector3f("light.diffuse", glm::vec3(0.5f));
         shaders[i]->SetVector3f("light.specular", glm::vec3(1.0f));
