@@ -19,6 +19,7 @@ class ResourceManager {
     static Renderer::Shader* GetShader(const char* name);
 
     static Renderer::Texture2D* LoadTexture2D(const char* file, bool alpha, const std::string& name);
+    static Renderer::Texture2D* LoadTexture2D(const std::string& file, bool alpha, const std::string& name);
     static Renderer::Texture2D* GetTexture2D(std::string& name);
     static Renderer::Texture2D* GetTexture2D(const char* name);
 

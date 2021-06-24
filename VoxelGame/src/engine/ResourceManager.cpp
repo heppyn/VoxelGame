@@ -30,6 +30,11 @@ Renderer::Texture2D* ResourceManager::LoadTexture2D(const char* file, bool alpha
     return Textures[name].get();
 }
 
+Renderer::Texture2D* ResourceManager::LoadTexture2D(const std::string& file, bool alpha, const std::string& name)
+{
+    return LoadTexture2D(file.c_str(), alpha, name);
+}
+
 Renderer::Texture2D* ResourceManager::GetTexture2D(std::string& name) {
     return GetTexture2D(name.c_str());
 }
