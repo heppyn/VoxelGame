@@ -7,12 +7,18 @@
 #include "Terrain.h"
 #include "BlockFactory.h"
 
+unsigned Terrain::TerrainGen::Seed_{ 0 };
+std::random_device Terrain::TerrainGen::Random_{};
 
 Chunk Terrain::TerrainGen::GenerateChunk(const glm::vec2& position) {
+    if (!Seed_) {
+        Seed_ = Random_();
+    }
+
     std::vector<GameObject> objects;
     const auto chunkSize = static_cast<unsigned>(Chunk::ChunkSize);
     objects.reserve(chunkSize * chunkSize);
-    const siv::BasicPerlinNoise<float> perlin(0);
+    const siv::BasicPerlinNoise<float> perlin(Seed_);
 
     for (unsigned int i = 0; i < chunkSize; ++i) {
         for (unsigned int j = 0; j < chunkSize; ++j) {
