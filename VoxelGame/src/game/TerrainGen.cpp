@@ -8,6 +8,7 @@
 #include "Terrain.h"
 #include "Biome.h"
 #include "BlockFactory.h"
+#include "vegetation/Tree.h"
 #include "engine/Random.h"
 #include "helpers/Math.h"
 
@@ -18,8 +19,11 @@ Chunk Terrain::TerrainGen::GenerateChunk(const glm::vec2& position) {
 
     for (unsigned int i = 0; i < chunkSize; ++i) {
         for (unsigned int j = 0; j < chunkSize; ++j) {
-            PlaceBlock(objects,
-              glm::vec2(position.x + static_cast<float>(i), position.y + static_cast<float>(j)));
+            const auto pos =
+              glm::vec2(position.x + static_cast<float>(i), position.y + static_cast<float>(j));
+
+            PlaceBlock(objects, pos);
+            PlaceVegetation(objects, pos);
         }
     }
 
@@ -42,6 +46,22 @@ void Terrain::TerrainGen::PlaceBlock(std::vector<GameObject>& buffer, const glm:
             GetBlockType(blockPos, surfHeight)));
         --h;
     } while (h > neighLow);
+}
+
+void Terrain::TerrainGen::PlaceVegetation(std::vector<GameObject>& buffer, const glm::vec2& pos) {
+    if (Biome::GetBiome(pos) == BiomeType::Forrest) {
+        if (Helpers::Math::Mod(pos.x, 7) == 0 && Helpers::Math::Mod(pos.y, 7) == 0) {
+            const auto h = BlockHeightSmooth(pos);
+            auto tree = Vegetation::Tree::SpawnTree(
+              { pos.x + Helpers::Math::Mod(pos.x, 3),
+                h,
+                pos.y + Helpers::Math::Mod(pos.y, 3) });
+            buffer.insert(
+              buffer.end(),
+              std::make_move_iterator(tree.begin()),
+              std::make_move_iterator(tree.end()));
+        }
+    }
 }
 
 float Terrain::TerrainGen::LowestNeigh(const glm::vec2& pos) {

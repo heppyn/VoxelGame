@@ -6,6 +6,11 @@ void Helpers::Math::PackVecToMatrix(glm::mat4& m, glm::vec2 v)
     m[1].w = v.y;
 }
 
+int Helpers::Math::Mod(const float& x, int mod)
+{
+    return static_cast<int>(x) % mod;
+}
+
 bool Helpers::CmpGlmVec<glm::vec<3, float, glm::defaultp>>::operator()(const glm::vec3& lhs, const glm::vec3& rhs) const {
     return lhs.x < rhs.x
            || lhs.x <= rhs.x && lhs.y < rhs.y

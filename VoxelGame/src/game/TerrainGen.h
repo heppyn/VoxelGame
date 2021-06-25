@@ -13,6 +13,7 @@ class TerrainGen {
 
   private:
     static void PlaceBlock(std::vector<GameObject>& buffer, const glm::vec2& pos);
+    static void PlaceVegetation(std::vector<GameObject>& buffer, const glm::vec2& pos);
     static float LowestNeigh(const glm::vec2& pos);
     static float LowestNeighSmooth(const glm::vec2& pos);
     static float HightestNeigh(const glm::vec2& pos);

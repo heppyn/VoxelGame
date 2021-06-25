@@ -15,6 +15,7 @@ namespace Math {
 
     template<>
     bool Equal(const float& a, const float& b);
+    int Mod(const float& x, int mod);
 } // namespace Math
 
 template<typename T>
