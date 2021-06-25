@@ -23,7 +23,7 @@ void Game::Init() {
     ResourceManager::LoadTexture2D(Constants::VOXEL_PACK_PATH_SH + "spritesheet_tiles.png", true, Constants::SPRITE_SHEET_SPEC)->SetTypeSpecular();
     ResourceManager::SpriteSheet = { 128.0f, 128.0f, Constants::SPRITE_SHEET };
 
-    Camera = std::make_shared<Renderer::Camera>(glm::vec3(0.0f, 15.0f, 0.0f));
+    Camera = std::make_shared<Renderer::Camera>(glm::vec3(0.0f, 80.0f, 0.0f));
     Renderer = std::make_unique<Renderer::SceneRenderer>(Camera.get());
     Engine::Random::Init();
 
