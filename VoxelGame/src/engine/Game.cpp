@@ -3,6 +3,7 @@
 #include "ResourceManager.h"
 #include "../open_gl/WindowManagerGl.h"
 #include "../helpers/Constants.h"
+#include "Random.h"
 
 
 Game::~Game() {
@@ -24,6 +25,7 @@ void Game::Init() {
 
     Camera = std::make_shared<Renderer::Camera>(glm::vec3(0.0f, 3.0f, 0.0f));
     Renderer = std::make_unique<Renderer::SceneRenderer>(Camera.get());
+    Engine::Random::Init();
 
     InitScene();
     Scene_.SetGlobalLight({ glm::vec3(-0.2f, -1.0f, -0.3f), glm::vec3(0.7f) });

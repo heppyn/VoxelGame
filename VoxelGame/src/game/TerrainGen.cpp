@@ -6,17 +6,9 @@
 #include "engine/Chunk.h"
 #include "Terrain.h"
 #include "BlockFactory.h"
-
-siv::BasicPerlinNoise<float> Terrain::TerrainGen::Perlin_{};
-unsigned Terrain::TerrainGen::Seed_{ 0 };
-std::random_device Terrain::TerrainGen::Random_{};
+#include "engine/Random.h"
 
 Chunk Terrain::TerrainGen::GenerateChunk(const glm::vec2& position) {
-    if (!Seed_) {
-        Seed_ = Random_();
-        Perlin_.reseed(Seed_);
-    }
-
     std::vector<GameObject> objects;
     const auto chunkSize = static_cast<unsigned>(Chunk::ChunkSize);
     objects.reserve(chunkSize * chunkSize);
@@ -54,5 +46,5 @@ float Terrain::TerrainGen::LowestNeigh(const glm::vec2& pos) {
 
 float Terrain::TerrainGen::BlockHeight(const glm::vec2& pos) {
     return std::floor(
-      30.0f * Perlin_.normalizedOctaveNoise2D(pos.x / Chunk::ChunkSize, pos.y / Chunk::ChunkSize, 2));
+      30.0f * Engine::Random::Perlin.normalizedOctaveNoise2D(pos.x / Chunk::ChunkSize, pos.y / Chunk::ChunkSize, 2));
 }
