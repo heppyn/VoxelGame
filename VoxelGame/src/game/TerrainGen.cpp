@@ -3,7 +3,6 @@
 #include <algorithm>
 #include <iostream>
 
-
 #include "engine/ResourceManager.h"
 #include "engine/Chunk.h"
 #include "Terrain.h"
@@ -29,8 +28,8 @@ Chunk Terrain::TerrainGen::GenerateChunk(const glm::vec2& position) {
 }
 
 void Terrain::TerrainGen::PlaceBlock(std::vector<GameObject>& buffer, const glm::vec2& pos) {
-    const auto surfHeight = BlockHeight(pos);
-    const auto neigh = static_cast<int>(LowestNeigh(pos));
+    const auto surfHeight = BlockHeightSmooth(pos);
+    const auto neighLow = static_cast<int>(LowestNeighSmooth(pos));
     auto h = static_cast<int>(surfHeight);
 
     do {
@@ -42,14 +41,22 @@ void Terrain::TerrainGen::PlaceBlock(std::vector<GameObject>& buffer, const glm:
             blockPos,
             GetBlockType(blockPos, surfHeight)));
         --h;
-    } while (h > neigh);
+    } while (h > neighLow);
 }
 
 float Terrain::TerrainGen::LowestNeigh(const glm::vec2& pos) {
-    return std::min({ BlockHeight({ pos.x - 1.0f, pos.y }),
-      BlockHeight({ pos.x + 1.0f, pos.y }),
-      BlockHeight({ pos.x, pos.y - 1.0f }),
-      BlockHeight({ pos.x, pos.y + 1.0f }) });
+    const auto neigh = NeighHeights(pos);
+    return *std::min_element(neigh.begin(), neigh.end());
+}
+
+float Terrain::TerrainGen::LowestNeighSmooth(const glm::vec2& pos) {
+    const auto neigh = NeighHeightsSmooth(pos);
+    return *std::min_element(neigh.begin(), neigh.end());
+}
+
+float Terrain::TerrainGen::HightestNeigh(const glm::vec2& pos) {
+    const auto neigh = NeighHeights(pos);
+    return *std::max_element(neigh.begin(), neigh.end());
 }
 
 float Terrain::TerrainGen::BlockHeight(const glm::vec2& pos) {
@@ -63,6 +70,20 @@ float Terrain::TerrainGen::BlockHeight(const glm::vec2& pos) {
 
     return std::floor(
       heightVar * Engine::Random::Perlin.normalizedOctaveNoise2D_0_1(perPos.x, perPos.y, 2));
+}
+
+float Terrain::TerrainGen::BlockHeightSmooth(const glm::vec2& pos) {
+    const auto high = static_cast<int>(HightestNeigh(pos));
+    const auto low = static_cast<int>(LowestNeigh(pos));
+    const auto h = static_cast<int>(BlockHeight(pos));
+
+    if (const auto diff = std::abs(high - low); diff > 3) {
+        if (std::abs(h - low) > std::abs(h - high))
+            return std::floor(high - diff / 3.0f);
+        return std::floor(low + diff / 3.0f);
+    }
+
+    return static_cast<float>(h);
 }
 
 Terrain::BlockType Terrain::TerrainGen::GetBlockType(const glm::vec3& pos, float surfHeight) {
@@ -92,4 +113,18 @@ Terrain::BlockType Terrain::TerrainGen::GetBlockType(const glm::vec3& pos, float
 
     assert("Undefiend biome", false);
     return BlockType::Grass;
+}
+
+std::vector<float> Terrain::TerrainGen::NeighHeights(const glm::vec2& pos) {
+    return { BlockHeight({ pos.x - 1.0f, pos.y }),
+        BlockHeight({ pos.x + 1.0f, pos.y }),
+        BlockHeight({ pos.x, pos.y - 1.0f }),
+        BlockHeight({ pos.x, pos.y + 1.0f }) };
+}
+
+std::vector<float> Terrain::TerrainGen::NeighHeightsSmooth(const glm::vec2& pos) {
+    return { BlockHeightSmooth({ pos.x - 1.0f, pos.y }),
+        BlockHeightSmooth({ pos.x + 1.0f, pos.y }),
+        BlockHeightSmooth({ pos.x, pos.y - 1.0f }),
+        BlockHeightSmooth({ pos.x, pos.y + 1.0f }) };
 }
