@@ -69,7 +69,7 @@ float Terrain::TerrainGen::BlockHeight(const glm::vec2& pos) {
     };
 
     return std::floor(
-      heightVar * Engine::Random::Perlin.normalizedOctaveNoise2D_0_1(perPos.x, perPos.y, 2));
+      GetBaseHeight(pos) + heightVar * Engine::Random::Perlin.normalizedOctaveNoise2D_0_1(perPos.x, perPos.y, 2));
 }
 
 float Terrain::TerrainGen::BlockHeightSmooth(const glm::vec2& pos) {

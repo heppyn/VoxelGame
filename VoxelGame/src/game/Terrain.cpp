@@ -1,4 +1,5 @@
 #include "Terrain.h"
+#include "engine/Random.h"
 
 
 glm::vec2 Terrain::GetTextPos(BlockType blockType) {
@@ -23,4 +24,11 @@ glm::vec2 Terrain::GetTextPos(BlockType blockType) {
 
     assert("Block with undefined texture", false);
     return { 0.0f, 0.0f };
+}
+
+float Terrain::GetBaseHeight(const glm::vec2& pos)
+{
+    const auto freq = 100.0f;
+    const auto height = 40.0f;
+    return height * Engine::Random::Perlin.noise2D_0_1(pos.x / freq, pos.y / freq);
 }

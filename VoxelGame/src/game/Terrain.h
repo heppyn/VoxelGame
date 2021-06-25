@@ -14,4 +14,6 @@ enum class BlockType {
 };
 
 glm::vec2 GetTextPos(BlockType blockType);
+
+float GetBaseHeight(const glm::vec2& pos);
 }
