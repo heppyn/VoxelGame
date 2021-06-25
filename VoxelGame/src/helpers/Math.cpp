@@ -16,3 +16,9 @@ bool Helpers::CmpGlmVec<glm::vec<2, float, glm::defaultp>>::operator()(const glm
     return lhs.x < rhs.x
            || lhs.x <= rhs.x && lhs.y < rhs.y;
 }
+
+template<>
+bool Helpers::Math::Equal<float>(const float& a, const float& b)
+{
+    return std::abs(a - b) < Math::Detail::EPSILON_F;
+}
