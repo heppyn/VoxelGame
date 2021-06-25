@@ -13,6 +13,8 @@ glm::vec2 Terrain::GetTextPos(BlockType blockType) {
             return { 7.0f, 5.0f };
         case BlockType::Grass:
             return { 8.0f, 0.0f };
+        case BlockType::GrassDark:
+            return { 7.0f, 8.0f };
         case BlockType::OakLog:
             return { 1.0f, 0.0f };
         case BlockType::OakLeaf:

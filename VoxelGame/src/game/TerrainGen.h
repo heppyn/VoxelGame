@@ -1,7 +1,10 @@
 #pragma once
 
-#include "engine/Chunk.h"
 #include "glm/vec2.hpp"
+#include "glm/vec3.hpp"
+
+#include "engine/Chunk.h"
+#include "Terrain.h"
 
 namespace Terrain {
 class TerrainGen {
@@ -12,5 +15,6 @@ class TerrainGen {
     static void PlaceBlock(std::vector<GameObject>& buffer, const glm::vec2& pos);
     static float LowestNeigh(const glm::vec2& pos);
     static float BlockHeight(const glm::vec2& pos);
+    static BlockType GetBlockType(const glm::vec3& pos, float surfHeight);
 };
 } // namespace Terrain

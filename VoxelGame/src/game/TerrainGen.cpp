@@ -1,12 +1,16 @@
 #include "TerrainGen.h"
 
 #include <algorithm>
+#include <iostream>
+
 
 #include "engine/ResourceManager.h"
 #include "engine/Chunk.h"
 #include "Terrain.h"
+#include "Biome.h"
 #include "BlockFactory.h"
 #include "engine/Random.h"
+#include "helpers/Math.h"
 
 Chunk Terrain::TerrainGen::GenerateChunk(const glm::vec2& position) {
     std::vector<GameObject> objects;
@@ -25,14 +29,18 @@ Chunk Terrain::TerrainGen::GenerateChunk(const glm::vec2& position) {
 }
 
 void Terrain::TerrainGen::PlaceBlock(std::vector<GameObject>& buffer, const glm::vec2& pos) {
-    auto h = static_cast<int>(BlockHeight(pos));
+    const auto surfHeight = BlockHeight(pos);
     const auto neigh = static_cast<int>(LowestNeigh(pos));
+    auto h = static_cast<int>(surfHeight);
 
     do {
+        const glm::vec3 blockPos{
+            pos.x, static_cast<float>(h), pos.y
+        };
         buffer.emplace_back(
           BlockFactory::CreateBlock(
-            glm::vec3(pos.x, static_cast<float>(h), pos.y),
-            h > 0 ? BlockType::Stone : BlockType::Grass));
+            blockPos,
+            GetBlockType(blockPos, surfHeight)));
         --h;
     } while (h > neigh);
 }
@@ -45,6 +53,43 @@ float Terrain::TerrainGen::LowestNeigh(const glm::vec2& pos) {
 }
 
 float Terrain::TerrainGen::BlockHeight(const glm::vec2& pos) {
+    const auto biome = Biome::GetBiome(pos);
+    const auto heightVar = Biome::GetHeightVar(biome);
+    const auto freq = Biome::GetFreq(biome);
+    const glm::vec2 perPos = {
+        pos.x / Chunk::ChunkSize / freq,
+        pos.y / Chunk::ChunkSize / freq
+    };
+
     return std::floor(
-      30.0f * Engine::Random::Perlin.normalizedOctaveNoise2D(pos.x / Chunk::ChunkSize, pos.y / Chunk::ChunkSize, 2));
+      heightVar * Engine::Random::Perlin.normalizedOctaveNoise2D_0_1(perPos.x, perPos.y, 2));
+}
+
+Terrain::BlockType Terrain::TerrainGen::GetBlockType(const glm::vec3& pos, float surfHeight) {
+    const auto biome = Biome::GetBiome({ pos.x, pos.z });
+
+    // stone below the surface
+    if (pos.y + 3 <= surfHeight)
+        return BlockType::Stone;
+
+    switch (biome) {
+        case BiomeType::Forrest:
+            if (Helpers::Math::Equal(pos.y, surfHeight))
+                return BlockType::GrassDark;
+            return BlockType::Dirt;
+
+        case BiomeType::Plains:
+            if (Helpers::Math::Equal(pos.y, surfHeight))
+                return BlockType::Grass;
+            return BlockType::Dirt;
+
+        case BiomeType::Desert:
+            return BlockType::Sand;
+
+        case BiomeType::Hills:
+            return BlockType::Stone;
+    }
+
+    assert("Undefiend biome", false);
+    return BlockType::Grass;
 }

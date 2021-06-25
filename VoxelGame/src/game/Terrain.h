@@ -8,6 +8,7 @@ enum class BlockType {
     Sand,
     Dirt,
     Grass,
+    GrassDark,
     OakLog,
     OakLeaf,
 };
