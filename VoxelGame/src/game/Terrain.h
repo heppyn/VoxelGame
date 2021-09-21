@@ -9,8 +9,13 @@ enum class BlockType {
     Dirt,
     Grass,
     GrassDark,
+    GrassOrange,
     OakLog,
     OakLeaf,
+    Snow,
+    Ice,
+    DirtStones,
+    Cactus,
 };
 
 glm::vec2 GetTextPos(BlockType blockType);

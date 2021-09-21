@@ -16,10 +16,20 @@ glm::vec2 Terrain::GetTextPos(BlockType blockType) {
             return { 8.0f, 0.0f };
         case BlockType::GrassDark:
             return { 7.0f, 8.0f };
+        case BlockType::GrassOrange:
+            return { 5.0f, 0.0f };
         case BlockType::OakLog:
             return { 1.0f, 0.0f };
         case BlockType::OakLeaf:
             return { 5.0f, 1.0f };
+        case BlockType::Snow:
+            return { 3.0f, 5.0f };
+        case BlockType::Ice:
+            return { 0.0f, 6.0f };
+        case BlockType::DirtStones:
+            return { 6.0f, 0.0f };
+        case BlockType::Cactus:
+            return { 4.0f, 8.0f };
     }
 
     assert("Block with undefined texture", false);

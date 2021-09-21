@@ -1,12 +1,10 @@
 #include "TerrainGen.h"
 
 #include <algorithm>
-#include <iostream>
 
 #include "engine/ResourceManager.h"
 #include "engine/Chunk.h"
 #include "Terrain.h"
-#include "Biome.h"
 #include "BlockFactory.h"
 #include "vegetation/Tree.h"
 #include "engine/Random.h"
@@ -22,8 +20,8 @@ Chunk Terrain::TerrainGen::GenerateChunk(const glm::vec2& position) {
             const auto pos =
               glm::vec2(position.x + static_cast<float>(i), position.y + static_cast<float>(j));
 
-            PlaceBlock(objects, pos);
-            PlaceVegetation(objects, pos);
+            const auto biome = PlaceBlock(objects, pos);
+            PlaceVegetation(objects, pos, biome);
         }
     }
 
@@ -31,10 +29,13 @@ Chunk Terrain::TerrainGen::GenerateChunk(const glm::vec2& position) {
     return Chunk(position, std::move(objects));
 }
 
-void Terrain::TerrainGen::PlaceBlock(std::vector<GameObject>& buffer, const glm::vec2& pos) {
+Terrain::BiomeType Terrain::TerrainGen::PlaceBlock(std::vector<GameObject>& buffer, const glm::vec2& pos) {
     const auto surfHeight = BlockHeightSmooth(pos);
     const auto neighLow = static_cast<int>(LowestNeighSmooth(pos));
     auto h = static_cast<int>(surfHeight);
+    const auto hum = GetHumidity(pos);
+    const auto temp = GetTemperature({ pos.x, static_cast<float>(h), pos.y });
+    const auto biome = Biome::GetBiome(pos, hum, temp);
 
     do {
         const glm::vec3 blockPos{
@@ -43,13 +44,15 @@ void Terrain::TerrainGen::PlaceBlock(std::vector<GameObject>& buffer, const glm:
         buffer.emplace_back(
           BlockFactory::CreateBlock(
             blockPos,
-            GetBlockType(blockPos, surfHeight)));
+            GetBlockType(blockPos, surfHeight, biome)));
         --h;
     } while (h > neighLow);
+
+    return biome;
 }
 
-void Terrain::TerrainGen::PlaceVegetation(std::vector<GameObject>& buffer, const glm::vec2& pos) {
-    if (Biome::GetBiome(pos) == BiomeType::Forrest) {
+void Terrain::TerrainGen::PlaceVegetation(std::vector<GameObject>& buffer, const glm::vec2& pos, BiomeType biome) {
+    if (biome == BiomeType::Woodland) {
         if (Helpers::Math::Mod(pos.x, 7) == 0 && Helpers::Math::Mod(pos.y, 7) == 0) {
             const auto h = BlockHeightSmooth(pos);
             auto tree = Vegetation::Tree::SpawnTree(
@@ -80,9 +83,9 @@ float Terrain::TerrainGen::HightestNeigh(const glm::vec2& pos) {
 }
 
 float Terrain::TerrainGen::BlockHeight(const glm::vec2& pos) {
-    const auto biome = Biome::GetBiome(pos);
-    const auto heightVar = Biome::GetHeightVar(biome);
-    const auto freq = Biome::GetFreq(biome);
+    // TODO: Redo terrain variation
+    const auto heightVar = 10.0f;
+    const auto freq = 2.5f;
     const glm::vec2 perPos = {
         pos.x / Chunk::ChunkSize / freq,
         pos.y / Chunk::ChunkSize / freq
@@ -106,29 +109,70 @@ float Terrain::TerrainGen::BlockHeightSmooth(const glm::vec2& pos) {
     return static_cast<float>(h);
 }
 
-Terrain::BlockType Terrain::TerrainGen::GetBlockType(const glm::vec3& pos, float surfHeight) {
-    const auto biome = Biome::GetBiome({ pos.x, pos.z });
-
+Terrain::BlockType Terrain::TerrainGen::GetBlockType(const glm::vec3& pos, float surfHeight, BiomeType biome) {
     // stone below the surface
     if (pos.y + 3 <= surfHeight)
         return BlockType::Stone;
 
     switch (biome) {
-        case BiomeType::Forrest:
+        case BiomeType::Ice:
+            return BlockType::Ice;
+
+        case BiomeType::Tundra:
             if (Helpers::Math::Equal(pos.y, surfHeight))
-                return BlockType::GrassDark;
+                return BlockType::DirtStones;
             return BlockType::Dirt;
 
-        case BiomeType::Plains:
+        case BiomeType::Grassland:
             if (Helpers::Math::Equal(pos.y, surfHeight))
                 return BlockType::Grass;
             return BlockType::Dirt;
 
-        case BiomeType::Desert:
+        case BiomeType::ColdDesert:
             return BlockType::Sand;
 
-        case BiomeType::Hills:
-            return BlockType::Stone;
+        case BiomeType::Woodland:
+            if (Helpers::Math::Equal(pos.y, surfHeight))
+                return BlockType::GrassDark;
+            return BlockType::Dirt;
+
+        case BiomeType::BorealForest:
+            if (Helpers::Math::Equal(pos.y, surfHeight))
+                return BlockType::Grass;
+            return BlockType::Dirt;
+
+        case BiomeType::Shrubland:
+            if (Helpers::Math::Equal(pos.y, surfHeight))
+                return BlockType::DirtStones;
+            return BlockType::Dirt;
+
+        case BiomeType::SeasonalForest:
+            if (Helpers::Math::Equal(pos.y, surfHeight))
+                return BlockType::GrassDark;
+            return BlockType::Dirt;
+
+        case BiomeType::TemperateRainforest:
+            if (Helpers::Math::Equal(pos.y, surfHeight))
+                return BlockType::GrassDark;
+            return BlockType::Dirt;
+
+        case BiomeType::SubtropicalDesert:
+            return BlockType::Sand;
+
+        case BiomeType::TropicalForest:
+            if (Helpers::Math::Equal(pos.y, surfHeight))
+                return BlockType::GrassDark;
+            return BlockType::Dirt;
+
+        case BiomeType::Savanna:
+            if (Helpers::Math::Equal(pos.y, surfHeight))
+                return BlockType::GrassOrange;
+            return BlockType::Dirt;
+
+        case BiomeType::TropicalRainforest:
+            if (Helpers::Math::Equal(pos.y, surfHeight))
+                return BlockType::GrassDark;
+            return BlockType::Dirt;
     }
 
     assert("Undefiend biome", false);
@@ -147,4 +191,36 @@ std::vector<float> Terrain::TerrainGen::NeighHeightsSmooth(const glm::vec2& pos)
         BlockHeightSmooth({ pos.x + 1.0f, pos.y }),
         BlockHeightSmooth({ pos.x, pos.y - 1.0f }),
         BlockHeightSmooth({ pos.x, pos.y + 1.0f }) };
+}
+
+Weather::Humidity Terrain::TerrainGen::GetHumidity(const glm::vec2& pos) {
+    // TODO: get humidity from surrounding water
+    return {
+        static_cast<unsigned char>(
+          Engine::Random::Perlin.noise2D_0_1(
+            pos.x / Chunk::ChunkSize / 10.0f,
+            pos.y / Chunk::ChunkSize / 10.0f)
+          * static_cast<float>(Weather::Humidity::SIZE - 1))
+    };
+}
+
+Weather::Temperature Terrain::TerrainGen::GetTemperature(const glm::vec3& pos) {
+    const auto tmpBandSize = 100;
+    const auto dist = Helpers::Math::Mod(std::abs(pos.z), tmpBandSize);
+    Weather::Temperature temp{ 0 };
+
+    if ((static_cast<int>(std::abs(pos.z)) / tmpBandSize) % 2 == 0)
+        temp = { static_cast<unsigned char>(Helpers::Math::Map(dist, 0, tmpBandSize - 1, Weather::Temperature::SIZE - 1, 0)) };
+    else
+        temp = { static_cast<unsigned char>(Helpers::Math::Map(dist, 0, tmpBandSize - 1, 0, Weather::Temperature::SIZE - 1)) };
+
+    const auto h = Helpers::Math::Map(pos.y, 0.0f, MAX_BLOCK_HEIGHT, 0.0f, 1.0f);
+    temp.Value -= static_cast<unsigned char>(h * static_cast<float>(Weather::Temperature::SIZE) * 0.5f);
+
+    // temperature overflowed
+    if (temp.Value >= Weather::Temperature::SIZE) {
+        temp.Value = 0;
+    }
+
+    return temp;
 }

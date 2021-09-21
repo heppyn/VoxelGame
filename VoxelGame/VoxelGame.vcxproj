@@ -358,6 +358,7 @@
     <ClInclude Include="src\game\Terrain.h" />
     <ClInclude Include="src\game\TerrainGen.h" />
     <ClInclude Include="src\game\vegetation\Tree.h" />
+    <ClInclude Include="src\game\Weather.h" />
     <ClInclude Include="src\helpers\Constants.h" />
     <ClInclude Include="src\helpers\Math.h" />
     <ClInclude Include="src\helpers\Print.h" />

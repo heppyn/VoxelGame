@@ -1508,6 +1508,9 @@
     <ClInclude Include="src\game\vegetation\Tree.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\game\Weather.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\textures\doge.png">

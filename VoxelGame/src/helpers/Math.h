@@ -16,6 +16,11 @@ namespace Math {
     template<>
     bool Equal(const float& a, const float& b);
     int Mod(const float& x, int mod);
+
+    template<typename T>
+    T Map(T x, T inMin, T inMax, T outMin, T outMax) {
+        return (x - inMin) * (outMax - outMin) / (inMax - inMin) + outMin;
+    }
 } // namespace Math
 
 template<typename T>
