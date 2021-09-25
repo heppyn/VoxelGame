@@ -120,40 +120,40 @@ Terrain::BlockType Terrain::TerrainGen::GetBlockType(const glm::vec3& pos, float
 
         case BiomeType::Tundra:
             if (Helpers::Math::Equal(pos.y, surfHeight))
-                return BlockType::DirtStones;
+                return BlockType::GrassTopTundra;
             return BlockType::Dirt;
 
         case BiomeType::Grassland:
             if (Helpers::Math::Equal(pos.y, surfHeight))
-                return BlockType::Grass;
+                return BlockType::GrassTop;
             return BlockType::Dirt;
 
         case BiomeType::ColdDesert:
-            return BlockType::Sand;
+            return BlockType::Greysand;
 
         case BiomeType::Woodland:
             if (Helpers::Math::Equal(pos.y, surfHeight))
-                return BlockType::GrassDark;
+                return BlockType::GrassTop;
             return BlockType::Dirt;
 
         case BiomeType::BorealForest:
             if (Helpers::Math::Equal(pos.y, surfHeight))
-                return BlockType::Grass;
+                return BlockType::GrassTop;
             return BlockType::Dirt;
 
         case BiomeType::Shrubland:
             if (Helpers::Math::Equal(pos.y, surfHeight))
-                return BlockType::DirtStones;
+                return BlockType::StoneDirt;
             return BlockType::Dirt;
 
         case BiomeType::SeasonalForest:
             if (Helpers::Math::Equal(pos.y, surfHeight))
-                return BlockType::GrassDark;
+                return BlockType::GrassTop;
             return BlockType::Dirt;
 
         case BiomeType::TemperateRainforest:
             if (Helpers::Math::Equal(pos.y, surfHeight))
-                return BlockType::GrassDark;
+                return BlockType::GrassTop;
             return BlockType::Dirt;
 
         case BiomeType::SubtropicalDesert:
@@ -161,22 +161,22 @@ Terrain::BlockType Terrain::TerrainGen::GetBlockType(const glm::vec3& pos, float
 
         case BiomeType::TropicalForest:
             if (Helpers::Math::Equal(pos.y, surfHeight))
-                return BlockType::GrassDark;
+                return BlockType::GrassTopJungle;
             return BlockType::Dirt;
 
         case BiomeType::Savanna:
             if (Helpers::Math::Equal(pos.y, surfHeight))
-                return BlockType::GrassOrange;
+                return BlockType::CottonRed;
             return BlockType::Dirt;
 
         case BiomeType::TropicalRainforest:
             if (Helpers::Math::Equal(pos.y, surfHeight))
-                return BlockType::GrassDark;
+                return BlockType::GrassTopJungle;
             return BlockType::Dirt;
     }
 
     assert("Undefiend biome", false);
-    return BlockType::Grass;
+    return BlockType::GrassTop;
 }
 
 std::vector<float> Terrain::TerrainGen::NeighHeights(const glm::vec2& pos) {
