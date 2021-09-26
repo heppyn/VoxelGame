@@ -11,22 +11,22 @@
 #include "helpers/Math.h"
 
 Chunk Terrain::TerrainGen::GenerateChunk(const glm::vec2& position) {
-    std::vector<GameObject> objects;
     const auto chunkSize = static_cast<unsigned>(Chunk::ChunkSize);
-    objects.reserve(chunkSize * chunkSize);
+    Chunk chunk(position);
+    chunk.GetObjects().reserve(chunkSize * chunkSize);
 
     for (unsigned int i = 0; i < chunkSize; ++i) {
         for (unsigned int j = 0; j < chunkSize; ++j) {
             const auto pos =
               glm::vec2(position.x + static_cast<float>(i), position.y + static_cast<float>(j));
 
-            const auto biome = PlaceBlock(objects, pos);
-            PlaceVegetation(objects, pos, biome);
+            const auto biome = PlaceBlock(chunk.GetObjects(), pos);
+            PlaceVegetation(chunk.GetObjects(), pos, biome);
         }
     }
 
-    objects.shrink_to_fit();
-    return Chunk(position, std::move(objects));
+    chunk.FinisChunk();
+    return chunk;
 }
 
 Terrain::BiomeType Terrain::TerrainGen::PlaceBlock(std::vector<GameObject>& buffer, const glm::vec2& pos) {
@@ -54,11 +54,25 @@ Terrain::BiomeType Terrain::TerrainGen::PlaceBlock(std::vector<GameObject>& buff
 void Terrain::TerrainGen::PlaceVegetation(std::vector<GameObject>& buffer, const glm::vec2& pos, BiomeType biome) {
     if (biome == BiomeType::Woodland) {
         if (Helpers::Math::Mod(pos.x, 7) == 0 && Helpers::Math::Mod(pos.y, 7) == 0) {
+            //TODO: check what is faster. This or lookup in BlockInfo
             const auto h = BlockHeightSmooth(pos);
-            auto tree = Vegetation::Tree::SpawnTree(
-              { pos.x + Helpers::Math::Mod(pos.x, 3),
+            auto tree = Vegetation::Tree::SpawnNormalTree(
+              { pos.x + Helpers::Math::ModT<float>(pos.x, 3),
                 h,
-                pos.y + Helpers::Math::Mod(pos.y, 3) });
+                pos.y + Helpers::Math::ModT<float>(pos.y, 3) });
+            buffer.insert(
+              buffer.end(),
+              std::make_move_iterator(tree.begin()),
+              std::make_move_iterator(tree.end()));
+        }
+    }
+    else if (biome == BiomeType::TropicalRainforest || biome == BiomeType::TropicalForest) {
+        // octaves determine density of the forest
+        const auto treeDens = 1;
+        if (Engine::Random::IsLocalMaxPerlin(pos, 2.5f, treeDens)) {
+            const auto h = BlockHeightSmooth(pos);
+
+            auto tree = Vegetation::Tree::SpawnJungleTree({ pos.x, h, pos.y });
             buffer.insert(
               buffer.end(),
               std::make_move_iterator(tree.begin()),
