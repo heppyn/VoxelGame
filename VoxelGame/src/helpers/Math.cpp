@@ -8,7 +8,7 @@ void Helpers::Math::PackVecToMatrix(glm::mat4& m, glm::vec2 v)
 
 int Helpers::Math::Mod(const float& x, int mod)
 {
-    return static_cast<int>(x) % mod;
+    return ModT<int>(x, mod);
 }
 
 bool Helpers::CmpGlmVec<glm::vec<3, float, glm::defaultp>>::operator()(const glm::vec3& lhs, const glm::vec3& rhs) const {

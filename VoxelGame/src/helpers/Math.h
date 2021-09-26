@@ -15,6 +15,12 @@ namespace Math {
 
     template<>
     bool Equal(const float& a, const float& b);
+
+    template<typename T>
+    int ModT(const float& x, int mod) {
+        return static_cast<T>(static_cast<int>(x) % mod);
+    }
+
     int Mod(const float& x, int mod);
 
     template<typename T>
