@@ -55,8 +55,12 @@ Terrain::BiomeType Terrain::Biome::GetBiome(const glm::vec2& pos, Weather::Humid
     assert(Weather::Humidity::SIZE == BiomeTable_.size());
     assert(Weather::Temperature::SIZE == BiomeTable_[0].size());
 
-    // TODO: pick from possible biomes
-    return BiomeTable_[humidity.Value][temperature.Value][0];
+    // pick from possible biomes
+    // TODO: prefer biomes that match their neighbors
+    const auto index = static_cast<size_t>(
+      static_cast<float>(BiomeTable_[humidity.Value][temperature.Value].size())
+      * Engine::Random::Get2dNoise0_1<float>(humidity.Value, temperature.Value));
+    return BiomeTable_[humidity.Value][temperature.Value][index];
 }
 
 void Terrain::Biome::Init() {
