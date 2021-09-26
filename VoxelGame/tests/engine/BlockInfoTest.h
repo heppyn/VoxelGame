@@ -1,5 +1,6 @@
 #pragma once
 #include "../TestClass.h"
+#include "engine/BlockInfo.h"
 
 namespace Tests {
 class BlockInfoTest : public TestClass {
@@ -7,7 +8,10 @@ class BlockInfoTest : public TestClass {
     void RunTests() override;
 
   private:
-    static void TreeTest();
-    static void HeightTest();
+    BlockInfo BlockInfo_;
+
+    void TreeTest();
+    void HeightTest();
+    void BiomeTest();
 };
 } // namespace Tests

@@ -4,7 +4,7 @@
 class BlockInfo {
   private:
     /* from the most significant to the least significant
-     * 1 bit
+     * 1 bit - has a tree
      * 1 bit
      * 1 bit
      * 1 bit
@@ -18,9 +18,9 @@ class BlockInfo {
      * 1 bit
      * 1 bit
      * 1 bit
-     * 1 bit
-     * 1 bit
-     * 1 bit - has a tree
+     * 1 bit - biome variation
+     * 1 bit - biome variation
+     * 1 bit - biome variation
      *
      * 8 bits - height
      */
@@ -28,8 +28,10 @@ class BlockInfo {
 
   public:
     [[nodiscard]] float GetSurfaceHeight() const { return static_cast<float>(Info_ & 0xFF); }
-    [[nodiscard]] bool HasTree() const { return Info_ & 0x100; }
+    [[nodiscard]] bool HasTree() const { return Info_ & 0x800000; }
+    [[nodiscard]] unsigned int GetBiome() const { return (Info_ >> 8) & 0x7; }
 
     void SetSurfaceHeight(float height);
     void AddTree();
+    void SetBiome(unsigned int biome);
 };

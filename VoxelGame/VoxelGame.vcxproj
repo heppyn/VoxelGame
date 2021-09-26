@@ -195,6 +195,7 @@
     <ClCompile Include="tests\engine\BlockInfoTest.cpp" />
     <ClCompile Include="tests\engine\PerlinTest.cpp" />
     <ClCompile Include="tests\TestClass.cpp" />
+    <ClCompile Include="tests\TestRunner.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".clang-format" />
@@ -676,6 +677,7 @@
     <ClInclude Include="tests\engine\BlockInfoTest.h" />
     <ClInclude Include="tests\engine\PerlinTest.h" />
     <ClInclude Include="tests\TestClass.h" />
+    <ClInclude Include="tests\TestRunner.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\textures\atlas.jpg" />

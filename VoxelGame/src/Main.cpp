@@ -6,16 +6,10 @@
 #include "engine/Game.h"
 #include "open_gl/WindowManagerGl.h"
 
-#include "../tests/engine/BlockInfoTest.h"
+#include "../tests/TestRunner.h"
 
 #include <iostream>
 
-void RunTests() {
-    Tests::BlockInfoTest bit;
-    bit.RunTests();
-
-    std::cout << "All tests OK\n";
-}
 
 // settings
 const unsigned int SCR_WIDTH = 1000;
@@ -33,7 +27,7 @@ float deltaTime = 0.0f; // time between current frame and last frame
 float lastFrame = 0.0f;
 
 int main() {
-    RunTests();
+    Tests::TestRunner::RunTests();
 
     // enable debug by passing true
     auto* window = WindowManagerGl::CreateMainWindow(true);
