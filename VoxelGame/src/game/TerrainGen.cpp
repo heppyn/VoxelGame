@@ -157,7 +157,7 @@ Terrain::BlockType Terrain::TerrainGen::GetBlockType(const glm::vec3& pos, float
 
         case BiomeType::Shrubland:
             if (Helpers::Math::Equal(pos.y, surfHeight))
-                return BlockType::StoneDirt;
+                return BlockType::GravelDirt;
             return BlockType::Dirt;
 
         case BiomeType::SeasonalForest:
