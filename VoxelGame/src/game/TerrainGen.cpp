@@ -60,34 +60,6 @@ void Terrain::TerrainGen::PlaceVegetation(std::vector<GameObject>& buffer, const
       buffer.end(),
       std::make_move_iterator(tree.begin()),
       std::make_move_iterator(tree.end()));
-
-    if (biome == BiomeType::Woodland) {
-        if (Helpers::Math::Mod(pos.x, 7) == 0 && Helpers::Math::Mod(pos.y, 7) == 0) {
-            //TODO: check what is faster. This or lookup in BlockInfo
-            const auto h = BlockHeightSmooth(pos);
-            auto tree = Vegetation::Tree::SpawnNormalTree(
-              { pos.x + Helpers::Math::ModT<float>(pos.x, 3),
-                h,
-                pos.y + Helpers::Math::ModT<float>(pos.y, 3) });
-            buffer.insert(
-              buffer.end(),
-              std::make_move_iterator(tree.begin()),
-              std::make_move_iterator(tree.end()));
-        }
-    }
-    else if (biome == BiomeType::TropicalRainforest || biome == BiomeType::TropicalForest) {
-        // octaves determine density of the forest
-        const auto treeDens = 1;
-        if (Engine::Random::IsLocalMaxPerlin(pos, 2.5f, treeDens)) {
-            const auto h = BlockHeightSmooth(pos);
-
-            auto tree = Vegetation::Tree::SpawnJungleTree({ pos.x, h, pos.y });
-            buffer.insert(
-              buffer.end(),
-              std::make_move_iterator(tree.begin()),
-              std::make_move_iterator(tree.end()));
-        }
-    }
 }
 
 float Terrain::TerrainGen::LowestNeigh(const glm::vec2& pos) {
