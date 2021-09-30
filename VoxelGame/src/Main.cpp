@@ -1,5 +1,6 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <iostream>
 
 #include "renderer/Camera.h"
 #include "renderer/Shader.h"
@@ -8,19 +9,10 @@
 
 #include "../tests/TestRunner.h"
 
-#include <iostream>
-
-
-// settings
-const unsigned int SCR_WIDTH = 1000;
-const unsigned int SCR_HEIGHT = 800;
 
 // camera
 Game* game = new Game;
 Renderer::Camera* camera;
-float lastX = SCR_WIDTH / 2.0f;
-float lastY = SCR_HEIGHT / 2.0f;
-bool firstMouse = true;
 
 // timing
 float deltaTime = 0.0f; // time between current frame and last frame

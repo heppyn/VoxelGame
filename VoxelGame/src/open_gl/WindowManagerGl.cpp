@@ -8,7 +8,7 @@
 
 
 GLFWwindow* WindowManagerGl::MainWindow = nullptr;
-unsigned int WindowManagerGl::Width = 1000;
+unsigned int WindowManagerGl::Width = 1500;
 unsigned int WindowManagerGl::Height = 800;
 
 GLFWwindow* WindowManagerGl::CreateMainWindow(bool debug /*= false*/) {
