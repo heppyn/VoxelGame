@@ -7,6 +7,7 @@
 #include "Terrain.h"
 #include "BlockFactory.h"
 #include "vegetation/Tree.h"
+#include "vegetation/TreeFactory.h"
 #include "engine/Random.h"
 #include "helpers/Math.h"
 
@@ -52,6 +53,14 @@ Terrain::BiomeType Terrain::TerrainGen::PlaceBlock(std::vector<GameObject>& buff
 }
 
 void Terrain::TerrainGen::PlaceVegetation(std::vector<GameObject>& buffer, const glm::vec2& pos, BiomeType biome) {
+    const auto h = BlockHeightSmooth(pos);
+    // place trees
+    auto tree = Vegetation::TreeFactory::GenerateTree({ pos.x, h, pos.y }, biome);
+    buffer.insert(
+      buffer.end(),
+      std::make_move_iterator(tree.begin()),
+      std::make_move_iterator(tree.end()));
+
     if (biome == BiomeType::Woodland) {
         if (Helpers::Math::Mod(pos.x, 7) == 0 && Helpers::Math::Mod(pos.y, 7) == 0) {
             //TODO: check what is faster. This or lookup in BlockInfo

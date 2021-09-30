@@ -196,6 +196,7 @@
     <ClCompile Include="tests\engine\PerlinTest.cpp" />
     <ClCompile Include="tests\TestClass.cpp" />
     <ClCompile Include="tests\TestRunner.cpp" />
+    <ClCompile Include="src\game\vegetation\TreeFactory.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".clang-format" />
@@ -365,6 +366,7 @@
     <ClInclude Include="src\game\Terrain.h" />
     <ClInclude Include="src\game\TerrainGen.h" />
     <ClInclude Include="src\game\vegetation\Tree.h" />
+    <ClInclude Include="src\game\vegetation\TreeFactory.h" />
     <ClInclude Include="src\game\Weather.h" />
     <ClInclude Include="src\helpers\Constants.h" />
     <ClInclude Include="src\helpers\Math.h" />

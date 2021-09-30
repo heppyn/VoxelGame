@@ -132,6 +132,9 @@
     <ClCompile Include="tests\TestRunner.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\game\vegetation\TreeFactory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\vendor\glm\detail\func_common.inl">
@@ -1540,6 +1543,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="tests\TestRunner.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\game\vegetation\TreeFactory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
