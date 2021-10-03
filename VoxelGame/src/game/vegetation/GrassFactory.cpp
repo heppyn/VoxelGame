@@ -1,25 +1,27 @@
 #include "GrassFactory.h"
 
 #include "engine/Random.h"
-#include "game/BlockFactory.h"
+
+Terrain::BlockFactory Terrain::Vegetation::GrassFactory::BlockFactory_(glm::vec3(0.5f), { 0.0f, -0.25f, 0.f });
 
 
 std::vector<GameObject> Terrain::Vegetation::GrassFactory::GenerateGrass(const glm::vec3& pos, BiomeType biome) {
+    constexpr auto scale = 0.5f;
     std::vector<GameObject> res;
     if (HasGrass(pos, biome)) {
         const auto r = Engine::Random::Get3dNoise0_1<float>(pos.x, pos.y, pos.z);
         constexpr auto numGrass = 4.0f;
         if (r < 1.0f / numGrass) {
-            res.emplace_back(BlockFactory::CreateBlock(pos, BlockType::Grass1));
+            res.emplace_back(BlockFactory_.CreateFromPreset(pos, BlockType::Grass1));
         }
         else if (r < 2.0f / numGrass) {
-            res.emplace_back(BlockFactory::CreateBlock(pos, BlockType::Grass2));
+            res.emplace_back(BlockFactory_.CreateFromPreset(pos, BlockType::Grass2));
         }
         else if (r < 3.0f / numGrass) {
-            res.emplace_back(BlockFactory::CreateBlock(pos, BlockType::Grass3));
+            res.emplace_back(BlockFactory_.CreateFromPreset(pos, BlockType::Grass3));
         }
         else {
-            res.emplace_back(BlockFactory::CreateBlock(pos, BlockType::Grass4));
+            res.emplace_back(BlockFactory_.CreateFromPreset(pos, BlockType::Grass4));
         }
     }
 

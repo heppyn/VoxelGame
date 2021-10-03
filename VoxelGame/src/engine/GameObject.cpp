@@ -72,3 +72,8 @@ void GameObject::Scale(const glm::vec3& scale) {
     assert(HasComponent<Components::Transform>());
     GetComponent<Components::Transform>().Scale = scale;
 }
+
+void GameObject::Move(const glm::vec3& dv) {
+    assert(HasComponent<Components::Transform>());
+    GetComponent<Components::Transform>().Position += dv;
+}

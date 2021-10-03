@@ -1,6 +1,7 @@
 #pragma once
 #include "engine/GameObject.h"
 #include "game/Biome.h"
+#include "game/BlockFactory.h"
 
 
 namespace Terrain::Vegetation {
@@ -17,6 +18,8 @@ class GrassFactory {
     [[nodiscard]] static bool HasGrass(const glm::vec3& pos, BiomeType biome);
 
   private:
+    static BlockFactory BlockFactory_;
+
     [[nodiscard]] static GrassDensity GetGrassDensity(BiomeType biome);
 };
 } // namespace Terrain::Vegetation

@@ -58,4 +58,5 @@ class GameObject {
     [[nodiscard]] const glm::vec3& Position() const;
     [[nodiscard]] const glm::vec3& Scale() const;
     void Scale(const glm::vec3& scale);
+    void Move(const glm::vec3& dv);
 };
