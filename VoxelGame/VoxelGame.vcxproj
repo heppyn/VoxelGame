@@ -167,6 +167,7 @@
     <ClCompile Include="src\game\BlockFactory.cpp" />
     <ClCompile Include="src\game\Terrain.cpp" />
     <ClCompile Include="src\game\TerrainGen.cpp" />
+    <ClCompile Include="src\game\vegetation\GrassFactory.cpp" />
     <ClCompile Include="src\game\vegetation\Tree.cpp" />
     <ClCompile Include="src\helpers\Math.cpp" />
     <ClCompile Include="src\open_gl\InputHandlerGl.cpp" />
@@ -365,6 +366,7 @@
     <ClInclude Include="src\game\BlockFactory.h" />
     <ClInclude Include="src\game\Terrain.h" />
     <ClInclude Include="src\game\TerrainGen.h" />
+    <ClInclude Include="src\game\vegetation\GrassFactory.h" />
     <ClInclude Include="src\game\vegetation\Tree.h" />
     <ClInclude Include="src\game\vegetation\TreeFactory.h" />
     <ClInclude Include="src\game\Weather.h" />

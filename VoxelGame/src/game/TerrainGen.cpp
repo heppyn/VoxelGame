@@ -10,6 +10,7 @@
 #include "vegetation/TreeFactory.h"
 #include "engine/Random.h"
 #include "helpers/Math.h"
+#include "vegetation/GrassFactory.h"
 
 Chunk Terrain::TerrainGen::GenerateChunk(const glm::vec2& position) {
     const auto chunkSize = static_cast<unsigned>(Chunk::ChunkSize);
@@ -53,13 +54,23 @@ Terrain::BiomeType Terrain::TerrainGen::PlaceBlock(std::vector<GameObject>& buff
 }
 
 void Terrain::TerrainGen::PlaceVegetation(std::vector<GameObject>& buffer, const glm::vec2& pos, BiomeType biome) {
+    //TODO: call vegetation generation based on biome type. Return game object - not tree, grass, etc.
     const auto h = BlockHeightSmooth(pos);
     // place trees
     auto tree = Vegetation::TreeFactory::GenerateTree({ pos.x, h, pos.y }, biome);
+    const auto s = tree.size();
     buffer.insert(
       buffer.end(),
       std::make_move_iterator(tree.begin()),
       std::make_move_iterator(tree.end()));
+
+    if (s == 0) {
+        auto grass = Vegetation::GrassFactory::GenerateGrass({pos.x, h + 1.0f, pos.y}, biome);
+        buffer.insert(
+          buffer.end(),
+          std::make_move_iterator(grass.begin()),
+          std::make_move_iterator(grass.end()));
+    }
 }
 
 float Terrain::TerrainGen::LowestNeigh(const glm::vec2& pos) {

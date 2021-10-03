@@ -7,6 +7,6 @@
 namespace Terrain {
 class BlockFactory {
   public:
-    static GameObject CreateBlock(const glm::vec3& pos, BlockType blockType);
+    [[nodiscard]] static GameObject CreateBlock(const glm::vec3& pos, BlockType blockType);
 };
 } // namespace Terrain
