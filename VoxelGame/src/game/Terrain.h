@@ -47,6 +47,7 @@ enum class BlockType {
     StoneGrass,
     StoneSand,
     StoneSnow,
+    TrunkOrangeSide,
     TrunkSide,
     TrunkTop,
     TrunkWhiteSide,
