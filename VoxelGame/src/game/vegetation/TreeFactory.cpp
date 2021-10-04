@@ -27,8 +27,10 @@ std::vector<GameObject> Terrain::Vegetation::TreeFactory::GenerateTree(const glm
         case BiomeType::SeasonalForest:
         case BiomeType::TemperateRainforest:
         case BiomeType::SubtropicalDesert:
-        case BiomeType::Savanna:
             return {};
+
+        case BiomeType::Savanna:
+            return Tree::SpawnSavannaTree(pos);
 
         case BiomeType::Woodland:
             return Tree::SpawnNormalTree(pos);
@@ -84,9 +86,9 @@ bool Terrain::Vegetation::TreeFactory::CanHaveTree(const glm::vec3& pos, BiomeTy
             return Engine::Random::IsLocalMaxPerlin({ pos.x, pos.z }, FREQ_NORMAL, DENSITY_NORMAL);
 
         case BiomeType::Savanna:
-            return Engine::Random::IsLocalMaxPerlin({ pos.x, pos.z }, FREQ_NORMAL, DENSITY_DENSE);
+            return Engine::Random::IsLocalMaxPerlin({ pos.x, pos.z }, FREQ_SPARSE, DENSITY_DENSE);
     }
 
-    assert(false);
+    assert("Undefined biome", false);
     return false;
 }

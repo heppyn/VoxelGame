@@ -9,10 +9,12 @@ class Tree {
 
   public:
     static std::vector<GameObject> SpawnNormalTree(const glm::vec3& pos);
-    static std::vector<GameObject> SpawnJungleTree(const glm::vec3& pos, float height = 6.0f, float height_var = 3.0f);
+    static std::vector<GameObject> SpawnJungleTree(const glm::vec3& pos, float height = 6.0f, float heightVar = 3.0f);
+    static std::vector<GameObject> SpawnSavannaTree(const glm::vec3& pos, float height = 2.0f, float heightVar = 2.0f);
 
 private:
     static std::vector<GameObject> GenerateTree(const std::vector<std::pair<glm::vec3, BlockType>>& tree);
+  static float GetTreeHeight(const glm::vec3& pos, float height, float heightVar);
 };
 
 } // namespace Terrain::Vegetation

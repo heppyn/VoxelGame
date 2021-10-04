@@ -5,6 +5,7 @@
 #include <perlin_noise/PerlinNoise.hpp>
 
 #include "glm/vec2.hpp"
+#include "glm/vec3.hpp"
 
 namespace Engine {
 class Random {
@@ -44,6 +45,20 @@ class Random {
     static T Get3dNoise0_1(Y x, Y y, Y z, unsigned int seed = Seed) {
         return static_cast<T>(Get3dNoise(x, y, z, seed)) / static_cast<T>(std::numeric_limits<unsigned int>::max());
     }
+
+    template<typename T, typename Y>
+    static T GetNoise0_1(T, unsigned int seed = Seed) = delete;
+
+    template<typename T>
+    static T GetNoise0_1(const glm::vec2& vec, unsigned int seed = Seed) {
+        return Get2dNoise0_1<T>(vec.x, vec.y, seed);
+    }
+
+    template<typename T>
+    static T GetNoise0_1(const glm::vec3& vec, unsigned int seed = Seed) {
+        return Get3dNoise0_1<T>(vec.x, vec.y, vec.z, seed);
+    }
+
 
   private:
     static constexpr int PRIME1 = 198491317; // large prime number with non-boring bits
