@@ -4,11 +4,13 @@
 #include "game/BlockFactory.h"
 
 std::vector<GameObject> Terrain::Vegetation::Tree::SpawnNormalTree(const glm::vec3& pos) {
+    const auto trunk = Engine::Random::GetNoise0_1<float>(pos) > 0.3f ? BlockType::TrunkSide : BlockType::TrunkWhiteSide;
+
     // don't use copy constructor of GameObject
     const std::vector<std::pair<glm::vec3, BlockType>> tree{
-        std::make_pair(glm::vec3(pos.x, pos.y + 1.0f, pos.z), BlockType::TrunkSide),
-        std::make_pair(glm::vec3(pos.x, pos.y + 2.0f, pos.z), BlockType::TrunkSide),
-        std::make_pair(glm::vec3(pos.x, pos.y + 3.0f, pos.z), BlockType::TrunkSide),
+        std::make_pair(glm::vec3(pos.x, pos.y + 1.0f, pos.z), trunk),
+        std::make_pair(glm::vec3(pos.x, pos.y + 2.0f, pos.z), trunk),
+        std::make_pair(glm::vec3(pos.x, pos.y + 3.0f, pos.z), trunk),
 
         std::make_pair(glm::vec3(pos.x, pos.y + 6.0f, pos.z), BlockType::Leaves),
 
