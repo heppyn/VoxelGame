@@ -69,7 +69,7 @@ bool Terrain::Vegetation::TreeFactory::CanHaveTree(const glm::vec3& pos, BiomeTy
         case BiomeType::TropicalRainforest:
         case BiomeType::TemperateRainforest:
         case BiomeType::Tundra:
-            return Engine::Random::IsLocalMaxPerlin({pos.x, pos.z}, FREQ_DENSE, DENSITY_DENSE);
+            return Engine::Random::IsLocalMaxPerlin({pos.x, pos.z}, FREQ_NORMAL, DENSITY_DENSE);
 
         case BiomeType::Ice:
         case BiomeType::ColdDesert:
@@ -83,7 +83,7 @@ bool Terrain::Vegetation::TreeFactory::CanHaveTree(const glm::vec3& pos, BiomeTy
         case BiomeType::Woodland:
         case BiomeType::SeasonalForest:
         case BiomeType::BorealForest:
-            return Engine::Random::IsLocalMaxPerlin({ pos.x, pos.z }, FREQ_NORMAL, DENSITY_NORMAL);
+            return Engine::Random::IsLocalMaxPerlin({ pos.x, pos.z }, FREQ_DENSE, DENSITY_NORMAL);
 
         case BiomeType::Savanna:
             return Engine::Random::IsLocalMaxPerlin({ pos.x, pos.z }, FREQ_SPARSE, DENSITY_DENSE);
