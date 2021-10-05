@@ -63,11 +63,11 @@ std::vector<GameObject> Terrain::Vegetation::Tree::SpawnSavannaTree(const glm::v
     tree.insert(tree.end(),
       {
         std::make_pair(glm::vec3(curPos.x, curPos.y, curPos.z), BlockType::TrunkOrangeSide),
-        std::make_pair(glm::vec3(curPos.x, curPos.y + 1.0f, curPos.z), BlockType::Leaves),
-        std::make_pair(glm::vec3(curPos.x + 1.0f, curPos.y, curPos.z), BlockType::Leaves),
-        std::make_pair(glm::vec3(curPos.x - 1.0f, curPos.y, curPos.z), BlockType::Leaves),
-        std::make_pair(glm::vec3(curPos.x, curPos.y, curPos.z + 1.0f), BlockType::Leaves),
-        std::make_pair(glm::vec3(curPos.x, curPos.y, curPos.z - 1.0f), BlockType::Leaves),
+        std::make_pair(glm::vec3(curPos.x, curPos.y + 1.0f, curPos.z), BlockType::LeavesOrange),
+        std::make_pair(glm::vec3(curPos.x + 1.0f, curPos.y, curPos.z), BlockType::LeavesOrange),
+        std::make_pair(glm::vec3(curPos.x - 1.0f, curPos.y, curPos.z), BlockType::LeavesOrange),
+        std::make_pair(glm::vec3(curPos.x, curPos.y, curPos.z + 1.0f), BlockType::LeavesOrange),
+        std::make_pair(glm::vec3(curPos.x, curPos.y, curPos.z - 1.0f), BlockType::LeavesOrange),
       });
 
     return GenerateTree(tree);
