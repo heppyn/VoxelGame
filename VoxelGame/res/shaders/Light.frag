@@ -64,5 +64,5 @@ void main()
     // TODO: add directional light
     vec3 resultColor = global + ambient + attenuation * (diffuse + specular);
 
-    FragColor = vec4(resultColor, 1.0);
+    FragColor = vec4(resultColor, vec4(texture(texture_diffuse1, TexCoord)).w);
 }

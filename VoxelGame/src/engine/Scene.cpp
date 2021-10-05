@@ -90,6 +90,17 @@ void Scene::UpdateObjectsData() {
             ObjectsDataCache_.push_back(Chunks_.at(chunkPos).GetInstancesData());
         }
     }
+    // render transparent objects last
+    for (auto i = -RenderDistance_; i <= RenderDistance_; ++i) {
+        for (auto j = -RenderDistance_; j <= RenderDistance_; ++j) {
+            const auto chunkPos = glm::vec2(
+              centerChunkPos.x + static_cast<float>(i) * Chunk::ChunkSize,
+              centerChunkPos.y + static_cast<float>(j) * Chunk::ChunkSize);
+            assert(Chunks_.contains(chunkPos));
+
+            ObjectsDataCache_.push_back(Chunks_.at(chunkPos).GetInstancesDataTrans());
+        }
+    }
 }
 
 bool Scene::IsInRenderDistance(const Chunk& chunk) const {
