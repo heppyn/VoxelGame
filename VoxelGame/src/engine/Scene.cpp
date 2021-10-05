@@ -92,6 +92,7 @@ void Scene::UpdateObjectsData() {
     }
     // render transparent objects last
     // this ensures correct color blending for semi transparent textures
+    // TODO: add chunks from the furthest to the closest one this will ensure correct blending
     for (auto i = -RenderDistance_; i <= RenderDistance_; ++i) {
         for (auto j = -RenderDistance_; j <= RenderDistance_; ++j) {
             const auto chunkPos = glm::vec2(

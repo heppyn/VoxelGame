@@ -23,9 +23,9 @@ Chunk Terrain::TerrainGen::GenerateChunk(const glm::vec2& position) {
             const auto pos =
               glm::vec2(position.x + static_cast<float>(i), position.y + static_cast<float>(j));
 
-            const auto biome = PlaceBlock(chunk.GetObjects(), pos);
+            const auto biome = PlaceBlock(chunk, pos);
             // place vegetation in transparent buffer
-            PlaceVegetation(chunk.GetObjectsTrans(), pos, biome);
+            PlaceVegetation(chunk, pos, biome);
         }
     }
 
@@ -33,7 +33,7 @@ Chunk Terrain::TerrainGen::GenerateChunk(const glm::vec2& position) {
     return chunk;
 }
 
-Terrain::BiomeType Terrain::TerrainGen::PlaceBlock(std::vector<GameObject>& buffer, const glm::vec2& pos) {
+Terrain::BiomeType Terrain::TerrainGen::PlaceBlock(Chunk& chunk, const glm::vec2& pos) {
     const auto surfHeight = BlockHeightSmooth(pos);
     const auto neighLow = static_cast<int>(LowestNeighSmooth(pos));
     auto h = static_cast<int>(surfHeight);
@@ -45,7 +45,7 @@ Terrain::BiomeType Terrain::TerrainGen::PlaceBlock(std::vector<GameObject>& buff
         const glm::vec3 blockPos{
             pos.x, static_cast<float>(h), pos.y
         };
-        buffer.emplace_back(
+        chunk.GetObjects().emplace_back(
           BlockFactory::CreateBlock(
             blockPos,
             GetBlockType(blockPos, surfHeight, biome)));
@@ -55,21 +55,21 @@ Terrain::BiomeType Terrain::TerrainGen::PlaceBlock(std::vector<GameObject>& buff
     return biome;
 }
 
-void Terrain::TerrainGen::PlaceVegetation(std::vector<GameObject>& buffer, const glm::vec2& pos, BiomeType biome) {
+void Terrain::TerrainGen::PlaceVegetation(Chunk& chunk, const glm::vec2& pos, BiomeType biome) {
     //TODO: call vegetation generation based on biome type. Return game object - not tree, grass, etc.
     const auto h = BlockHeightSmooth(pos);
     // place trees
     auto tree = Vegetation::TreeFactory::GenerateTree({ pos.x, h, pos.y }, biome);
     const auto s = tree.size();
-    buffer.insert(
-      buffer.end(),
+    chunk.GetObjects().insert(
+      chunk.GetObjects().end(),
       std::make_move_iterator(tree.begin()),
       std::make_move_iterator(tree.end()));
 
     if (s == 0) {
         auto grass = Vegetation::GrassFactory::GenerateGrass({pos.x, h + 1.0f, pos.y}, biome);
-        buffer.insert(
-          buffer.end(),
+        chunk.GetObjectsTrans().insert(
+          chunk.GetObjectsTrans().end(),
           std::make_move_iterator(grass.begin()),
           std::make_move_iterator(grass.end()));
     }
