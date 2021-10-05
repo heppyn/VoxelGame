@@ -47,8 +47,7 @@ std::vector<GameObject>& Chunk::GetObjects() {
 }
 
 std::shared_ptr<std::vector<glm::mat4>> Chunk::GetInstancesDataTrans() const {
-    assert(!InstancesDataTrans_->empty());
-
+    // can be empty if no transparent textures are present in the chunk
     return InstancesDataTrans_;
 }
 

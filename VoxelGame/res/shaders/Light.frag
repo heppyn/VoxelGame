@@ -35,6 +35,11 @@ uniform vec3 view_pos;
 
 void main()
 {
+    float alpha = vec4(texture(texture_diffuse1, TexCoord)).a;
+    // dont process fragments which are transparent - treshold is arnitrary number
+    if (alpha < 0.05)
+        discard;
+
     vec3 norm = normalize(Normal);
 
     // global 
@@ -64,5 +69,5 @@ void main()
     // TODO: add directional light
     vec3 resultColor = global + ambient + attenuation * (diffuse + specular);
 
-    FragColor = vec4(resultColor, vec4(texture(texture_diffuse1, TexCoord)).w);
+    FragColor = vec4(resultColor, alpha);
 }
