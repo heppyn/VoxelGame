@@ -16,7 +16,6 @@ Chunk Terrain::TerrainGen::GenerateChunk(const glm::vec2& position) {
     const auto chunkSize = static_cast<unsigned>(Chunk::ChunkSize);
     Chunk chunk(position);
     chunk.GetObjects().reserve(chunkSize * chunkSize);
-    chunk.GetObjectsTrans().reserve(chunkSize * chunkSize);
 
     for (unsigned int i = 0; i < chunkSize; ++i) {
         for (unsigned int j = 0; j < chunkSize; ++j) {
@@ -24,8 +23,7 @@ Chunk Terrain::TerrainGen::GenerateChunk(const glm::vec2& position) {
               glm::vec2(position.x + static_cast<float>(i), position.y + static_cast<float>(j));
 
             const auto biome = PlaceBlock(chunk.GetObjects(), pos);
-            // place vegetation in transparent buffer
-            PlaceVegetation(chunk.GetObjectsTrans(), pos, biome);
+            PlaceVegetation(chunk.GetObjects(), pos, biome);
         }
     }
 
