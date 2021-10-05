@@ -19,7 +19,6 @@ class TreeFactory {
     constexpr static float FREQ_DENSE{ 1.5f };
     constexpr static float FREQ_NORMAL{ 2.5f };
     constexpr static float FREQ_SPARSE{ 5.5f };
-    constexpr static float FREQ_RARE{ 7.5f };
 
     static bool HasNeighTree(const glm::vec3& pos, BiomeType biome, int regionSize);
     static bool CanHaveTree(const glm::vec3& pos, BiomeType biome);
