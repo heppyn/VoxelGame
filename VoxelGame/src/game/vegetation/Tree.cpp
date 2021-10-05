@@ -60,17 +60,35 @@ std::vector<GameObject> Terrain::Vegetation::Tree::SpawnSavannaTree(const glm::v
     }
 
     curPos += glm::vec3(0.0f, 1.0f, 0.0f);
-    tree.insert(tree.end(), 
-    {
+    tree.insert(tree.end(),
+      {
         std::make_pair(glm::vec3(curPos.x, curPos.y, curPos.z), BlockType::TrunkOrangeSide),
         std::make_pair(glm::vec3(curPos.x, curPos.y + 1.0f, curPos.z), BlockType::Leaves),
         std::make_pair(glm::vec3(curPos.x + 1.0f, curPos.y, curPos.z), BlockType::Leaves),
         std::make_pair(glm::vec3(curPos.x - 1.0f, curPos.y, curPos.z), BlockType::Leaves),
         std::make_pair(glm::vec3(curPos.x, curPos.y, curPos.z + 1.0f), BlockType::Leaves),
         std::make_pair(glm::vec3(curPos.x, curPos.y, curPos.z - 1.0f), BlockType::Leaves),
-    });
+      });
 
     return GenerateTree(tree);
+}
+
+std::vector<GameObject> Terrain::Vegetation::Tree::SpawnCactus(const glm::vec3& pos) {
+    const std::vector cactus ={
+      std::make_pair(glm::vec3(pos.x, pos.y + 1.0f, pos.z), BlockType::CactusSide),
+      std::make_pair(glm::vec3(pos.x, pos.y + 2.0f, pos.z), BlockType::CactusSide),
+      std::make_pair(glm::vec3(pos.x, pos.y + 3.0f, pos.z), BlockType::CactusSide),
+    };
+
+    std::vector<GameObject> res;
+    res.reserve(cactus.size());
+    BlockFactory bf(glm::vec3(0.8f), glm::vec3(0.0f, -0.1f, 0.0f));
+
+    for (const auto& [pos, type] : cactus) {
+        res.emplace_back(bf.CreateStacked(pos, type));
+    }
+
+    return res;
 }
 
 std::vector<GameObject> Terrain::Vegetation::Tree::GenerateTree(const std::vector<std::pair<glm::vec3, BlockType>>& tree) {
