@@ -47,6 +47,7 @@ float Terrain::Biome::GetHeightVar(BiomeType type) {
 }
 
 Terrain::BiomeType Terrain::Biome::GetBiome(const glm::vec2& pos, Weather::Humidity humidity, Weather::Temperature temperature) {
+    constexpr auto zoneSize = 128.0f;
     // TODO: initialize before this call and assert not empty
     if (BiomeTable_.empty()) {
         InitBiomeTable();
@@ -59,7 +60,7 @@ Terrain::BiomeType Terrain::Biome::GetBiome(const glm::vec2& pos, Weather::Humid
     // TODO: prefer biomes that match their neighbors
     const auto index = static_cast<size_t>(
       static_cast<float>(BiomeTable_[humidity.Value][temperature.Value].size())
-      * Engine::Random::Get2dNoise0_1<float>(humidity.Value, temperature.Value));
+      * Engine::Random::Perlin.accumulatedOctaveNoise2D_0_1(pos.x / zoneSize, pos.y / zoneSize, 1));
     return BiomeTable_[humidity.Value][temperature.Value][index];
 }
 

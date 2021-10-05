@@ -24,7 +24,6 @@ Chunk Terrain::TerrainGen::GenerateChunk(const glm::vec2& position) {
               glm::vec2(position.x + static_cast<float>(i), position.y + static_cast<float>(j));
 
             const auto biome = PlaceBlock(chunk, pos);
-            // place vegetation in transparent buffer
             PlaceVegetation(chunk, pos, biome);
         }
     }
