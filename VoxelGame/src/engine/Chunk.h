@@ -13,7 +13,9 @@ class Chunk {
 
   private:
     std::vector<GameObject> Objects_;
+    std::vector<GameObject> ObjectsTrans_;
     std::shared_ptr<std::vector<glm::mat4>> InstancesData_;
+    std::shared_ptr<std::vector<glm::mat4>> InstancesDataTrans_;
     std::vector<std::vector<BlockInfo>> BlockInfos_;
 
   public:
@@ -26,6 +28,11 @@ class Chunk {
     [[nodiscard]] const std::vector<GameObject>& GetObjects() const;
     [[nodiscard]] std::vector<GameObject>& GetObjects();
 
+    [[nodiscard]] std::shared_ptr<std::vector<glm::mat4>> GetInstancesDataTrans() const;
+    [[nodiscard]] const std::vector<GameObject>& GetObjectsTrans() const;
+    [[nodiscard]] std::vector<GameObject>& GetObjectsTrans();
+
   private:
     void RecalculateBlockHeights();
+    static void GenerateInstanceData(const std::vector<GameObject>& objects, std::shared_ptr<std::vector<glm::mat4>> buffer);
 };
