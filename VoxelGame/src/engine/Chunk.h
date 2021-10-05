@@ -15,6 +15,7 @@ class Chunk {
     std::vector<GameObject> Objects_;
     std::vector<GameObject> ObjectsTrans_;
     std::shared_ptr<std::vector<glm::mat4>> InstancesData_;
+    // separate transparent textures from non transparent, so semi transparent textures are correctly blended
     std::shared_ptr<std::vector<glm::mat4>> InstancesDataTrans_;
     std::vector<std::vector<BlockInfo>> BlockInfos_;
 

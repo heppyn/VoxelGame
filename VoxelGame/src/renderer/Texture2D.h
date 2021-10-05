@@ -15,8 +15,8 @@ class Texture2D {
     unsigned int InternalFormat_{ GL_RGB };
     unsigned int ImageFormat_{ GL_RGB };
 
-    unsigned int WrapS_{ GL_REPEAT };
-    unsigned int WrapT_{ GL_REPEAT };
+    unsigned int WrapS_{ GL_CLAMP_TO_EDGE }; // prevent colored bored on transparent textures
+    unsigned int WrapT_{ GL_CLAMP_TO_EDGE };
     unsigned int FilterMin_{ GL_LINEAR }; // filtering mode if texture pixels < screen pixels
     unsigned int FilterMax_{ GL_LINEAR }; // filtering mode if texture pixels > screen pixels
 
