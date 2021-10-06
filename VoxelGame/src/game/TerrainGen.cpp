@@ -212,15 +212,19 @@ Weather::Humidity Terrain::TerrainGen::GetHumidity(const glm::vec2& pos) {
 }
 
 Weather::Temperature Terrain::TerrainGen::GetTemperature(const glm::vec3& pos) {
-    const auto tmpBandSize = 100;
-    const auto dist = Helpers::Math::Mod(std::abs(pos.z), tmpBandSize);
+    constexpr auto tmpBandSize = 150;
+    constexpr auto bandFluctuation = 0.1f;
+    const auto fluctuation = Engine::Random::Perlin.accumulatedOctaveNoise1D_0_1(pos.x * 0.1f, 2) * tmpBandSize * bandFluctuation;
+    const auto dist = Helpers::Math::Mod(std::abs(pos.z) + fluctuation, tmpBandSize);
     Weather::Temperature temp{ 0 };
 
-    if ((static_cast<int>(std::abs(pos.z)) / tmpBandSize) % 2 == 0)
+    // bands are repeating infinitely - determine if temperature should be rising or falling
+    if ((static_cast<int>(std::abs(pos.z) + fluctuation) / tmpBandSize) % 2 == 0)
         temp = { static_cast<unsigned char>(Helpers::Math::Map(dist, 0, tmpBandSize - 1, Weather::Temperature::SIZE - 1, 0)) };
     else
         temp = { static_cast<unsigned char>(Helpers::Math::Map(dist, 0, tmpBandSize - 1, 0, Weather::Temperature::SIZE - 1)) };
 
+    // take height into account
     const auto h = Helpers::Math::Map(pos.y, 0.0f, MAX_BLOCK_HEIGHT, 0.0f, 1.0f);
     temp.Value -= static_cast<unsigned char>(h * static_cast<float>(Weather::Temperature::SIZE) * 0.5f);
 
