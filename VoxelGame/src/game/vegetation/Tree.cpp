@@ -91,6 +91,14 @@ std::vector<GameObject> Terrain::Vegetation::Tree::SpawnCactus(const glm::vec3& 
     return res;
 }
 
+std::vector<GameObject> Terrain::Vegetation::Tree::SpawnShrub(const glm::vec3& pos) {
+    std::vector<GameObject> res;
+    const auto scale = Engine::Random::Get2dNoise0_1<float>(pos.x, pos.z) * 0.5f + 0.5f;
+    BlockFactory bf(glm::vec3(scale), glm::vec3(0.0f, (1.0f - scale) / -2.0f, 0.0f));
+    res.emplace_back(bf.CreateFromPreset(pos + glm::vec3(0.0f, 1.0f, 0.0f), BlockType::LeavesOrange));
+    return res;
+}
+
 std::vector<GameObject> Terrain::Vegetation::Tree::GenerateTree(const std::vector<std::pair<glm::vec3, BlockType>>& tree) {
     std::vector<GameObject> res;
     res.reserve(tree.size());

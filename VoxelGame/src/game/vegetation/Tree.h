@@ -12,6 +12,7 @@ class Tree {
     static std::vector<GameObject> SpawnJungleTree(const glm::vec3& pos, float height = 6.0f, float heightVar = 3.0f);
     static std::vector<GameObject> SpawnSavannaTree(const glm::vec3& pos, float height = 2.0f, float heightVar = 2.0f);
     static std::vector<GameObject> SpawnCactus(const glm::vec3& pos);
+    static std::vector<GameObject> SpawnShrub(const glm::vec3& pos);
 
   private:
     static std::vector<GameObject> GenerateTree(const std::vector<std::pair<glm::vec3, BlockType>>& tree);
