@@ -6,6 +6,11 @@ void Helpers::Math::PackVecToMatrix(glm::mat4& m, glm::vec2 v)
     m[1].w = v.y;
 }
 
+template<>
+bool Helpers::Math::Equal<glm::vec<3, float, glm::defaultp>>(const glm::vec3& a, const glm::vec3& b) {
+    return Equal(a.x, b.x) && Equal(a.y, b.y) && Equal(a.z, b.z);
+}
+
 int Helpers::Math::Mod(const float& x, int mod)
 {
     return ModT<int>(x, mod);

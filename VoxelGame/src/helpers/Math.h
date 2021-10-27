@@ -16,6 +16,9 @@ namespace Math {
     template<>
     bool Equal(const float& a, const float& b);
 
+    template<>
+    bool Equal(const glm::vec3& a, const glm::vec3& b);
+
     template<typename T>
     int ModT(const float& x, int mod) {
         return static_cast<T>(static_cast<int>(x) % mod);

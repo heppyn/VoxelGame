@@ -20,9 +20,10 @@ float lastFrame = 0.0f;
 
 int main() {
     // add -s to see successful runs
-    const auto params = { "main", "-b" };
+    //const auto params = { "main", "-b" };
 
-    if (const int result = Catch::Session().run(2, params.begin())) {
+    constexpr auto testOnly = true;
+    if (const int result = Catch::Session().run(); result || testOnly) {
         std::cin.ignore();
         return result;
     }
