@@ -46,6 +46,20 @@ class Random {
         return static_cast<T>(Get3dNoise(x, y, z, seed)) / static_cast<T>(std::numeric_limits<unsigned int>::max());
     }
 
+    // use for random index
+    template<typename T>
+    static unsigned Get1dNoiseLimited(T x, unsigned upperLimit, unsigned int seed = Seed) {
+        return static_cast<unsigned>(Get1dNoise0_1<float>(x, seed) * upperLimit);
+    }
+    template<typename T>
+    static unsigned Get2dNoiseLimited(T x, T y, unsigned upperLimit, unsigned int seed = Seed) {
+        return static_cast<unsigned>(Get2dNoise0_1<float>(x, y, seed) * upperLimit);
+    }
+    template<typename T>
+    static unsigned Get3dNoiseLimited(T x, T y, T z, unsigned upperLimit, unsigned int seed = Seed) {
+        return static_cast<unsigned>(Get3dNoise0_1<float>(x, y, z, seed) * upperLimit);
+    }
+
     template<typename T, typename Y>
     static T GetNoise0_1(T, unsigned int seed = Seed) = delete;
 

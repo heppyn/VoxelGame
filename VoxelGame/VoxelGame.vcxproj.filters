@@ -132,7 +132,16 @@
     <ClCompile Include="src\engine\L-systems\Turtle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="tests\engine\TurtleTest.cpp">
+    <ClCompile Include="tests\engine\L-systems\TurtleTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\L-systems\Parser.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\L-systems\RandomGrammar.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="tests\engine\L-systems\RandomGrammarTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -1543,6 +1552,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="tests\vendor\catch.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\L-systems\Parser.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\L-systems\RandomGrammar.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
