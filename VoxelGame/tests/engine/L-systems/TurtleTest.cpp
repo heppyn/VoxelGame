@@ -1,4 +1,4 @@
-#include "../vendor/catch.hpp"
+#include "../../vendor/catch.hpp"
 
 #include "engine/L-systems/Turtle.h"
 #include "helpers/Math.h"
