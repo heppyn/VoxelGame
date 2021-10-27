@@ -3,11 +3,11 @@
 #include <iostream>
 
 #include "renderer/Camera.h"
-#include "renderer/Shader.h"
 #include "engine/Game.h"
 #include "open_gl/WindowManagerGl.h"
 
-#include "../tests/TestRunner.h"
+#define CATCH_CONFIG_RUNNER
+#include "../tests/vendor/catch.hpp"
 
 
 // camera
@@ -19,7 +19,13 @@ float deltaTime = 0.0f; // time between current frame and last frame
 float lastFrame = 0.0f;
 
 int main() {
-    Tests::TestRunner::RunTests();
+    // add -s to see successful runs
+    const auto params = { "main", "-b" };
+
+    if (const int result = Catch::Session().run(2, params.begin())) {
+        std::cin.ignore();
+        return result;
+    }
 
     // enable debug by passing true
     auto* window = WindowManagerGl::CreateMainWindow(true);

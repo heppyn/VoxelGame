@@ -1,44 +1,37 @@
-#include "BlockInfoTest.h"
+#include "../vendor/catch.hpp"
 
-#include <cassert>
-#include <iostream>
-
+#include "engine/BlockInfo.h"
 #include "helpers/Math.h"
 
+TEST_CASE("block info test", "[engine, block_info]") {
+    BlockInfo blockInfo;
 
-void Tests::BlockInfoTest::RunTests() {
-    TreeTest();
-    HeightTest();
-    BiomeTest();
+    // check defaults
+    REQUIRE_FALSE(blockInfo.HasTree());
+    REQUIRE(Helpers::Math::Equal(blockInfo.GetSurfaceHeight(), 0.0f));
+    REQUIRE(blockInfo.GetBiome() == 0u);
 
-    std::cout << "Block Info tests OK\n";
-}
-void Tests::BlockInfoTest::TreeTest() {
-    assert(BlockInfo_.HasTree() == false);
+    SECTION("add tree") {
+        blockInfo.AddTree();
+        REQUIRE(blockInfo.HasTree());
+    }
 
-    BlockInfo_.AddTree();
-    assert(BlockInfo_.HasTree() == true);
-}
+    SECTION("change surface height") {
+        blockInfo.SetSurfaceHeight(255.0f);
+        REQUIRE(Helpers::Math::Equal(blockInfo.GetSurfaceHeight(), 255.0f));
 
-void Tests::BlockInfoTest::HeightTest() {
-    assert(Helpers::Math::Equal(BlockInfo_.GetSurfaceHeight(), 0.0f));
+        blockInfo.SetSurfaceHeight(5.0f);
+        REQUIRE(Helpers::Math::Equal(blockInfo.GetSurfaceHeight(), 5.0f));
+    }
 
-    BlockInfo_.SetSurfaceHeight(255.0f);
-    assert(Helpers::Math::Equal(BlockInfo_.GetSurfaceHeight(), 255.0f));
+    SECTION("change biome") {
+        blockInfo.SetBiome(1);
+        REQUIRE(blockInfo.GetBiome() == 1u);
 
-    BlockInfo_.SetSurfaceHeight(5.0f);
-    assert(Helpers::Math::Equal(BlockInfo_.GetSurfaceHeight(), 5.0f));
-}
+        blockInfo.SetBiome(7);
+        REQUIRE(blockInfo.GetBiome() == 7u);
 
-void Tests::BlockInfoTest::BiomeTest() {
-    assert(BlockInfo_.GetBiome() == 0u);
-
-    BlockInfo_.SetBiome(1);
-    assert(BlockInfo_.GetBiome() == 1u);
-
-    BlockInfo_.SetBiome(7);
-    assert(BlockInfo_.GetBiome() == 7u);
-
-    BlockInfo_.SetBiome(5);
-    assert(BlockInfo_.GetBiome() == 5u);
+        blockInfo.SetBiome(5);
+        REQUIRE(blockInfo.GetBiome() == 5u);
+    }
 }

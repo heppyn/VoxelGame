@@ -123,15 +123,6 @@
     <ClCompile Include="tests\engine\BlockInfoTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="tests\TestClass.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="tests\engine\PerlinTest.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="tests\TestRunner.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\game\vegetation\TreeFactory.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -142,9 +133,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="tests\engine\TurtleTest.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="tests\Test.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -1545,18 +1533,6 @@
     <ClInclude Include="src\engine\BlockInfo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="tests\engine\BlockInfoTest.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="tests\TestClass.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="tests\engine\PerlinTest.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="tests\TestRunner.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\game\vegetation\TreeFactory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -1564,9 +1540,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\engine\L-systems\Turtle.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="tests\engine\TurtleTest.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="tests\vendor\catch.hpp">
