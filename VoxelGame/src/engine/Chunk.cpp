@@ -18,7 +18,8 @@ Chunk::Chunk(const glm::vec2& position, std::vector<GameObject>&& objects)
     InstancesData_ = std::make_shared<std::vector<glm::mat4>>();
     InstancesDataTrans_ = std::make_shared<std::vector<glm::mat4>>();
     GenerateInstanceData();
-    RecalculateBlockHeights();
+    // not used now
+    //RecalculateBlockHeights();
 }
 
 void Chunk::GenerateInstanceData() {

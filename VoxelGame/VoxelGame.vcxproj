@@ -162,7 +162,7 @@
     <ClCompile Include="src\engine\Commands.cpp" />
     <ClCompile Include="src\engine\InputHandler.cpp" />
     <ClCompile Include="src\engine\L-systems\RandomGrammar.cpp" />
-    <ClCompile Include="src\engine\L-systems\Parser.cpp" />
+    <ClCompile Include="src\engine\L-systems\GrammarExecutor.cpp" />
     <ClCompile Include="src\engine\L-systems\Turtle.cpp" />
     <ClCompile Include="src\engine\Random.cpp" />
     <ClCompile Include="src\engine\Scene.cpp" />
@@ -363,7 +363,7 @@
     <ClInclude Include="src\engine\Components\SpritesheetTex.h" />
     <ClInclude Include="src\engine\Components\Transform.h" />
     <ClInclude Include="src\engine\InputHandler.h" />
-    <ClInclude Include="src\engine\L-systems\Parser.h" />
+    <ClInclude Include="src\engine\L-systems\GrammarExecutor.h" />
     <ClInclude Include="src\engine\L-systems\Turtle.h" />
     <ClInclude Include="src\engine\Random.h" />
     <ClInclude Include="src\engine\Scene.h" />

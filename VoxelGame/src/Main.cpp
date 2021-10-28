@@ -22,7 +22,7 @@ int main() {
     // add -s to see successful runs
     //const auto params = { "main", "-b" };
 
-    constexpr auto testOnly = true;
+    constexpr auto testOnly = false;
     if (const int result = Catch::Session().run(); result || testOnly) {
         std::cin.ignore();
         return result;

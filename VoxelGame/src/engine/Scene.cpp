@@ -5,12 +5,13 @@
 
 #include "ResourceManager.h"
 #include "game/TerrainGen.h"
+#include "L-systems/GrammarExecutor.h"
 
 void Scene::Init(std::shared_ptr<Renderer::Camera> camera) {
     SetCamera(std::move(camera));
 
     // add white light
-    Lights_.emplace_back(glm::vec3(0.0f, 6.0f, 0.0f), ResourceManager::GetTexture2D("white"));
+    Lights_.emplace_back(glm::vec3(0.0f, 30.0f, 0.0f), ResourceManager::GetTexture2D("white"));
     Lights_.front().Scale(glm::vec3(0.25f));
 
     // generate first chunks around the camera
@@ -18,6 +19,19 @@ void Scene::Init(std::shared_ptr<Renderer::Camera> camera) {
 }
 
 void Scene::Update() {
+    if (Chunks_.empty()) {
+        LSystems::GrammarExecutor ge;
+        LSystems::Detail::RandomGrammar grammar("F-F-F-F");
+        grammar.AddProduction('F', "F-F+F+FF-F-F+F");
+        Chunk chunk(glm::vec2(0.0f), ge.GenerateBasedOn(grammar, 4, 1));
+        chunk.FinisChunk();
+        ObjectsDataCache_.push_back(chunk.GetInstancesData());
+        Chunks_.emplace(glm::vec2(0.0f), std::move(chunk));
+    }
+}
+
+
+void Scene::UpdateOrig() {
     const auto centerChunkPos = GetCenterChunkPos();
     auto updated{ false };
 
