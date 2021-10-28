@@ -4,7 +4,7 @@
 #include "Components/Transform.h"
 #include "Components/SpritesheetTex.h"
 
-GameObject::GameObject(glm::vec3 position, glm::vec2 texPos, bool batched) {
+GameObject::GameObject(glm::vec3 position, glm::vec2 texPos) {
     AddComponent<Components::SpritesheetTex>(texPos);
     AddComponent<Components::Transform>(position);
 }

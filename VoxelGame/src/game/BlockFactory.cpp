@@ -5,7 +5,7 @@ Terrain::BlockFactory::BlockFactory(const glm::vec3& scale, const glm::vec3& pos
   : Scale_(scale), PositionOffset_(positionOffset), OrigPosOffset_(positionOffset) {}
 
 GameObject Terrain::BlockFactory::CreateBlock(const glm::vec3& pos, BlockType blockType) {
-    return GameObject(pos, GetTextPos(blockType), true);
+    return GameObject(pos, GetTextPos(blockType));
 }
 
 GameObject Terrain::BlockFactory::CreateFromPreset(const glm::vec3& pos, BlockType blockType) const {

@@ -16,7 +16,7 @@ class GameObject {
   public:
     GameObject() = default;
     //TODO: add factories for game objects
-    GameObject(glm::vec3 position, glm::vec2 texPos, bool batched = false);
+    GameObject(glm::vec3 position, glm::vec2 texPos);
     GameObject(glm::vec3 position, Renderer::Texture2D* texture, bool batched = false);
     GameObject(glm::vec3 position, const std::vector<Renderer::Texture2D*>& textures, bool batched = false);
     GameObject(const GameObject& other) = delete; // not supported yet
