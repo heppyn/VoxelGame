@@ -20,10 +20,25 @@ void Scene::Init(std::shared_ptr<Renderer::Camera> camera) {
 
 void Scene::Update() {
     if (Chunks_.empty()) {
-        LSystems::GrammarExecutor ge;
-        LSystems::Detail::RandomGrammar grammar("F-F-F-F");
-        grammar.AddProduction('F', "F-F+F+FF-F-F+F");
-        Chunk chunk(glm::vec2(0.0f), ge.GenerateBasedOn(grammar, 4, 1));
+        LSystems::GrammarExecutor ge(22.5f, 22.5f);
+        LSystems::Detail::RandomGrammar grammar("U");
+        grammar.AddProduction('U', "UU-^[-^U+&U+&U]+&[+&U-^U-^U]");
+        Chunk chunk(glm::vec2(0.0f), ge.GenerateBasedOn(glm::vec3(0.0f), grammar, 1, 1));
+        auto objects = ge.GenerateBasedOn({ 10.0f, 0.0f, 0.0f }, grammar, 2, 1);
+        chunk.GetObjects().insert(
+          chunk.GetObjects().end(),
+          std::make_move_iterator(objects.begin()),
+          std::make_move_iterator(objects.end()));
+        objects = ge.GenerateBasedOn({ 20.0f, 0.0f, 0.0f }, grammar, 3, 1);
+        chunk.GetObjects().insert(
+          chunk.GetObjects().end(),
+          std::make_move_iterator(objects.begin()),
+          std::make_move_iterator(objects.end()));
+        objects = ge.GenerateBasedOn({ 40.0f, 0.0f, 0.0f }, grammar, 4, 1);
+        chunk.GetObjects().insert(
+          chunk.GetObjects().end(),
+          std::make_move_iterator(objects.begin()),
+          std::make_move_iterator(objects.end()));
         chunk.FinisChunk();
         ObjectsDataCache_.push_back(chunk.GetInstancesData());
         Chunks_.emplace(glm::vec2(0.0f), std::move(chunk));
