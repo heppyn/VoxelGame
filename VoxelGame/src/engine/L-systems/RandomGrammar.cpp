@@ -6,6 +6,9 @@ LSystems::Detail::RandomGrammar::RandomGrammar(std::string axiom, unsigned seed,
   : Axiom_(std::move(axiom)), Seed_(seed), Productions_(productions) {}
 
 std::string LSystems::Detail::RandomGrammar::Derivate(int numDerivation, unsigned salt) const {
+    if (numDerivation <= 0)
+        return Axiom_;
+
     std::string derivation = Derivate(Axiom_, salt);
     for (int i = 1; i < numDerivation; ++i) {
         salt = Engine::Random::Get1dNoise(salt, Seed_);

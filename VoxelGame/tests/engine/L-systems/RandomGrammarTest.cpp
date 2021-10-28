@@ -22,6 +22,7 @@ TEST_CASE("grammar test", "[engine, grammar]") {
         grammar.AddProduction('c', "a");
         grammar.AddProduction('d', "b");
 
+        REQUIRE(grammar.Derivate(0) == "a");
         REQUIRE(grammar.Derivate(1) == "bc");
         REQUIRE(grammar.Derivate(2) == "daa");
         REQUIRE(grammar.Derivate(3) == "bbcbc");
