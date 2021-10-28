@@ -29,11 +29,12 @@ void Renderer::SceneRenderer::Render(const Scene& scene, unsigned width, unsigne
         // TODO: set matrices in uniform block for all shaders
         // camera may have moved, set new matrices
         shader->SetMatrix4("view", Camera->GetViewMatrix(), true);
+        // size of frustum
         const glm::mat4 projection = glm::perspective(
           glm::radians(Camera->Zoom),
           static_cast<float>(width) / static_cast<float>(height),
           0.1f,
-          100.0f);
+          500.0f);
         shader->SetMatrix4("projection", projection);
     }
 
