@@ -89,4 +89,30 @@ TEST_CASE("turtle test", "[engine, turtle]") {
         INFO("Turtle position: " << Helpers::ToString(t1.Position()));
         REQUIRE(Helpers::Math::Equal(t1.Position(), glm::vec3(0.5f, 0.0f, -sqrtf(3.0f) / 2)));
     }
+
+    SECTION("turtle can rotate around x axis") {
+        turtle.Rotate(0.0f, 90.0f);
+        turtle.MoveForward(1.0f);
+
+        INFO("Turtle position: " << Helpers::ToString(turtle.Position()));
+        REQUIRE(Helpers::Math::Equal(turtle.Position(), glm::vec3(0.0f, 1.0f, 0.0f)));
+
+        turtle.Rotate(0.0f, 90.0f);
+        turtle.MoveForward(1.0f);
+
+        INFO("Turtle position: " << Helpers::ToString(turtle.Position()));
+        REQUIRE(Helpers::Math::Equal(turtle.Position(), glm::vec3(0.0f, 1.0f, 1.0f)));
+
+        turtle.Rotate(0.0f, 90.0f);
+        turtle.MoveForward(1.0f);
+
+        INFO("Turtle position: " << Helpers::ToString(turtle.Position()));
+        REQUIRE(Helpers::Math::Equal(turtle.Position(), glm::vec3(0.0f, 0.0f, 1.0f)));
+
+        turtle.Rotate(0.0f, 90.0f);
+        turtle.MoveForward(1.0f);
+
+        INFO("Turtle position: " << Helpers::ToString(turtle.Position()));
+        REQUIRE(Helpers::Math::Equal(turtle.Position(), glm::vec3(0.0f, 0.0f, 0.0f)));
+    }
 }

@@ -2,6 +2,8 @@
 
 #include <glm/glm.hpp>
 
+#include "helpers/Math.h"
+
 
 LSystems::Turtle::Turtle(const glm::vec3& position)
   : Position_(position), Front_(0.0f), Up_(0.0f), Right_(0.0f) {
@@ -10,8 +12,10 @@ LSystems::Turtle::Turtle(const glm::vec3& position)
 
 void LSystems::Turtle::Rotate(float yaw, float pitch) {
     Yaw += yaw;
-    // stuff break when pitch is 90 deg
-    Pitch = glm::clamp(Pitch + pitch, -89.99f, 89.99f);
+    Pitch += pitch;
+    // stuff breaks when pitch is 90 deg
+    if (Helpers::Math::Equal(cos(glm::radians(Pitch)), 0.0f))
+        Pitch -= 0.01f;
     UpdateTurtleVectors();
 }
 
