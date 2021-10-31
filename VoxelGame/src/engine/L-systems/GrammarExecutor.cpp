@@ -7,8 +7,7 @@ LSystems::GrammarExecutor::GrammarExecutor(float yaw, float pitch)
 
 std::vector<GameObject> LSystems::GrammarExecutor::GenerateBasedOn(const glm::vec3& pos, const Detail::RandomGrammar& grammar, int numDerivations, unsigned salt) {
     std::vector<GameObject> objects;
-    // for testing purposes start from 0 0 0
-    Turtle turtle(pos);
+    Turtle turtle(pos, 1.0f);
 
     std::cout << grammar.Derivate(numDerivations, salt) << "\n\n";
 
@@ -24,13 +23,22 @@ void LSystems::GrammarExecutor::ExecuteLetter(char letter, std::vector<GameObjec
     switch (letter) {
         case 'U':
             // TODO: use factory for creating objects
-            objects.emplace_back(turtle.Position(), glm::vec2(0.0f));
-            turtle.MoveUp(1.0f);
+            for (float x = 0.0f; x < 1.0f; x += turtle.Scale()) {
+                objects.emplace_back(turtle.Position(), glm::vec2(4.0f, 3.0f));
+                objects[objects.size() - 1].Scale(glm::vec3(turtle.Scale()));
+                turtle.MoveUp();
+            }
             break;
         case 'F':
             // TODO: use factory for creating objects
-            objects.emplace_back(turtle.Position(), glm::vec2(0.0f));
-            turtle.MoveForward(1.0f);
+            for (float x = 0.0f; x < 1.0f; x += turtle.Scale()) {
+                objects.emplace_back(turtle.Position(), glm::vec2(4.0f, 3.0f));
+                objects[objects.size() - 1].Scale(glm::vec3(turtle.Scale()));
+                turtle.MoveForward();
+            }
+            break;
+        case 'X':
+            turtle.Scale(turtle.Scale() * 0.7f);
             break;
         // using right hand system, keep + to match the book
         case '+':

@@ -10,12 +10,17 @@ LSystems::Turtle::Turtle(const glm::vec3& position)
     UpdateTurtleVectors();
 }
 
+LSystems::Turtle::Turtle(const glm::vec3& position, float scale)
+  : Position_(position), Front_(0.0f), Up_(0.0f), Right_(0.0f), Scale_(scale) {
+    UpdateTurtleVectors();
+}
+
 void LSystems::Turtle::Rotate(float yaw, float pitch) {
-    Yaw += yaw;
-    Pitch += pitch;
+    Yaw_ += yaw;
+    Pitch_ += pitch;
     // stuff breaks when pitch is 90 deg
-    if (Helpers::Math::Equal(cos(glm::radians(Pitch)), 0.0f))
-        Pitch -= 0.01f;
+    if (Helpers::Math::Equal(cos(glm::radians(Pitch_)), 0.0f))
+        Pitch_ -= 0.01f;
     UpdateTurtleVectors();
 }
 
@@ -37,9 +42,9 @@ void LSystems::Turtle::MoveUp(float dy) {
 void LSystems::Turtle::UpdateTurtleVectors() {
     // calculate the new Front vector
     glm::vec3 front;
-    front.x = cos(glm::radians(Yaw)) * cos(glm::radians(Pitch));
-    front.y = sin(glm::radians(Pitch));
-    front.z = sin(glm::radians(Yaw)) * cos(glm::radians(Pitch));
+    front.x = cos(glm::radians(Yaw_)) * cos(glm::radians(Pitch_));
+    front.y = sin(glm::radians(Pitch_));
+    front.z = sin(glm::radians(Yaw_)) * cos(glm::radians(Pitch_));
     Front_ = glm::normalize(front);
     // also re-calculate the Right and Up vector
     // normalize the vectors, because their length gets closer to 0 the more you look up or down which results in slower movement
