@@ -1,6 +1,16 @@
-45.0f 25.7f 0.7
+45.0 25.7 0.7
 X
 X > U[&X][^X]UX
 X > U[&+X][^+X]UX
 X > U[&-X][^-X]UX
 U > UU
+
+45.0 25.7 0.7
+U
+U > UU-^[-^UX+&U+&U]+&[+&UX-^U-^U]
+U > U[X^++U]U[X&--U]U
+U > U[X^+U]U[X&-U]U
+U > U[X^++U]U
+U > U[X^+U]U
+U > U[X&--U]U
+U > U[X&-U]U
