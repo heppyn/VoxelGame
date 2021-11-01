@@ -5,6 +5,18 @@ GameObjectFactory::GameObjectFactory(const glm::vec3& scale, const glm::vec3& po
 GameObject GameObjectFactory::CreateObject(const glm::vec3& pos, const glm::vec2& tex) {
     return GameObject(pos, tex);
 }
+
+GameObject GameObjectFactory::CreateObject(const glm::vec3& pos, const glm::vec2& tex, const glm::vec3& scale) {
+    auto go = CreateObject(pos, tex);
+    go.Scale(scale);
+
+    return go;
+}
+
+GameObject GameObjectFactory::CreateObject(const glm::vec3& pos, const glm::vec2& tex, float scale) {
+    return CreateObject(pos, tex, glm::vec3(scale));
+}
+
 GameObject GameObjectFactory::CreateFromPreset(const glm::vec3& pos, const glm::vec2& tex) const {
     auto go = CreateObject(pos, tex);
     go.Scale(Scale_);
