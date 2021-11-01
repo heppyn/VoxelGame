@@ -2,8 +2,8 @@
 
 #include <sstream>
 
-LSystems::Detail::RandomGrammar::RandomGrammar(std::string axiom, unsigned seed, std::map<char, std::vector<std::string>>&& productions)
-  : Axiom_(std::move(axiom)), Seed_(seed), Productions_(productions) {}
+LSystems::Detail::RandomGrammar::RandomGrammar(std::string axiom, std::map<char, std::vector<std::string>>&& productions)
+  : Axiom_(std::move(axiom)), Productions_(productions) {}
 
 std::string LSystems::Detail::RandomGrammar::Derivate(int numDerivation, unsigned salt) const {
     if (numDerivation <= 0)
@@ -11,7 +11,8 @@ std::string LSystems::Detail::RandomGrammar::Derivate(int numDerivation, unsigne
 
     std::string derivation = Derivate(Axiom_, salt);
     for (int i = 1; i < numDerivation; ++i) {
-        salt = Engine::Random::Get1dNoise(salt, Seed_);
+        // update salt - otherwise all derivations would be the same
+        salt = Engine::Random::Get1dNoise(salt);
         derivation = Derivate(derivation, salt);
     }
 

@@ -8,7 +8,7 @@ namespace LSystems::Detail {
 // http://algorithmicbotany.org/papers/abop/abop-ch1.pdf page 4
 class RandomGrammar {
   public:
-    explicit RandomGrammar(std::string axiom, unsigned seed = Engine::Random::Seed, std::map<char, std::vector<std::string>>&& productions = {});
+    explicit RandomGrammar(std::string axiom, std::map<char, std::vector<std::string>>&& productions = {});
 
     [[nodiscard]] std::string Derivate(int numDerivation, unsigned salt = 1) const;
     // L-systems grammar predecessor is only single letter
@@ -16,7 +16,6 @@ class RandomGrammar {
 
   private:
     std::string Axiom_;
-    unsigned Seed_;
     // TODO: measure performance with unordered map, for low number of productions map could be faster
     std::map<char, std::vector<std::string>> Productions_;
 
