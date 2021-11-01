@@ -1,0 +1,6 @@
+45.0f 25.7f
+X
+X > U[&X][^X]UX
+X > U[&+X][^+X]UX
+X > U[&-X][^-X]UX
+U > UU

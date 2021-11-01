@@ -1,0 +1,18 @@
+yaw_angle pitch_angle
+axiom
+letter > production
+.
+.
+.
+letter > production
+
+[
+yaw_angle pitch_angle
+axiom
+letter > production
+.
+.
+.
+letter > production
+
+]

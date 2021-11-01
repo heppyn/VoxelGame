@@ -144,6 +144,12 @@
     <ClCompile Include="tests\engine\L-systems\RandomGrammarTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\engine\L-systems\GrammarParser.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="tests\engine\L-systems\GrammarParserTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\vendor\glm\detail\func_common.inl">
@@ -1560,6 +1566,9 @@
     <ClInclude Include="src\engine\L-systems\RandomGrammar.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\engine\L-systems\GrammarParser.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\textures\doge.png">
@@ -1592,5 +1601,9 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="res\textures\voxel-pack-updated\License.txt" />
+    <Text Include="res\l-systems\plants\Grass.txt" />
+    <Text Include="res\l-systems\Format.txt" />
+    <Text Include="tests\engine\L-systems\grammar.txt" />
+    <Text Include="tests\engine\L-systems\multipleGrammars.txt" />
   </ItemGroup>
 </Project>
