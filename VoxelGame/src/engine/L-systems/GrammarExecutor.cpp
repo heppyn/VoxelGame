@@ -2,6 +2,8 @@
 
 #include <iostream>
 
+#include "engine/GameObjectFactory.h"
+
 LSystems::GrammarExecutor::GrammarExecutor(float yaw, float pitch)
   : Yaw(yaw), Pitch(pitch) {}
 
@@ -24,16 +26,14 @@ void LSystems::GrammarExecutor::ExecuteLetter(char letter, std::vector<GameObjec
         case 'U':
             // TODO: use factory for creating objects
             for (float x = 0.0f; x < 1.0f; x += turtle.Scale()) {
-                objects.emplace_back(turtle.Position(), glm::vec2(4.0f, 3.0f));
-                objects[objects.size() - 1].Scale(glm::vec3(turtle.Scale()));
+                objects.emplace_back(GameObjectFactory::CreateObject(turtle.Position(), { 4.0f, 3.0f }, turtle.Scale()));
                 turtle.MoveUp();
             }
             break;
         case 'F':
             // TODO: use factory for creating objects
             for (float x = 0.0f; x < 1.0f; x += turtle.Scale()) {
-                objects.emplace_back(turtle.Position(), glm::vec2(4.0f, 3.0f));
-                objects[objects.size() - 1].Scale(glm::vec3(turtle.Scale()));
+                objects.emplace_back(GameObjectFactory::CreateObject(turtle.Position(), { 4.0f, 3.0f }, turtle.Scale()));
                 turtle.MoveForward();
             }
             break;
