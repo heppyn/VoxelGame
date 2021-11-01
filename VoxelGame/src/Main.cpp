@@ -19,14 +19,6 @@ float deltaTime = 0.0f; // time between current frame and last frame
 float lastFrame = 0.0f;
 
 int main() {
-    // add -s to see successful runs
-    //const auto params = { "main", "-b" };
-
-    constexpr auto testOnly = false;
-    if (const int result = Catch::Session().run(); result || testOnly) {
-        std::cin.ignore();
-        return result;
-    }
 
     // enable debug by passing true
     auto* window = WindowManagerGl::CreateMainWindow(true);
@@ -40,6 +32,16 @@ int main() {
     glEnable(GL_CULL_FACE);
     game->Init();
     camera = game->GetCamera();
+
+    // first initialize game to use resource manager etc.
+    // add -s to see successful runs
+    //const auto params = { "main", "-b" };
+
+    constexpr auto testOnly = false;
+    if (const int result = Catch::Session().run(); result || testOnly) {
+        std::cin.ignore();
+        return result;
+    }
 
     while (!glfwWindowShouldClose(window)) {
         const float currentFrame = static_cast<float>(glfwGetTime());

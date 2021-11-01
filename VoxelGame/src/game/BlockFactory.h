@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Terrain.h"
+#include "engine/GameObjectFactory.h"
 #include "engine/GameObject.h"
 
 
@@ -19,8 +20,6 @@ class BlockFactory {
     BlockFactory& PositionOffset(const glm::vec3& positionOffset);
 
   private:
-    glm::vec3 Scale_{ 1.0f };
-    glm::vec3 PositionOffset_{ 0.0f };
-    glm::vec3 OrigPosOffset_{ 0.0f };
+    GameObjectFactory GOFactory_{glm::vec3(1.0f), glm::vec3(0.0f)};
 };
 } // namespace Terrain
