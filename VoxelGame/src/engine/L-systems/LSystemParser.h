@@ -3,12 +3,12 @@
 #include <string_view>
 #include <fstream>
 
-#include "RandomGrammar.h"
+#include "LSystem.h"
 
 namespace LSystems {
-class GrammarParser {
+class LSystemParser {
 public:
-    [[nodiscard]] static std::vector<Detail::RandomGrammar> LoadGrammarFromFile(const std::string_view file);
+    [[nodiscard]] static std::vector<LSystem> LoadLSystemFromFile(const std::string_view file);
 
 private:
     [[nodiscard]] static bool CheckIfProduction(std::ifstream& stream);

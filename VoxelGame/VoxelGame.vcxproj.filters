@@ -135,7 +135,7 @@
     <ClCompile Include="tests\engine\L-systems\TurtleTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\engine\L-systems\GrammarExecutor.cpp">
+    <ClCompile Include="src\engine\L-systems\LSystemExecutor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\engine\L-systems\RandomGrammar.cpp">
@@ -144,10 +144,10 @@
     <ClCompile Include="tests\engine\L-systems\RandomGrammarTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\engine\L-systems\GrammarParser.cpp">
+    <ClCompile Include="src\engine\L-systems\LSystemParser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="tests\engine\L-systems\GrammarParserTest.cpp">
+    <ClCompile Include="tests\engine\L-systems\LSystemParserTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\engine\GameObjectFactory.cpp">
@@ -1566,16 +1566,19 @@
     <ClInclude Include="tests\vendor\catch.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\L-systems\GrammarExecutor.h">
+    <ClInclude Include="src\engine\L-systems\LSystemExecutor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\engine\L-systems\RandomGrammar.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\L-systems\GrammarParser.h">
+    <ClInclude Include="src\engine\L-systems\LSystemParser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\engine\GameObjectFactory.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\L-systems\LSystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

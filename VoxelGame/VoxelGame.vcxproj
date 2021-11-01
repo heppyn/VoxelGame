@@ -162,9 +162,9 @@
     <ClCompile Include="src\engine\Commands.cpp" />
     <ClCompile Include="src\engine\GameObjectFactory.cpp" />
     <ClCompile Include="src\engine\InputHandler.cpp" />
-    <ClCompile Include="src\engine\L-systems\GrammarParser.cpp" />
+    <ClCompile Include="src\engine\L-systems\LSystemParser.cpp" />
     <ClCompile Include="src\engine\L-systems\RandomGrammar.cpp" />
-    <ClCompile Include="src\engine\L-systems\GrammarExecutor.cpp" />
+    <ClCompile Include="src\engine\L-systems\LSystemExecutor.cpp" />
     <ClCompile Include="src\engine\L-systems\Turtle.cpp" />
     <ClCompile Include="src\engine\Random.cpp" />
     <ClCompile Include="src\engine\Scene.cpp" />
@@ -200,7 +200,7 @@
     <ClCompile Include="src\vendor\stb_image\stb_image.cpp" />
     <ClCompile Include="tests\engine\BlockInfoTest.cpp" />
     <ClCompile Include="tests\engine\GameObjectFactoryTest.cpp" />
-    <ClCompile Include="tests\engine\L-systems\GrammarParserTest.cpp" />
+    <ClCompile Include="tests\engine\L-systems\LSystemParserTest.cpp" />
     <ClCompile Include="tests\engine\L-systems\RandomGrammarTest.cpp" />
     <ClCompile Include="tests\engine\L-systems\TurtleTest.cpp" />
     <ClCompile Include="src\game\vegetation\TreeFactory.cpp" />
@@ -359,7 +359,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\engine\GameObjectFactory.h" />
-    <ClInclude Include="src\engine\L-systems\GrammarParser.h" />
+    <ClInclude Include="src\engine\L-systems\LSystemParser.h" />
+    <ClInclude Include="src\engine\L-systems\LSystem.h" />
     <ClInclude Include="src\engine\L-systems\RandomGrammar.h" />
     <ClInclude Include="src\engine\BlockInfo.h" />
     <ClInclude Include="src\engine\Chunk.h" />
@@ -369,7 +370,7 @@
     <ClInclude Include="src\engine\Components\SpritesheetTex.h" />
     <ClInclude Include="src\engine\Components\Transform.h" />
     <ClInclude Include="src\engine\InputHandler.h" />
-    <ClInclude Include="src\engine\L-systems\GrammarExecutor.h" />
+    <ClInclude Include="src\engine\L-systems\LSystemExecutor.h" />
     <ClInclude Include="src\engine\L-systems\Turtle.h" />
     <ClInclude Include="src\engine\Random.h" />
     <ClInclude Include="src\engine\Scene.h" />

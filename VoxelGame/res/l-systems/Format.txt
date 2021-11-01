@@ -1,4 +1,4 @@
-yaw_angle pitch_angle
+yaw_angle pitch_angle shring_ratio
 axiom
 letter > production
 .
