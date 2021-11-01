@@ -6,6 +6,7 @@
 namespace Components {
 class Transform : public Component {
   public:
+    // center of the object
     glm::vec3 Position{ 0 };
     glm::vec3 Rotation{ 0 };
     glm::vec3 Scale{ 1 };
