@@ -5,7 +5,8 @@
 
 #include "ResourceManager.h"
 #include "game/TerrainGen.h"
-#include "L-systems/GrammarExecutor.h"
+#include "L-systems/LSystemExecutor.h"
+#include "L-systems/LSystemParser.h"
 
 void Scene::Init(std::shared_ptr<Renderer::Camera> camera) {
     SetCamera(std::move(camera));
@@ -20,28 +21,17 @@ void Scene::Init(std::shared_ptr<Renderer::Camera> camera) {
 
 void Scene::Update() {
     if (Chunks_.empty()) {
-        LSystems::GrammarExecutor ge(22.5f, 22.5f);
-        LSystems::Detail::RandomGrammar grammar("U");
-        grammar.AddProduction('U', "UU-^[-^U+&U+&U]+&[+&U-^U-^U]");
-        Chunk chunk(glm::vec2(0.0f), ge.GenerateBasedOn(glm::vec3(0.0f), grammar, 1, 1));
-        auto objects = ge.GenerateBasedOn({ 10.0f, 0.0f, 0.0f }, grammar, 2, 1);
-        chunk.GetObjects().insert(
-          chunk.GetObjects().end(),
-          std::make_move_iterator(objects.begin()),
-          std::make_move_iterator(objects.end()));
-        objects = ge.GenerateBasedOn({ 20.0f, 0.0f, 0.0f }, grammar, 3, 1);
-        chunk.GetObjects().insert(
-          chunk.GetObjects().end(),
-          std::make_move_iterator(objects.begin()),
-          std::make_move_iterator(objects.end()));
-        objects = ge.GenerateBasedOn({ 40.0f, 0.0f, 0.0f }, grammar, 4, 1);
-        chunk.GetObjects().insert(
-          chunk.GetObjects().end(),
-          std::make_move_iterator(objects.begin()),
-          std::make_move_iterator(objects.end()));
-        chunk.FinisChunk();
-        ObjectsDataCache_.push_back(chunk.GetInstancesData());
-        Chunks_.emplace(glm::vec2(0.0f), std::move(chunk));
+        LSystems::LSystemExecutor ge;
+        const auto lSystems = LSystems::LSystemParser::LoadLSystemFromFile("./res/l-systems/plants/Grass.txt");
+        if (!lSystems.empty()) {
+            Chunk chunk(glm::vec2(0.0f), ge.GenerateBasedOn(glm::vec3(0.0f), lSystems[1], 7, 2));
+            chunk.FinisChunk();
+            ObjectsDataCache_.push_back(chunk.GetInstancesData());
+            Chunks_.emplace(glm::vec2(0.0f), std::move(chunk));
+        }
+        else {
+            std::cout << "Failed to load L-system\n";
+        }
     }
 }
 
