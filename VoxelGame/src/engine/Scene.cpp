@@ -12,7 +12,7 @@ void Scene::Init(std::shared_ptr<Renderer::Camera> camera) {
     SetCamera(std::move(camera));
 
     // add white light
-    Lights_.emplace_back(glm::vec3(0.0f, 30.0f, 0.0f), ResourceManager::GetTexture2D("white"));
+    Lights_.emplace_back(glm::vec3(100.0f, 30.0f, 0.0f), ResourceManager::GetTexture2D("white"));
     Lights_.front().Scale(glm::vec3(0.25f));
 
     // generate first chunks around the camera
@@ -22,9 +22,10 @@ void Scene::Init(std::shared_ptr<Renderer::Camera> camera) {
 void Scene::Update() {
     if (Chunks_.empty()) {
         LSystems::LSystemExecutor ge;
-        const auto lSystems = LSystems::LSystemParser::LoadLSystemFromFile("./res/l-systems/plants/Grass.txt");
+        //const auto lSystems = LSystems::LSystemParser::LoadLSystemFromFile("./res/l-systems/plants/Grass.txt");
+        const auto lSystems = LSystems::LSystemParser::LoadLSystemFromFile("./res/l-systems/Koch.txt");
         if (!lSystems.empty()) {
-            Chunk chunk(glm::vec2(0.0f), ge.GenerateBasedOn(glm::vec3(0.0f), lSystems[1], 7, 2));
+            Chunk chunk(glm::vec2(0.0f), ge.GenerateBasedOn(glm::vec3(0.0f), lSystems[0], 3, 2));
             chunk.FinisChunk();
             ObjectsDataCache_.push_back(chunk.GetInstancesData());
             Chunks_.emplace(glm::vec2(0.0f), std::move(chunk));

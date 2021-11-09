@@ -1617,5 +1617,6 @@
     <Text Include="res\l-systems\Format.txt" />
     <Text Include="tests\engine\L-systems\grammar.txt" />
     <Text Include="tests\engine\L-systems\multipleGrammars.txt" />
+    <Text Include="res\l-systems\Koch.txt" />
   </ItemGroup>
 </Project>
