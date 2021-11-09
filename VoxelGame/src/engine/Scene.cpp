@@ -2,7 +2,9 @@
 
 #include <iostream>
 #include <utility>
+#include <GLFW/glfw3.h>
 
+#include "helpers/Constants.h"
 #include "ResourceManager.h"
 #include "game/TerrainGen.h"
 #include "L-systems/LSystemExecutor.h"
@@ -38,6 +40,7 @@ void Scene::Update() {
 
 
 void Scene::UpdateOrig() {
+    const auto startTime = glfwGetTime();
     const auto centerChunkPos = GetCenterChunkPos();
     auto updated{ false };
 
@@ -51,8 +54,14 @@ void Scene::UpdateOrig() {
         }
     }
 
+    auto overFrame = false;
     for (auto i = -RenderDistance_; i <= RenderDistance_; ++i) {
         for (auto j = -RenderDistance_; j <= RenderDistance_; ++j) {
+            // pause world generation if frame rate would drop
+            if (glfwGetTime() - startTime > Constants::FRAME_LEN) {
+                overFrame = true;
+                break;
+            }
             const auto chunkPos = glm::vec2(
               centerChunkPos.x + static_cast<float>(i) * Chunk::ChunkSize,
               centerChunkPos.y + static_cast<float>(j) * Chunk::ChunkSize);
@@ -61,6 +70,8 @@ void Scene::UpdateOrig() {
                 updated = true;
             }
         }
+        if (overFrame)
+            break;
     }
 
     if (updated)
@@ -105,9 +116,9 @@ void Scene::UpdateObjectsData() {
             const auto chunkPos = glm::vec2(
               centerChunkPos.x + static_cast<float>(i) * Chunk::ChunkSize,
               centerChunkPos.y + static_cast<float>(j) * Chunk::ChunkSize);
-            assert(Chunks_.contains(chunkPos));
-
-            ObjectsDataCache_.push_back(Chunks_.at(chunkPos).GetInstancesData());
+            if (Chunks_.contains(chunkPos)) {
+                ObjectsDataCache_.push_back(Chunks_.at(chunkPos).GetInstancesData());
+            }
         }
     }
     // render transparent objects last
@@ -118,9 +129,9 @@ void Scene::UpdateObjectsData() {
             const auto chunkPos = glm::vec2(
               centerChunkPos.x + static_cast<float>(i) * Chunk::ChunkSize,
               centerChunkPos.y + static_cast<float>(j) * Chunk::ChunkSize);
-            assert(Chunks_.contains(chunkPos));
-
-            ObjectsDataCache_.push_back(Chunks_.at(chunkPos).GetInstancesDataTrans());
+            if (Chunks_.contains(chunkPos)) {
+                ObjectsDataCache_.push_back(Chunks_.at(chunkPos).GetInstancesDataTrans());
+            }
         }
     }
 }
