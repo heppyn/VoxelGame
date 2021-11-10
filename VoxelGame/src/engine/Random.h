@@ -33,6 +33,14 @@ class Random {
         return GetSquirrel3dNoise(static_cast<int>(x), static_cast<int>(y), static_cast<int>(z), seed);
     }
 
+    static unsigned int GetNoise(glm::vec2 vec, unsigned int seed = Seed) {
+        return GetSquirrel2dNoise(static_cast<int>(vec.x), static_cast<int>(vec.y), seed);
+    }
+    // bad statistical properties - use 2D noise
+    static unsigned int GetNoise(glm::vec3 vec, unsigned int seed = Seed) {
+        return GetSquirrel2dNoise(static_cast<int>(vec.x), static_cast<int>(vec.z), seed);
+    }
+
     template<typename T, typename Y>
     static T Get1dNoise0_1(Y x, unsigned int seed = Seed) {
         return static_cast<T>(Get1dNoise(x, seed)) / static_cast<T>(std::numeric_limits<unsigned int>::max());
@@ -58,6 +66,14 @@ class Random {
     template<typename T>
     static unsigned Get3dNoiseLimited(T x, T y, T z, unsigned upperLimit, unsigned int seed = Seed) {
         return static_cast<unsigned>(Get3dNoise0_1<float>(x, y, z, seed) * upperLimit);
+    }
+
+    static unsigned GetNoiseLimited(glm::vec2 vec, unsigned upperLimit, unsigned int seed = Seed) {
+        return static_cast<unsigned>(GetNoise0_1<float>(vec, seed) * static_cast<float>(upperLimit));
+    }
+    // bad statistical properties - use 2D noise
+    static unsigned GetNoiseLimited(glm::vec3 vec, unsigned upperLimit, unsigned int seed = Seed) {
+        return static_cast<unsigned>(Get2dNoise0_1<float>(vec.x, vec.z, seed) * static_cast<float>(upperLimit));
     }
 
     template<typename T, typename Y>
