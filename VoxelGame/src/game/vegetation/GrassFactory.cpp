@@ -1,9 +1,16 @@
 #include "GrassFactory.h"
 
+#include <iostream>
+
 #include "engine/Random.h"
+#include "engine/L-systems/LSystemParser.h"
 
 Terrain::BlockFactory Terrain::Vegetation::GrassFactory::BlockFactory_(glm::vec3(0.5f), { 0.0f, -0.25f, 0.f });
 
+
+Terrain::Vegetation::GrassFactory::GrassFactory(std::string_view grassFile)
+  : LSystems_(LSystems::LSystemParser::LoadLSystemFromFile(grassFile)) {
+}
 
 std::vector<GameObject> Terrain::Vegetation::GrassFactory::GenerateGrass(const glm::vec3& pos, BiomeType biome) {
     constexpr auto scale = 0.5f;
@@ -26,6 +33,20 @@ std::vector<GameObject> Terrain::Vegetation::GrassFactory::GenerateGrass(const g
     }
 
     return res;
+}
+
+std::vector<GameObject> Terrain::Vegetation::GrassFactory::GenerateLSystemGrass(const glm::vec3& pos, BiomeType biome) {
+    if (HasGrass(pos, biome)) {
+        std::cout << Engine::Random::Get2dNoise0_1<float>(pos.x, pos.z) << ' ';
+        std::cout << Engine::Random::GetNoiseLimited(pos, LSystems_.size()) << '\n';
+        return LExecutor_.GenerateBasedOn(
+          pos,
+          LSystems_[Engine::Random::GetNoiseLimited(pos, LSystems_.size())],
+          0.05f,
+          4,
+          Engine::Random::GetNoise(pos));
+    }
+    return {};
 }
 
 bool Terrain::Vegetation::GrassFactory::HasGrass(const glm::vec3& pos, BiomeType biome) {

@@ -12,6 +12,8 @@
 #include "helpers/Math.h"
 #include "vegetation/GrassFactory.h"
 
+Terrain::Vegetation::GrassFactory Terrain::TerrainGen::GrassFactory_("./res/l-systems/plants/Grass.txt");
+
 Chunk Terrain::TerrainGen::GenerateChunk(const glm::vec2& position) {
     const auto chunkSize = static_cast<unsigned>(Chunk::ChunkSize);
     Chunk chunk(position);
@@ -66,7 +68,7 @@ void Terrain::TerrainGen::PlaceVegetation(Chunk& chunk, const glm::vec2& pos, Bi
       std::make_move_iterator(tree.end()));
 
     if (s == 0) {
-        auto grass = Vegetation::GrassFactory::GenerateGrass({pos.x, h + 1.0f, pos.y}, biome);
+        auto grass = GrassFactory_.GenerateLSystemGrass({pos.x, h + 1.0f, pos.y}, biome);
         chunk.GetObjectsTrans().insert(
           chunk.GetObjectsTrans().end(),
           std::make_move_iterator(grass.begin()),

@@ -6,6 +6,7 @@
 #include "engine/Chunk.h"
 #include "Terrain.h"
 #include "Biome.h"
+#include "vegetation/GrassFactory.h"
 
 
 namespace Terrain {
@@ -15,6 +16,9 @@ class TerrainGen {
     inline static const float MAX_BLOCK_HEIGHT{ 255.0f };
 
   private:
+    // TODO: are all functions const?
+    static Vegetation::GrassFactory GrassFactory_;
+
     static BiomeType PlaceBlock(Chunk& chunk, const glm::vec2& pos);
     static void PlaceVegetation(Chunk& chunk, const glm::vec2& pos, BiomeType biome);
     static float LowestNeigh(const glm::vec2& pos);
