@@ -8,9 +8,12 @@
 namespace LSystems {
 class LSystemExecutor {
   public:
+    LSystemExecutor() = default;
+    explicit LSystemExecutor(int derivationVar);
     [[nodiscard]] std::vector<GameObject> GenerateBasedOn(const glm::vec3& pos, const LSystem& lSystem, float scale, int numDerivations, unsigned salt);
 
   private:
+    int DerivationVar{ 0 };
     std::stack<Turtle> TStack_{};
     float Scale_{};
 

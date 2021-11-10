@@ -4,12 +4,16 @@
 
 #include "engine/GameObjectFactory.h"
 
+LSystems::LSystemExecutor::LSystemExecutor(int derivationVar) : DerivationVar(derivationVar) {}
 
 std::vector<GameObject> LSystems::LSystemExecutor::GenerateBasedOn(const glm::vec3& pos, const LSystem& lSystem, float scale, int numDerivations, unsigned salt) {
+    if (DerivationVar) {
+        numDerivations += static_cast<int>(Engine::Random::Get1dNoiseLimited(salt, DerivationVar));
+    }
     std::vector<GameObject> objects;
     Scale_ = scale;
     // anchor the starting block to the bottom of the block
-    Turtle turtle({pos.x, pos.y - ((1.0f - scale) / 2.0f), pos.z}, scale);
+    Turtle turtle({ pos.x, pos.y - ((1.0f - scale) / 2.0f), pos.z }, scale);
 
     //std::cout << lSystem.Grammar.Derivate(numDerivations, salt) << "\n\n";
 

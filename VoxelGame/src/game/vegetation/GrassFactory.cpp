@@ -37,13 +37,11 @@ std::vector<GameObject> Terrain::Vegetation::GrassFactory::GenerateGrass(const g
 
 std::vector<GameObject> Terrain::Vegetation::GrassFactory::GenerateLSystemGrass(const glm::vec3& pos, BiomeType biome) {
     if (HasGrass(pos, biome)) {
-        std::cout << Engine::Random::Get2dNoise0_1<float>(pos.x, pos.z) << ' ';
-        std::cout << Engine::Random::GetNoiseLimited(pos, LSystems_.size()) << '\n';
         return LExecutor_.GenerateBasedOn(
           pos,
           LSystems_[Engine::Random::GetNoiseLimited(pos, LSystems_.size())],
           0.05f,
-          4,
+          2,
           Engine::Random::GetNoise(pos));
     }
     return {};

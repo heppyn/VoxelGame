@@ -24,7 +24,7 @@ class GrassFactory {
   private:
     static BlockFactory BlockFactory_;
     std::vector<LSystems::LSystem> LSystems_;
-    LSystems::LSystemExecutor LExecutor_{};
+    LSystems::LSystemExecutor LExecutor_{2};
 
     [[nodiscard]] static GrassDensity GetGrassDensity(BiomeType biome);
 };
