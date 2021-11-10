@@ -5,11 +5,13 @@
 #include "engine/GameObjectFactory.h"
 
 
-std::vector<GameObject> LSystems::LSystemExecutor::GenerateBasedOn(const glm::vec3& pos, const LSystem& lSystem, int numDerivations, unsigned salt) {
+std::vector<GameObject> LSystems::LSystemExecutor::GenerateBasedOn(const glm::vec3& pos, const LSystem& lSystem, float scale, int numDerivations, unsigned salt) {
     std::vector<GameObject> objects;
-    Turtle turtle(pos, 1.0f);
+    Scale_ = scale;
+    // anchor the starting block to the bottom of the block
+    Turtle turtle({pos.x, pos.y - ((1.0f - scale) / 2.0f), pos.z}, scale);
 
-    std::cout << lSystem.Grammar.Derivate(numDerivations, salt) << "\n\n";
+    //std::cout << lSystem.Grammar.Derivate(numDerivations, salt) << "\n\n";
 
     for (const auto production = lSystem.Grammar.Derivate(numDerivations, salt); const auto letter : production) {
         ExecuteLetter(letter, lSystem, objects, turtle);
@@ -22,15 +24,13 @@ void LSystems::LSystemExecutor::ExecuteLetter(char letter, const LSystem& lSyste
     // TODO: save this in hash map if it is too slow for large alphabet
     switch (letter) {
         case 'U':
-            // TODO: use factory for creating objects
-            for (float x = 0.0f; x < 1.0f; x += turtle.Scale()) {
+            for (float x = 0.0f; x < Scale_; x += turtle.Scale()) {
                 objects.emplace_back(GameObjectFactory::CreateObject(turtle.Position(), { 4.0f, 3.0f }, turtle.Scale()));
                 turtle.MoveUp();
             }
             break;
         case 'F':
-            // TODO: use factory for creating objects
-            for (float x = 0.0f; x < 1.0f; x += turtle.Scale()) {
+            for (float x = 0.0f; x < Scale_; x += turtle.Scale()) {
                 objects.emplace_back(GameObjectFactory::CreateObject(turtle.Position(), { 4.0f, 3.0f }, turtle.Scale()));
                 turtle.MoveForward();
             }
@@ -57,6 +57,9 @@ void LSystems::LSystemExecutor::ExecuteLetter(char letter, const LSystem& lSyste
         case ']':
             turtle = TStack_.top();
             TStack_.pop();
+            break;
+        // character used for expanding grammar
+        case 'E':
             break;
 
         default:

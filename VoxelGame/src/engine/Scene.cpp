@@ -21,13 +21,12 @@ void Scene::Init(std::shared_ptr<Renderer::Camera> camera) {
     Update();
 }
 
-void Scene::Update() {
+void Scene::UpdateOrig() {
     if (Chunks_.empty()) {
         LSystems::LSystemExecutor ge;
-        //const auto lSystems = LSystems::LSystemParser::LoadLSystemFromFile("./res/l-systems/plants/Grass.txt");
-        const auto lSystems = LSystems::LSystemParser::LoadLSystemFromFile("./res/l-systems/Koch.txt");
+        const auto lSystems = LSystems::LSystemParser::LoadLSystemFromFile("./res/l-systems/plants/Grass.txt");
         if (!lSystems.empty()) {
-            Chunk chunk(glm::vec2(0.0f), ge.GenerateBasedOn(glm::vec3(0.0f), lSystems[0], 3, 2));
+            Chunk chunk(glm::vec2(0.0f), ge.GenerateBasedOn(glm::vec3(0.0f), lSystems[0], 0.1f, 3, 2));
             chunk.FinisChunk();
             ObjectsDataCache_.push_back(chunk.GetInstancesData());
             Chunks_.emplace(glm::vec2(0.0f), std::move(chunk));
@@ -39,7 +38,7 @@ void Scene::Update() {
 }
 
 
-void Scene::UpdateOrig() {
+void Scene::Update() {
     const auto startTime = glfwGetTime();
     const auto centerChunkPos = GetCenterChunkPos();
     auto updated{ false };
@@ -66,8 +65,10 @@ void Scene::UpdateOrig() {
               centerChunkPos.x + static_cast<float>(i) * Chunk::ChunkSize,
               centerChunkPos.y + static_cast<float>(j) * Chunk::ChunkSize);
             if (!Chunks_.contains(chunkPos)) {
+                const auto startTimeChunk = glfwGetTime();
                 Chunks_.emplace(chunkPos, Terrain::TerrainGen::GenerateChunk(chunkPos));
                 updated = true;
+                std::cout << "Chunk generated in " << (glfwGetTime() - startTimeChunk) * 1000.0 << " ms\n";
             }
         }
         if (overFrame)
