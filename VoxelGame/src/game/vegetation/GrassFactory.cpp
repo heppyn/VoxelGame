@@ -4,6 +4,7 @@
 
 #include "engine/Random.h"
 #include "engine/L-systems/LSystemParser.h"
+#include "helpers/Print.h"
 
 Terrain::BlockFactory Terrain::Vegetation::GrassFactory::BlockFactory_(glm::vec3(0.5f), { 0.0f, -0.25f, 0.f });
 
@@ -37,8 +38,14 @@ std::vector<GameObject> Terrain::Vegetation::GrassFactory::GenerateGrass(const g
 
 std::vector<GameObject> Terrain::Vegetation::GrassFactory::GenerateLSystemGrass(const glm::vec3& pos, BiomeType biome) {
     if (HasGrass(pos, biome)) {
+        const glm::vec3 newPos = {
+            pos.x + (Engine::Random::Get2dNoise0_1<float>(pos.x, pos.y) - 0.5f),
+            pos.y,
+            pos.z + (Engine::Random::Get2dNoise0_1<float>(pos.x, pos.z) - 0.5f)
+        };
+        std::cout << Helpers::ToString(newPos) << '\n';
         return LExecutor_.GenerateBasedOn(
-          pos,
+          newPos,
           LSystems_[Engine::Random::GetNoiseLimited(pos, LSystems_.size())],
           0.05f,
           2,
