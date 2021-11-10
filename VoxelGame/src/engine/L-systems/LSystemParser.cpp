@@ -16,10 +16,12 @@ std::vector<LSystems::LSystem> LSystems::LSystemParser::LoadLSystemFromFile(cons
         std::string axiom;
 
         while (!lSystemFile.eof()) {
+            SkipIfComment(lSystemFile);
             if (!(lSystemFile >> yaw >> pitch >> shrinkRatio)) {
                 // no other definition found - return current result
                 break;
             }
+            SkipIfComment(lSystemFile);
             lSystemFile >> axiom;
             auto grammar = Detail::RandomGrammar(axiom);
 
@@ -45,6 +47,7 @@ std::vector<LSystems::LSystem> LSystems::LSystemParser::LoadLSystemFromFile(cons
 }
 
 bool LSystems::LSystemParser::CheckIfProduction(std::ifstream& stream) {
+    SkipIfComment(stream);
     char dummy;
     // skip to potential axiom line
     stream >> dummy;
@@ -53,4 +56,16 @@ bool LSystems::LSystemParser::CheckIfProduction(std::ifstream& stream) {
     stream.seekg(-2, std::ios::cur);
 
     return production;
+}
+
+void LSystems::LSystemParser::SkipIfComment(std::ifstream& stream) {
+    char dummy;
+    stream >> dummy;
+    if (dummy == '#') {
+        std::string tmp;
+        std::getline(stream, tmp);
+    }
+    else {
+        stream.seekg(-1, std::ios::cur);
+    }
 }

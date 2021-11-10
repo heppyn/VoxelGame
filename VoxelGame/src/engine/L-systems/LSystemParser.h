@@ -12,5 +12,6 @@ public:
 
 private:
     [[nodiscard]] static bool CheckIfProduction(std::ifstream& stream);
+    static void SkipIfComment(std::ifstream& stream);
 };
 } // namespace LSystems

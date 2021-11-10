@@ -1,6 +1,9 @@
+# file can contain comments
 42.3 25.7 0.7
 X
+#	here can be comment
 X > U[&X][^X]UX
 Y > U[&+X][^+X]UX
 Z > U[&-X][^-X]UX
 U > UU
+# comments can be anywhere
