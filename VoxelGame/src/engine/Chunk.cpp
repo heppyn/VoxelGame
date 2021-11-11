@@ -3,6 +3,7 @@
 #include <iostream>
 
 #include "Components/SpritesheetTex.h"
+#include "Components/Transform.h"
 #include "helpers/Math.h"
 
 float Chunk::ChunkSize{ 16.0f };
@@ -83,9 +84,8 @@ void Chunk::GenerateInstanceData(const std::vector<GameObject>& objects, std::sh
     buffer->reserve(objects.size());
 
     for (const auto& o : objects) {
-        auto model = glm::mat4(1.0f); // identity matrix
-        model = glm::translate(model, o.Position());
-        model = glm::scale(model, o.Scale());
+        assert(o.HasComponent<Components::Transform>());
+        auto model = o.GetComponent<Components::Transform>().ModelMat();
 
         assert(o.HasComponent<Components::SpritesheetTex>());
         const auto& texPos = o.GetComponent<Components::SpritesheetTex>().GetTexPos();

@@ -18,5 +18,11 @@ class Transform : public Component {
     Transform& operator=(const Transform&) = default;
     Transform(Transform&&) = default;
     Transform& operator=(Transform&&) = default;
+
+    [[nodiscard]] glm::mat4 ModelMat() const {
+        auto model = glm::mat4(1.0f); // identity matrix
+        model = translate(model, Position);
+        return scale(model, Scale);
+    }
 };
 } // namespace Components
