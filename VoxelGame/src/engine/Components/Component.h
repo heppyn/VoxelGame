@@ -16,7 +16,7 @@ class Component {
 
     virtual ~Component() = default;
     virtual void Initialize() {}
-    virtual void Update(const float delta) {}
+    virtual void Update([[maybe_unused]] const float delta) {}
     virtual void Render() const {}
 };
 } // namespace Components

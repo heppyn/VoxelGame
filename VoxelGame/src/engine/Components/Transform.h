@@ -2,6 +2,8 @@
 
 #include "Component.h"
 #include "glm/vec3.hpp"
+#include "glm/matrix.hpp"
+#include "glm/gtx/transform.hpp"
 
 namespace Components {
 class Transform : public Component {
@@ -21,8 +23,8 @@ class Transform : public Component {
 
     [[nodiscard]] glm::mat4 ModelMat() const {
         auto model = glm::mat4(1.0f); // identity matrix
-        model = translate(model, Position);
-        return scale(model, Scale);
+        model = glm::translate(model, Position);
+        return glm::scale(model, Scale);
     }
 };
 } // namespace Components
