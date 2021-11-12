@@ -106,7 +106,7 @@ glm::vec2 Terrain::GetTextPos(BlockType blockType) {
             return { 1.0f, 6.0f };
     }
 
-    assert("Block with undefined texture", false);
+    assert(false && "Block with undefined texture");
     return { 0.0f, 0.0f };
 }
 

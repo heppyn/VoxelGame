@@ -25,6 +25,8 @@ class Chunk {
 
     void GenerateInstanceData();
     void FinisChunk();
+    void AddObjectData(std::vector<glm::mat4>&& objects);
+
     [[nodiscard]] std::shared_ptr<std::vector<glm::mat4>> GetInstancesData() const;
     [[nodiscard]] const std::vector<GameObject>& GetObjects() const;
     [[nodiscard]] std::vector<GameObject>& GetObjects();

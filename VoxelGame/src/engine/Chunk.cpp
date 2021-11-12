@@ -34,6 +34,14 @@ void Chunk::FinisChunk() {
     GenerateInstanceData();
 }
 
+// don't make const because data in pointer are changed
+void Chunk::AddObjectData(std::vector<glm::mat4>&& objects) {
+    InstancesData_->insert(
+      InstancesData_->end(),
+      std::make_move_iterator(objects.begin()),
+      std::make_move_iterator(objects.end()));
+}
+
 std::shared_ptr<std::vector<glm::mat4>> Chunk::GetInstancesData() const {
     assert(!InstancesData_->empty());
 
@@ -68,7 +76,7 @@ void Chunk::RecalculateBlockHeights() {
         for (auto& info : vec) {
             info.SetSurfaceHeight(0.0f);
         }
-    } 
+    }
 
     for (const auto& o : Objects_) {
         const auto& pos = o.Position();
@@ -79,9 +87,9 @@ void Chunk::RecalculateBlockHeights() {
 }
 
 void Chunk::GenerateInstanceData(const std::vector<GameObject>& objects, std::shared_ptr<std::vector<glm::mat4>> buffer) {
-    // clear if re-generating
-    buffer->clear();
-    buffer->reserve(objects.size());
+    // don't clear if objects data were added
+    // chunks are not regenerated
+    buffer->reserve(buffer->size() + objects.size());
 
     for (const auto& o : objects) {
         assert(o.HasComponent<Components::Transform>());

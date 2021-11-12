@@ -62,13 +62,10 @@ void Terrain::TerrainGen::PlaceVegetation(Chunk& chunk, const glm::vec2& pos, Bi
     // place trees
     auto tree = Vegetation::TreeFactory::GenerateTree({ pos.x, h, pos.y }, biome);
     const auto s = tree.size();
-    chunk.GetObjects().insert(
-      chunk.GetObjects().end(),
-      std::make_move_iterator(tree.begin()),
-      std::make_move_iterator(tree.end()));
+    chunk.AddObjectData(std::move(tree));
 
     if (s == 0) {
-        auto grass = GrassFactory_.GenerateLSystemGrass({pos.x, h + 1.0f, pos.y}, biome);
+        auto grass = Vegetation::GrassFactory::GenerateGrass({ pos.x, h + 1.0f, pos.y }, biome);
         chunk.GetObjectsTrans().insert(
           chunk.GetObjectsTrans().end(),
           std::make_move_iterator(grass.begin()),
@@ -184,7 +181,7 @@ Terrain::BlockType Terrain::TerrainGen::GetBlockType(const glm::vec3& pos, float
             return BlockType::Dirt;
     }
 
-    assert("Undefiend biome", false);
+    assert(false && "Undefiend biome");
     return BlockType::GrassTop;
 }
 

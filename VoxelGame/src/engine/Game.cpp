@@ -1,6 +1,7 @@
 #include "Game.h"
 
 #include "ResourceManager.h"
+#include "game/vegetation/LSystemsManager.h"
 #include "../open_gl/WindowManagerGl.h"
 #include "../helpers/Constants.h"
 #include "Random.h"
@@ -8,6 +9,7 @@
 
 Game::~Game() {
     ResourceManager::Clear();
+    Terrain::Vegetation::LSystemsManager::Clear();
 }
 
 void Game::Init() {
@@ -22,10 +24,11 @@ void Game::Init() {
     ResourceManager::LoadTexture2D(Constants::VOXEL_PACK_PATH_SH + "sprite_sheet.png", true, Constants::SPRITE_SHEET);
     ResourceManager::LoadTexture2D(Constants::VOXEL_PACK_PATH_SH + "sprite_sheet.png", true, Constants::SPRITE_SHEET_SPEC)->SetTypeSpecular();
     ResourceManager::SpriteSheet = { 128.0f, 128.0f, Constants::SPRITE_SHEET };
+    Engine::Random::Init();
+    Terrain::Vegetation::LSystemsManager::Init();
 
     Camera = std::make_shared<Renderer::Camera>(glm::vec3(0.0f, 30.0f, 0.0f));
     Renderer = std::make_unique<Renderer::SceneRenderer>(Camera.get());
-    Engine::Random::Init();
 
     InitScene();
     Scene_.SetGlobalLight({ glm::vec3(-0.2f, -1.0f, -0.3f), glm::vec3(0.7f) });
@@ -37,7 +40,7 @@ void Game::ProcessInput(float delta) const {
     InputHandler->ProcessInput(delta);
 }
 
-void Game::Update(float delta) {
+void Game::Update([[maybe_unused]] float delta) {
     Scene_.Update();
 }
 

@@ -9,7 +9,7 @@ namespace Terrain::Vegetation {
 class TreeFactory {
   public:
     static bool HasTree(const glm::vec3& pos, BiomeType biome);
-    static std::vector<GameObject> GenerateTree(const glm::vec3& pos, BiomeType biome);
+    static std::vector<glm::mat4> GenerateTree(const glm::vec3& pos, BiomeType biome);
 
   private:
     constexpr static int DENSITY_DENSE{ 1 };

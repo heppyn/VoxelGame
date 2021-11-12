@@ -9,7 +9,7 @@ bool Terrain::Vegetation::TreeFactory::HasTree(const glm::vec3& pos, BiomeType b
     return CanHaveTree(pos, biome) && !HasNeighTree(pos, biome, 1);
 }
 
-std::vector<GameObject> Terrain::Vegetation::TreeFactory::GenerateTree(const glm::vec3& pos, BiomeType biome) {
+std::vector<glm::mat4> Terrain::Vegetation::TreeFactory::GenerateTree(const glm::vec3& pos, BiomeType biome) {
     if (!HasTree(pos, biome)) {
         return {};
     }
@@ -27,21 +27,21 @@ std::vector<GameObject> Terrain::Vegetation::TreeFactory::GenerateTree(const glm
             return {};
 
         case BiomeType::Shrubland:
-            return Tree::SpawnShrub(pos);
+            return Tree::SpawnLSystemShrub(pos);
 
         case BiomeType::SubtropicalDesert:
-            return Tree::SpawnCactus(pos);
+            return Tree::SpawnLSystemCactus(pos);
 
         case BiomeType::Savanna:
-            return Tree::SpawnSavannaTree(pos);
+            return Tree::SpawnLSystemSavannaTree(pos);
 
         case BiomeType::Grassland:
         case BiomeType::Woodland:
-            return Tree::SpawnNormalTree(pos);
+            return Tree::SpawnLSystemNormalTree(pos);
 
         case BiomeType::TropicalForest:
         case BiomeType::TropicalRainforest:
-            return Tree::SpawnJungleTree(pos);
+            return Tree::SpawnLSystemJungleTree(pos);
     }
 
     assert(false);
@@ -96,6 +96,6 @@ bool Terrain::Vegetation::TreeFactory::CanHaveTree(const glm::vec3& pos, BiomeTy
             return Engine::Random::IsLocalMaxPerlin({ pos.x, pos.z }, FREQ_SPARSE, DENSITY_DENSE);
     }
 
-    assert("Undefined biome", false);
+    assert(false && "Undefined biome");
     return false;
 }

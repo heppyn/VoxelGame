@@ -156,6 +156,9 @@
     <ClCompile Include="tests\engine\GameObjectFactoryTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\game\vegetation\LSystemsManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\vendor\glm\detail\func_common.inl">
@@ -1581,6 +1584,9 @@
     <ClInclude Include="src\engine\L-systems\LSystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\game\vegetation\LSystemsManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\textures\doge.png">
@@ -1618,5 +1624,6 @@
     <Text Include="tests\engine\L-systems\grammar.txt" />
     <Text Include="tests\engine\L-systems\multipleGrammars.txt" />
     <Text Include="res\l-systems\Koch.txt" />
+    <Text Include="res\l-systems\plants\Shrubs.txt" />
   </ItemGroup>
 </Project>

@@ -1,7 +1,11 @@
 #include "Tree.h"
 
 #include "engine/Random.h"
+#include "engine/Components/SpritesheetTex.h"
+#include "engine/Components/Transform.h"
 #include "game/BlockFactory.h"
+#include "game/vegetation/LSystemsManager.h"
+#include "helpers/Math.h"
 
 std::vector<GameObject> Terrain::Vegetation::Tree::SpawnNormalTree(const glm::vec3& pos) {
     const auto trunk = Engine::Random::GetNoise0_1<float>(pos) > 0.3f ? BlockType::TrunkSide : BlockType::TrunkWhiteSide;
@@ -84,8 +88,8 @@ std::vector<GameObject> Terrain::Vegetation::Tree::SpawnCactus(const glm::vec3& 
     res.reserve(cactus.size());
     BlockFactory bf(glm::vec3(0.8f), glm::vec3(0.0f, -0.1f, 0.0f));
 
-    for (const auto& [pos, type] : cactus) {
-        res.emplace_back(bf.CreateStacked(pos, type));
+    for (const auto& [position, type] : cactus) {
+        res.emplace_back(bf.CreateStacked(position, type));
     }
 
     return res;
@@ -97,6 +101,23 @@ std::vector<GameObject> Terrain::Vegetation::Tree::SpawnShrub(const glm::vec3& p
     BlockFactory bf(glm::vec3(scale), glm::vec3(0.0f, (1.0f - scale) / -2.0f, 0.0f));
     res.emplace_back(bf.CreateFromPreset(pos + glm::vec3(0.0f, 1.0f, 0.0f), BlockType::LeavesOrange));
     return res;
+}
+
+std::vector<glm::mat4> Terrain::Vegetation::Tree::SpawnLSystemShrub(const glm::vec3& pos) {
+    return LSystemsManager::GetShrub({ pos.x, pos.y + 1.0f, pos.z}, BlockType::TrunkSide);
+}
+
+std::vector<glm::mat4> Terrain::Vegetation::Tree::SpawnLSystemNormalTree(const glm::vec3& pos) {
+    return GenerateObjectData(SpawnNormalTree(pos));
+}
+std::vector<glm::mat4> Terrain::Vegetation::Tree::SpawnLSystemJungleTree(const glm::vec3& pos, float height, float heightVar) {
+    return GenerateObjectData(SpawnJungleTree(pos, height, heightVar));
+}
+std::vector<glm::mat4> Terrain::Vegetation::Tree::SpawnLSystemSavannaTree(const glm::vec3& pos, float height, float heightVar) {
+    return GenerateObjectData(SpawnSavannaTree(pos, height, heightVar));
+}
+std::vector<glm::mat4> Terrain::Vegetation::Tree::SpawnLSystemCactus(const glm::vec3& pos) {
+    return GenerateObjectData(SpawnCactus(pos));
 }
 
 std::vector<GameObject> Terrain::Vegetation::Tree::GenerateTree(const std::vector<std::pair<glm::vec3, BlockType>>& tree) {
@@ -111,4 +132,22 @@ std::vector<GameObject> Terrain::Vegetation::Tree::GenerateTree(const std::vecto
 
 float Terrain::Vegetation::Tree::GetTreeHeight(const glm::vec3& pos, float height, float heightVar) {
     return Engine::Random::GetNoise0_1<float>(pos) * heightVar + height;
+}
+
+std::vector<glm::mat4> Terrain::Vegetation::Tree::GenerateObjectData(const std::vector<GameObject>& objects) {
+    std::vector<glm::mat4> res;
+
+    // TODO: implement in common function
+    for (const auto& o : objects) {
+        assert(o.HasComponent<Components::Transform>());
+        auto model = o.GetComponent<Components::Transform>().ModelMat();
+
+        assert(o.HasComponent<Components::SpritesheetTex>());
+        const auto& texPos = o.GetComponent<Components::SpritesheetTex>().GetTexPos();
+        Helpers::Math::PackVecToMatrix(model, texPos);
+
+        res.push_back(model);
+    }
+
+    return res;
 }
