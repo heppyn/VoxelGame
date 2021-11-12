@@ -14,6 +14,10 @@ class GameObjectFactory {
     [[nodiscard]] GameObject CreateFromPreset(const glm::vec3& pos, const glm::vec2& tex);
     [[nodiscard]] GameObject CreateStacked(const glm::vec3& pos, const glm::vec2& tex);
 
+    [[nodiscard]] static GameObject CreateObjectNoTex(const glm::vec3& pos);
+    [[nodiscard]] static GameObject CreateObjectNoTex(const glm::vec3& pos, const glm::vec3& scale);
+    [[nodiscard]] static GameObject CreateObjectNoTex(const glm::vec3& pos, float scale);
+
     GameObjectFactory& Scale(const glm::vec3& scale);
     GameObjectFactory& PositionOffset(const glm::vec3& positionOffset);
 

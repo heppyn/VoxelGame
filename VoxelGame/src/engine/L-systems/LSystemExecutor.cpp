@@ -29,13 +29,13 @@ void LSystems::LSystemExecutor::ExecuteLetter(char letter, const LSystem& lSyste
     switch (letter) {
         case 'U':
             for (float x = 0.0f; x < Scale_; x += turtle.Scale()) {
-                objects.emplace_back(GameObjectFactory::CreateObject(turtle.Position(), { 4.0f, 3.0f }, turtle.Scale()));
+                objects.emplace_back(GameObjectFactory::CreateObjectNoTex(turtle.Position(), turtle.Scale()));
                 turtle.MoveUp();
             }
             break;
         case 'F':
             for (float x = 0.0f; x < Scale_; x += turtle.Scale()) {
-                objects.emplace_back(GameObjectFactory::CreateObject(turtle.Position(), { 4.0f, 3.0f }, turtle.Scale()));
+                objects.emplace_back(GameObjectFactory::CreateObjectNoTex(turtle.Position(), turtle.Scale()));
                 turtle.MoveForward();
             }
             break;
@@ -67,6 +67,6 @@ void LSystems::LSystemExecutor::ExecuteLetter(char letter, const LSystem& lSyste
             break;
 
         default:
-            assert(false, "Incomplete alphabet");
+            assert(false && "Incomplete alphabet");
     }
 }

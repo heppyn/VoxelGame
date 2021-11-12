@@ -38,6 +38,20 @@ GameObject GameObjectFactory::CreateStacked(const glm::vec3& pos, const glm::vec
 
     return go;
 }
+
+GameObject GameObjectFactory::CreateObjectNoTex(const glm::vec3& pos) {
+    return GameObject(pos);
+}
+GameObject GameObjectFactory::CreateObjectNoTex(const glm::vec3& pos, const glm::vec3& scale) {
+    auto go = CreateObjectNoTex(pos);
+    go.Scale(scale);
+
+    return go;
+}
+GameObject GameObjectFactory::CreateObjectNoTex(const glm::vec3& pos, float scale) {
+    return CreateObjectNoTex(pos, glm::vec3(scale));
+}
+
 GameObjectFactory& GameObjectFactory::Scale(const glm::vec3& scale) {
     Scale_ = scale;
     return *this;

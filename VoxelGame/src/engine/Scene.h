@@ -19,7 +19,7 @@ class Scene {
     std::vector<GameObject> Lights_{};
     std::map<glm::vec2, Chunk, Helpers::CmpGlmVec<glm::vec2>> Chunks_{};
     std::shared_ptr<Renderer::Camera> Camera_{ nullptr };
-    int RenderDistance_{ 1 };
+    int RenderDistance_{ 5 };
 
     std::vector<std::shared_ptr<std::vector<glm::mat4>>> ObjectsDataCache_{};
 
