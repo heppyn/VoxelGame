@@ -19,6 +19,7 @@ std::vector<LSystems::LSystem> LSystems::LSystemParser::LoadLSystemFromFile(cons
             SkipIfComment(lSystemFile);
             if (!(lSystemFile >> yaw >> pitch >> shrinkRatio)) {
                 // no other definition found - return current result
+                assert(!res.empty() && "No L-system loaded");
                 break;
             }
             SkipIfComment(lSystemFile);
