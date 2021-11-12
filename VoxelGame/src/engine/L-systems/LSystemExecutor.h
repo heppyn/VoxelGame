@@ -14,9 +14,9 @@ class LSystemExecutor {
 
   private:
     int DerivationVar{ 0 };
-    std::stack<Turtle> TStack_{};
+    std::stack<Detail::Turtle> TStack_{};
     float Scale_{};
 
-    void ExecuteLetter(char letter, const LSystem& lSystem, std::vector<GameObject>& objects, Turtle& turtle);
+    void ExecuteLetter(char letter, const LSystem& lSystem, std::vector<GameObject>& objects, Detail::Turtle& turtle);
 };
 } // namespace LSystems

@@ -2,7 +2,7 @@
 #include "glm/vec3.hpp"
 
 
-namespace LSystems {
+namespace LSystems::Detail {
 // turtle has a position and orientation
 // http://algorithmicbotany.org/papers/abop/abop-ch1.pdf
 // Chapter 1.5 modeling in three dimensions

@@ -1,7 +1,5 @@
 #include "LSystemExecutor.h"
 
-#include <iostream>
-
 #include "engine/GameObjectFactory.h"
 
 LSystems::LSystemExecutor::LSystemExecutor(int derivationVar) : DerivationVar(derivationVar) {}
@@ -13,7 +11,7 @@ std::vector<GameObject> LSystems::LSystemExecutor::GenerateBasedOn(const glm::ve
     std::vector<GameObject> objects;
     Scale_ = scale;
     // anchor the starting block to the bottom of the block
-    Turtle turtle({ pos.x, pos.y - ((1.0f - scale) / 2.0f), pos.z }, scale);
+    Detail::Turtle turtle({ pos.x, pos.y - ((1.0f - scale) / 2.0f), pos.z }, scale);
 
     //std::cout << lSystem.Grammar.Derivate(numDerivations, salt) << "\n\n";
 
@@ -24,7 +22,7 @@ std::vector<GameObject> LSystems::LSystemExecutor::GenerateBasedOn(const glm::ve
     return objects;
 }
 
-void LSystems::LSystemExecutor::ExecuteLetter(char letter, const LSystem& lSystem, std::vector<GameObject>& objects, Turtle& turtle) {
+void LSystems::LSystemExecutor::ExecuteLetter(char letter, const LSystem& lSystem, std::vector<GameObject>& objects, Detail::Turtle& turtle) {
     // TODO: save this in hash map if it is too slow for large alphabet
     switch (letter) {
         case 'U':

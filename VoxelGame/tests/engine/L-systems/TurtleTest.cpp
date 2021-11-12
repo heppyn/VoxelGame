@@ -7,7 +7,7 @@
 
 TEST_CASE("turtle test", "[engine, turtle]") {
     // setup
-    LSystems::Turtle turtle(glm::vec3(0.0f));
+    LSystems::Detail::Turtle turtle(glm::vec3(0.0f));
     REQUIRE(Helpers::Math::Equal(turtle.Position(), glm::vec3(0.0f)));
 
     SECTION("turtle can move forward") {
@@ -82,7 +82,7 @@ TEST_CASE("turtle test", "[engine, turtle]") {
 
         REQUIRE(Helpers::Math::Equal(turtle.Position(), glm::vec3(1.0f, 0.0f, -1.0f)));
 
-        LSystems::Turtle t1(glm::vec3(0.0f));
+        LSystems::Detail::Turtle t1(glm::vec3(0.0f));
         t1.Rotate(30.0f, 0.0f);
         t1.MoveForward(sqrtf(1.0f));
 

@@ -5,17 +5,17 @@
 #include "helpers/Math.h"
 
 
-LSystems::Turtle::Turtle(const glm::vec3& position)
+LSystems::Detail::Turtle::Turtle(const glm::vec3& position)
   : Position_(position), Front_(0.0f), Up_(0.0f), Right_(0.0f) {
     UpdateTurtleVectors();
 }
 
-LSystems::Turtle::Turtle(const glm::vec3& position, float scale)
+LSystems::Detail::Turtle::Turtle(const glm::vec3& position, float scale)
   : Position_(position), Front_(0.0f), Up_(0.0f), Right_(0.0f), Scale_(scale) {
     UpdateTurtleVectors();
 }
 
-void LSystems::Turtle::Rotate(float yaw, float pitch) {
+void LSystems::Detail::Turtle::Rotate(float yaw, float pitch) {
     Yaw_ += yaw;
     Pitch_ += pitch;
     // stuff breaks when pitch is 90 deg
@@ -24,22 +24,22 @@ void LSystems::Turtle::Rotate(float yaw, float pitch) {
     UpdateTurtleVectors();
 }
 
-void LSystems::Turtle::Move(const glm::vec3& dv) {
+void LSystems::Detail::Turtle::Move(const glm::vec3& dv) {
     Position_ += dv;
 }
 
-void LSystems::Turtle::MoveForward(float dz) {
+void LSystems::Detail::Turtle::MoveForward(float dz) {
     Position_ += Front_ * dz;
 }
-void LSystems::Turtle::MoveSide(float dx) {
+void LSystems::Detail::Turtle::MoveSide(float dx) {
     Position_ += Right_ * dx;
 }
 
-void LSystems::Turtle::MoveUp(float dy) {
+void LSystems::Detail::Turtle::MoveUp(float dy) {
     Position_ += Up_ * dy;
 }
 
-void LSystems::Turtle::UpdateTurtleVectors() {
+void LSystems::Detail::Turtle::UpdateTurtleVectors() {
     // calculate the new Front vector
     glm::vec3 front;
     front.x = cos(glm::radians(Yaw_)) * cos(glm::radians(Pitch_));
