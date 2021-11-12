@@ -1,11 +1,7 @@
-# symetrical straight shrub
-45.0 25.7 0.7
-E
-E > U[&XE][^XE]XUE
-E > U[&+XE][^+XE]XUE
-E > U[&-XE][^-XE]XUE
-U > UU
+# taken from http://algorithmicbotany.org/papers/abop/abop-ch1.pdf  
+# E = expand symbol, is not interpreted by the turtle
 
+# 25/d
 # split - grow - double split
 45.0 20.0 0.7
 E
@@ -14,10 +10,51 @@ E > U[^XE]U[&XE]^E
 E > U[+^XE]U[-&XE]-^E
 E > U[-^XE]U[+&XE]+^E
 
-
-45.0 22.5 0.7
-E
+# 25/d
+# split - grow - double split
+# split starts from the ground
+45.0 20.0 0.7
+A
 U > UU
-E > U&[[XE]^XE]^U[^XUE]&XE
-E > U+&[[XE]^XE]^U[-^XUE]&XE
-E > U-&[[XE]^XE]^U[+^XUE]&XE
+A > [^XE]U[&XE]^E
+A > [+^XE]U[-&XE]-^E
+A > [-^XE]U[+&XE]+^E
+E > U[^XE]U[&XE]^E
+E > U[+^XE]U[-&XE]-^E
+E > U[-^XE]U[+&XE]+^E
+
+# 25/d
+# split - grow - double split
+# multiple splits from the ground
+45.0 20.0 0.7
+A
+U > UU
+A > [^XE][+++^XE]U[&XE]^XE
+A > [+^XE][--^XE]U[-&XE]-^XE
+A > [-^XE][++^XE]U[+&XE]+^XE
+E > U[^XE]U[&XE]^XE
+E > U[+^XE]U[-&XE]-^XE
+E > U[-^XE]U[+&XE]+^XE
+
+# 25/f
+# too large - doesn't look like a shrub
+# 45.0 22.5 0.7
+# E
+# U > UU
+# E > U&[[XE]^XE]^U[^XUE]&XE
+# E > U+&[[XE]^XE]^U[-^XUE]&XE
+# E > U-&[[XE]^XE]^U[+^XUE]&XE
+
+# 25/f
+# same as the previous one, but splits from the ground
+45.0 22.5 0.7
+A
+U > UU
+A > &[[XE]+^XE]^U[++^XUE]&XE
+A > +&[[--XE]++^XE]^U[-^XUE]&XE
+A > ++&[[--XE]+^XE]^U[--^XUE]&XE
+A > -&[[+XE]--^XE]^U[+^XUE]&XE
+E > U&[[XE]^-XE]^U[^++XUE]
+E > U&[[XE]^-XE]^U[^--XUE]&XE
+E > U+&[[--XE]+^XE]^U[-^XUE]
+E > U-&[[+XE]-^XE]^U[+^XUE]&XE
