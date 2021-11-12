@@ -20,7 +20,7 @@ class LSystemsManager {
 
     static std::vector<std::vector<glm::mat4>> Shrubs_;
 
-    static constexpr int SHRUB_COUNT{ 4 };
+    static constexpr int SHRUB_COUNT{ 8 };
 
     inline static const auto SHRUB_PATH{ "./res/l-systems/plants/Shrubs.txt" };
 };

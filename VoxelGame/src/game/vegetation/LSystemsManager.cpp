@@ -12,12 +12,15 @@ std::vector<std::vector<glm::mat4>> Terrain::Vegetation::LSystemsManager::Shrubs
 void Terrain::Vegetation::LSystemsManager::Init() {
     const auto lSystems = LSystems::LSystemParser::LoadLSystemFromFile(SHRUB_PATH);
     assert(!lSystems.empty());
-    auto executor = LSystems::LSystemExecutor(2);
+    LSystems::LSystemExecutor executor;
     auto salt = Engine::Random::Get1dNoise(Engine::Random::Seed);
 
     for (const auto& ls : lSystems) {
         for (int i = 0; i < SHRUB_COUNT; ++i) {
-            const auto tmpObjects = executor.GenerateBasedOn(glm::vec3(0.0f), ls, 0.1f, 2, salt);
+            // add different grow stages
+            // larger plants have thicker stems
+            const auto mod = i % 3;
+            const auto tmpObjects = executor.GenerateBasedOn(glm::vec3(0.0f), ls, 0.1f + mod / 20.0f, 2 + mod, salt);
             Shrubs_.emplace_back();
             Shrubs_[Shrubs_.size() - 1].reserve(tmpObjects.size());
 
