@@ -205,6 +205,7 @@
     <ClCompile Include="tests\engine\L-systems\RandomGrammarTest.cpp" />
     <ClCompile Include="tests\engine\L-systems\TurtleTest.cpp" />
     <ClCompile Include="src\game\vegetation\TreeFactory.cpp" />
+    <ClCompile Include="tests\engine\RandomTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".clang-format" />
