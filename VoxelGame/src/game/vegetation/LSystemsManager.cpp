@@ -11,6 +11,7 @@ std::vector<std::vector<glm::mat4>> Terrain::Vegetation::LSystemsManager::Shrubs
 
 void Terrain::Vegetation::LSystemsManager::Init() {
     const auto lSystems = LSystems::LSystemParser::LoadLSystemFromFile(SHRUB_PATH);
+    assert(!lSystems.empty());
     auto executor = LSystems::LSystemExecutor(2);
     auto salt = Engine::Random::Get1dNoise(Engine::Random::Seed);
 
@@ -27,6 +28,7 @@ void Terrain::Vegetation::LSystemsManager::Init() {
             salt = Engine::Random::Get1dNoise(salt);
         }
     }
+    assert(!Shrubs_.empty());
 }
 
 void Terrain::Vegetation::LSystemsManager::Clear() {

@@ -7,7 +7,7 @@ std::vector<LSystems::LSystem> LSystems::LSystemParser::LoadLSystemFromFile(cons
     try {
         std::ifstream lSystemFile(file.data());
         if (!lSystemFile.is_open()) {
-            std::cout << "File [" << file << "] could not be opened";
+            std::cout << "ERROR: File [" << file << "] could not be opened";
             return {};
         }
 
@@ -39,8 +39,12 @@ std::vector<LSystems::LSystem> LSystems::LSystemParser::LoadLSystemFromFile(cons
         }
     }
     catch (std::exception&) {
-        std::cout << "Failed to load L-system from [" << file << "]\n";
+        std::cout << "ERROR: Failed to load L-system from [" << file << "]\n";
         return {};
+    }
+
+    if (res.empty()) {
+        std::cout << "WARNING: L-system not loaded\n";
     }
 
     return res;
@@ -64,6 +68,7 @@ void LSystems::LSystemParser::SkipIfComment(std::ifstream& stream) {
     if (dummy == '#') {
         std::string tmp;
         std::getline(stream, tmp);
+        SkipIfComment(stream);
     }
     else {
         stream.seekg(-1, std::ios::cur);
