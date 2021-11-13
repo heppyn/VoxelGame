@@ -6,9 +6,9 @@
 45.0 20.0 0.7
 E
 U > UU
-E > U[^XE]U[&XE]^E
-E > U[+^XE]U[-&XE]-^E
-E > U[-^XE]U[+&XE]+^E
+E > U[^XE]XU[&XE]^E
+E > U[+^XE]XU[-&XE]-^E
+E > U[-^XE]XU[+&XE]+^E
 
 # 25/d
 # split - grow - double split
@@ -16,12 +16,12 @@ E > U[-^XE]U[+&XE]+^E
 45.0 20.0 0.7
 A
 U > UU
-A > [^XE]U[&XE]^E
-A > [+^XE]U[-&XE]-^E
-A > [-^XE]U[+&XE]+^E
-E > U[^XE]U[&XE]^E
-E > U[+^XE]U[-&XE]-^E
-E > U[-^XE]U[+&XE]+^E
+A > [^XE]XU[&XE]^E
+A > [+^XE]XU[-&XE]-^E
+A > [-^XE]XU[+&XE]+^E
+E > U[^XE]XU[&XE]^E
+E > U[+^XE]XU[-&XE]-^E
+E > U[-^XE]XU[+&XE]+^E
 
 # 25/d
 # split - grow - double split
@@ -29,12 +29,12 @@ E > U[-^XE]U[+&XE]+^E
 45.0 20.0 0.7
 A
 U > UU
-A > [^XE][+++^XE]U[&XE]^XE
-A > [+^XE][--^XE]U[-&XE]-^XE
-A > [-^XE][++^XE]U[+&XE]+^XE
-E > U[^XE]U[&XE]^XE
-E > U[+^XE]U[-&XE]-^XE
-E > U[-^XE]U[+&XE]+^XE
+A > [^XE][+++^XE]XU[&XE]^XE
+A > [+^XE][--^XE]XU[-&XE]-^XE
+A > [-^XE][++^XE]XU[+&XE]+^XE
+E > U[^XE]XU[&XE]^XE
+E > U[+^XE]XU[-&XE]-^XE
+E > U[-^XE]XU[+&XE]+^XE
 
 # 25/f
 # too large - doesn't look like a shrub
