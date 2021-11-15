@@ -14,12 +14,16 @@ class Turtle {
     void Rotate(float yaw, float pitch);
     void Move(const glm::vec3& dv);
     void MoveForward(float dz);
+    void MoveBackward(float dz) { MoveForward(-dz); }
     void MoveSide(float dx);
     void MoveUp(float dy);
+    void MoveDown(float dy) { MoveUp(-dy); }
 
     void MoveForward() { MoveForward(Scale_); }
+    void MoveBackward() { MoveForward(-Scale_); }
     void MoveSide() { MoveSide(Scale_); }
     void MoveUp() { MoveUp(Scale_); }
+    void MoveDown() { MoveUp(-Scale_); }
 
     [[nodiscard]] const glm::vec3& Position() const { return Position_; }
     [[nodiscard]] float Scale() const { return Scale_; }
@@ -40,4 +44,4 @@ class Turtle {
 
     void UpdateTurtleVectors();
 };
-} // namespace LSystems
+} // namespace LSystems::Detail

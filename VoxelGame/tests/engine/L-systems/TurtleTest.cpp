@@ -11,21 +11,46 @@ TEST_CASE("turtle test", "[engine, turtle]") {
     REQUIRE(Helpers::Math::Equal(turtle.Position(), glm::vec3(0.0f)));
 
     SECTION("turtle can move forward") {
-        turtle.MoveForward(3.0f);
+        turtle.MoveForward();
+        REQUIRE(Helpers::Math::Equal(turtle.Position(), glm::vec3(0.0f, 0.0f, -1.0f)));
 
-        REQUIRE(Helpers::Math::Equal(turtle.Position(), glm::vec3(0.0f, 0.0f, -3.0f)));
+        turtle.MoveForward(3.0f);
+        REQUIRE(Helpers::Math::Equal(turtle.Position(), glm::vec3(0.0f, 0.0f, -4.0f)));
+    }
+
+    SECTION("turtle can move backwards") {
+        turtle.MoveBackward();
+        REQUIRE(Helpers::Math::Equal(turtle.Position(), glm::vec3(0.0f, 0.0f, 1.0f)));
+
+        turtle.MoveBackward(2.0f);
+        REQUIRE(Helpers::Math::Equal(turtle.Position(), glm::vec3(0.0f, 0.0f, 3.0f)));
     }
 
     SECTION("turtle can move sideways") {
-        turtle.MoveSide(3.0f);
+        turtle.MoveSide();
+        REQUIRE(Helpers::Math::Equal(turtle.Position(), glm::vec3(1.0f, 0.0f, 0.0f)));
 
-        REQUIRE(Helpers::Math::Equal(turtle.Position(), glm::vec3(3.0f, 0.0f, 0.0f)));
+        turtle.MoveSide(3.0f);
+        REQUIRE(Helpers::Math::Equal(turtle.Position(), glm::vec3(4.0f, 0.0f, 0.0f)));
+
+        turtle.MoveSide(-5.0f);
+        REQUIRE(Helpers::Math::Equal(turtle.Position(), glm::vec3(-1.0f, 0.0f, 0.0f)));
     }
 
-    SECTION("turtle can move up") {
-        turtle.MoveUp(3.0f);
+    SECTION("turtle can move upwards") {
+        turtle.MoveUp();
+        REQUIRE(Helpers::Math::Equal(turtle.Position(), glm::vec3(0.0f, 1.0f, 0.0f)));
 
-        REQUIRE(Helpers::Math::Equal(turtle.Position(), glm::vec3(0.0f, 3.0f, 0.0f)));
+        turtle.MoveUp(3.0f);
+        REQUIRE(Helpers::Math::Equal(turtle.Position(), glm::vec3(0.0f, 4.0f, 0.0f)));
+    }
+
+    SECTION("turtle can move downwards") {
+        turtle.MoveDown();
+        REQUIRE(Helpers::Math::Equal(turtle.Position(), glm::vec3(0.0f, -1.0f, 0.0f)));
+
+        turtle.MoveDown(2.0f);
+        REQUIRE(Helpers::Math::Equal(turtle.Position(), glm::vec3(0.0f, -3.0f, 0.0f)));
     }
 
     SECTION("turtle can move") {
