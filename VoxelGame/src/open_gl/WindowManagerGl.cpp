@@ -69,7 +69,7 @@ void WindowManagerGl::SetScrollCallback(GLFWcursorposfun callback) {
     glfwSetScrollCallback(MainWindow, callback);
 }
 
-void WindowManagerGl::FramebufferSizeCallback(GLFWwindow* window, int width, int height) {
+void WindowManagerGl::FramebufferSizeCallback([[maybe_unused]] GLFWwindow* window, int width, int height) {
     // make sure the viewport matches the new window dimensions
     // TODO: implement observer to update
     // TODO: more windows?

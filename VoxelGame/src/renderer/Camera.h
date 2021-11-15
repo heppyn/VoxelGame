@@ -55,7 +55,7 @@ class Camera {
     // processes input received from a mouse scroll-wheel event. Only requires input on the vertical wheel-axis
     void ProcessMouseScroll(float yOffset);
 
-    void Move(float delta, float x, float y = 0.0, float z = 0.0);
+    void Move(float delta, float x, float y = 0.0);
 
   private:
     // calculates the front vector from the Camera's (updated) Euler Angles

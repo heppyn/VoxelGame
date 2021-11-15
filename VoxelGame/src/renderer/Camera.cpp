@@ -61,7 +61,7 @@ void Renderer::Camera::ProcessMouseScroll(float yOffset) {
         Zoom = 45.0f;
 }
 
-void Renderer::Camera::Move(float delta, float x, float y, float z) {
+void Renderer::Camera::Move(float delta, float x, float y) {
     if (x > 0) {
         ProcessKeyboard(CameraMovement::RIGHT, delta);
     }

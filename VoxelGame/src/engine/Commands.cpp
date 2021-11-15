@@ -22,16 +22,16 @@ void Commands::MoveRightCommand::Execute(float delta)
 
 void Commands::MouseCommand::ExecuteMove(float xPos, float yPos) {
     if (FirstMouse) {
-        LastX = static_cast<float>(xPos);
-        LastY = static_cast<float>(yPos);
+        LastX = xPos;
+        LastY = yPos;
         FirstMouse = false;
     }
 
-    const float xOffset = static_cast<float>(xPos) - LastX;
-    const float yOffset = LastY - static_cast<float>(yPos); // reversed since y-coordinates go from bottom to top
+    const float xOffset = xPos - LastX;
+    const float yOffset = LastY - yPos; // reversed since y-coordinates go from bottom to top
 
-    LastX = static_cast<float>(xPos);
-    LastY = static_cast<float>(yPos);
+    LastX = xPos;
+    LastY = yPos;
     Actor->ProcessMouseMovement(xOffset, yOffset);
 }
 

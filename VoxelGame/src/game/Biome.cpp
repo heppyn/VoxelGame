@@ -10,7 +10,7 @@ std::vector<std::vector<std::vector<Terrain::BiomeType>>> Terrain::Biome::BiomeT
 
 
 // TODO: load from file
-float Terrain::Biome::GetFreq(BiomeType type) {
+float Terrain::Biome::GetFreq([[maybe_unused]] BiomeType type) {
     return 2.5f;
     // TODO: revisit this based on height map
     //switch (type) {
@@ -28,7 +28,7 @@ float Terrain::Biome::GetFreq(BiomeType type) {
     //return 1.0f;
 }
 
-float Terrain::Biome::GetHeightVar(BiomeType type) {
+float Terrain::Biome::GetHeightVar([[maybe_unused]] BiomeType type) {
     return 10.0f;
     // TODO: revisit this based on height map
     /*switch (type) {
