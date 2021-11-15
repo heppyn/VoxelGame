@@ -21,6 +21,7 @@ class LSystemExecutor {
 
     std::stack<Detail::Turtle> TStack_{};
     float Scale_{};
+    glm::vec2 LastMove_{ 0.0f };
 
     void ExecuteLetter(char letter, const LSystem& lSystem, std::vector<GameObject>& objects, Detail::Turtle& turtle, unsigned salt);
 };

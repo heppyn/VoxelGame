@@ -201,6 +201,7 @@
     <ClCompile Include="src\vendor\stb_image\stb_image.cpp" />
     <ClCompile Include="tests\engine\BlockInfoTest.cpp" />
     <ClCompile Include="tests\engine\GameObjectFactoryTest.cpp" />
+    <ClCompile Include="tests\engine\L-systems\LSystemExecutorTest.cpp" />
     <ClCompile Include="tests\engine\L-systems\LSystemParserTest.cpp" />
     <ClCompile Include="tests\engine\L-systems\RandomGrammarTest.cpp" />
     <ClCompile Include="tests\engine\L-systems\TurtleTest.cpp" />

@@ -11,6 +11,7 @@ std::vector<GameObject> LSystems::LSystemExecutor::GenerateBasedOn(const glm::ve
     }
     std::vector<GameObject> objects;
     Scale_ = scale;
+    LastMove_ = { 0.0f, 0.0f };
     // anchor the starting block to the bottom of the block
     Detail::Turtle turtle({ pos.x, pos.y - ((1.0f - scale) / 2.0f), pos.z }, scale);
 
@@ -34,16 +35,30 @@ void LSystems::LSystemExecutor::ExecuteLetter(char letter, const LSystem& lSyste
                 objects.emplace_back(GameObjectFactory::CreateObjectNoTex(turtle.Position(), turtle.Scale()));
                 turtle.MoveUp();
             }
+            LastMove_ = { 0.0f, turtle.Scale() };
             break;
         case 'F':
             for (float x = 0.0f; x < Scale_; x += turtle.Scale()) {
                 objects.emplace_back(GameObjectFactory::CreateObjectNoTex(turtle.Position(), turtle.Scale()));
                 turtle.MoveForward();
             }
+            LastMove_ = { turtle.Scale(), 0.0f };
             break;
-        case 'X':
-            turtle.Scale(turtle.Scale() * lSystem.ShrinkRatio);
+        case 'X': {
+            const auto newScale = turtle.Scale() * lSystem.ShrinkRatio;
+            const auto moveDiff = (turtle.Scale() - newScale) / 2.0f;
+            // move in opposite direction of the previous move
+            // objects would be separated by a gap, because the next object will be shrank
+            // add all opposite moves
+            if (LastMove_.x > 0.0f) {
+                turtle.MoveBackward(moveDiff);
+            }
+            else if (LastMove_.y > 0.0f) {
+                turtle.MoveDown(moveDiff);
+            }
+            turtle.Scale(newScale);
             break;
+        }
         // using right hand system, keep + to match the book
         case '+':
             turtle.Rotate(-lSystem.Yaw + angleDelta * lSystem.Yaw, 0.0f);
