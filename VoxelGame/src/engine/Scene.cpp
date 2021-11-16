@@ -26,7 +26,7 @@ void Scene::UpdateOrig() {
         LSystems::LSystemExecutor ge;
         const auto lSystems = LSystems::LSystemParser::LoadLSystemFromFile("./res/l-systems/plants/Grass.txt");
         if (!lSystems.empty()) {
-            Chunk chunk(glm::vec2(0.0f), ge.GenerateBasedOn(glm::vec3(0.0f), lSystems[0], 0.1f, 3, 2));
+            Chunk chunk(glm::vec2(0.0f), std::move(ge.GenerateBasedOn(glm::vec3(0.0f), lSystems[0], 0.1f, 3, 2)[0]));
             chunk.FinisChunk();
             ObjectsDataCache_.push_back(chunk.GetInstancesData());
             Chunks_.emplace(glm::vec2(0.0f), std::move(chunk));

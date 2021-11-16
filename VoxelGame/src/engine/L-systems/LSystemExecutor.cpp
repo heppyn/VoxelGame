@@ -5,11 +5,12 @@
 LSystems::LSystemExecutor::LSystemExecutor(int derivationVar) : DerivationVar_(derivationVar) {}
 LSystems::LSystemExecutor::LSystemExecutor(float randomAngle) : RandomAngle_(randomAngle) {}
 
-std::vector<GameObject> LSystems::LSystemExecutor::GenerateBasedOn(const glm::vec3& pos, const LSystem& lSystem, float scale, int numDerivations, unsigned salt) {
+std::vector<std::vector<GameObject>> LSystems::LSystemExecutor::GenerateBasedOn(const glm::vec3& pos, const LSystem& lSystem, float scale, int numDerivations, unsigned salt) {
     if (DerivationVar_) {
         numDerivations += static_cast<int>(Engine::Random::Get1dNoiseLimited(salt, DerivationVar_));
     }
-    std::vector<GameObject> objects;
+    std::vector<std::vector<GameObject>> objects;
+    objects.emplace_back();
     Scale_ = scale;
     LastMove_ = { 0.0f, 0.0f };
     // anchor the starting block to the bottom of the block
@@ -25,21 +26,23 @@ std::vector<GameObject> LSystems::LSystemExecutor::GenerateBasedOn(const glm::ve
     return objects;
 }
 
-void LSystems::LSystemExecutor::ExecuteLetter(char letter, const LSystem& lSystem, std::vector<GameObject>& objects, Detail::Turtle& turtle, unsigned salt) {
+void LSystems::LSystemExecutor::ExecuteLetter(char letter, const LSystem& lSystem, std::vector<std::vector<GameObject>>& objects, Detail::Turtle& turtle, unsigned salt) {
     // [-1.0, 1.0] * percentage
     const auto angleDelta = (Engine::Random::Get1dNoise0_1<float>(salt) - 0.5f) * 2.0f * RandomAngle_;
     // TODO: save this in hash map if it is too slow for large alphabet
     switch (letter) {
         case 'U':
             for (float x = 0.0f; x < Scale_; x += turtle.Scale()) {
-                objects.emplace_back(GameObjectFactory::CreateObjectNoTex(turtle.Position(), turtle.Scale()));
+                objects[turtle.OutputBuffer()].emplace_back(
+                  GameObjectFactory::CreateObjectNoTex(turtle.Position(), turtle.Scale()));
                 turtle.MoveUp();
             }
             LastMove_ = { 0.0f, turtle.Scale() };
             break;
         case 'F':
             for (float x = 0.0f; x < Scale_; x += turtle.Scale()) {
-                objects.emplace_back(GameObjectFactory::CreateObjectNoTex(turtle.Position(), turtle.Scale()));
+                objects[turtle.OutputBuffer()].emplace_back(
+                  GameObjectFactory::CreateObjectNoTex(turtle.Position(), turtle.Scale()));
                 turtle.MoveForward();
             }
             LastMove_ = { turtle.Scale(), 0.0f };
@@ -82,6 +85,23 @@ void LSystems::LSystemExecutor::ExecuteLetter(char letter, const LSystem& lSyste
         // character used for expanding grammar
         case 'E':
             break;
+        case '0':
+        case '1':
+        case '2':
+        case '3':
+        case '4':
+        case '5':
+        case '6':
+        case '7':
+        case '8':
+        case '9': {
+            const uint8_t buffer = letter - '0';
+            while (objects.size() <= buffer) {
+                objects.emplace_back();
+            }
+            turtle.OutputBuffer(buffer);
+            break;
+        }
 
         default:
             assert(false && "Incomplete alphabet");

@@ -5,6 +5,15 @@
 #include "glm/fwd.hpp"
 
 namespace Terrain::Vegetation {
+namespace Detail {
+    struct PlantModel {
+        // represents plant which can have multiple distinct block variations
+        // eq. stem and leaves
+        std::vector<std::vector<glm::mat4>> Model;
+
+        [[nodiscard]] size_t Size() const;
+    };
+}
 class LSystemsManager {
   public:
     // generate model matrices
@@ -18,7 +27,7 @@ class LSystemsManager {
   private:
     LSystemsManager() = default; // LSystemsManager is singleton
 
-    static std::vector<std::vector<glm::mat4>> Shrubs_;
+    static std::vector<Detail::PlantModel> Shrubs_;
 
     static constexpr int SHRUB_COUNT{ 8 };
 

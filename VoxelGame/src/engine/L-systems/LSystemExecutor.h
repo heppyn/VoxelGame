@@ -11,7 +11,7 @@ class LSystemExecutor {
     LSystemExecutor() = default;
     explicit LSystemExecutor(int derivationVar);
     explicit LSystemExecutor(float randomAngle);
-    [[nodiscard]] std::vector<GameObject> GenerateBasedOn(const glm::vec3& pos, const LSystem& lSystem, float scale, int numDerivations, unsigned salt);
+    [[nodiscard]] std::vector<std::vector<GameObject>> GenerateBasedOn(const glm::vec3& pos, const LSystem& lSystem, float scale, int numDerivations, unsigned salt);
 
   private:
     int DerivationVar_{ 0 };
@@ -23,6 +23,6 @@ class LSystemExecutor {
     float Scale_{};
     glm::vec2 LastMove_{ 0.0f };
 
-    void ExecuteLetter(char letter, const LSystem& lSystem, std::vector<GameObject>& objects, Detail::Turtle& turtle, unsigned salt);
+    void ExecuteLetter(char letter, const LSystem& lSystem, std::vector<std::vector<GameObject>>& objects, Detail::Turtle& turtle, unsigned salt);
 };
 } // namespace LSystems

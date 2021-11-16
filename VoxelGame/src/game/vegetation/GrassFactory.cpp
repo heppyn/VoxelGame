@@ -44,12 +44,12 @@ std::vector<GameObject> Terrain::Vegetation::GrassFactory::GenerateLSystemGrass(
             pos.z + (Engine::Random::Get2dNoise0_1<float>(pos.x, pos.z) - 0.5f)
         };
         std::cout << Helpers::ToString(newPos) << '\n';
-        return LExecutor_.GenerateBasedOn(
+        return std::move(LExecutor_.GenerateBasedOn(
           newPos,
           LSystems_[Engine::Random::GetNoiseLimited(pos, LSystems_.size())],
           0.05f,
           2,
-          Engine::Random::GetNoise(pos));
+          Engine::Random::GetNoise(pos))[0]);
     }
     return {};
 }

@@ -28,6 +28,8 @@ class Turtle {
     [[nodiscard]] const glm::vec3& Position() const { return Position_; }
     [[nodiscard]] float Scale() const { return Scale_; }
     void Scale(float scale) { Scale_ = scale; }
+    [[nodiscard]] uint8_t OutputBuffer() const { return OutputBuffer_; }
+    void OutputBuffer(uint8_t buffer) { OutputBuffer_ = buffer; }
 
   private:
     static constexpr glm::vec3 WORLD_UP{ 0.0f, 1.0f, 0.0f };
@@ -41,6 +43,7 @@ class Turtle {
     float Yaw_{ -90.0f }; // look to negative Z
     float Pitch_{ 0.0f };
     float Scale_{ 1.0f };
+    uint8_t OutputBuffer_{ 0 };
 
     void UpdateTurtleVectors();
 };

@@ -140,4 +140,11 @@ TEST_CASE("turtle test", "[engine, turtle]") {
         INFO("Turtle position: " << Helpers::ToString(turtle.Position()));
         REQUIRE(Helpers::Math::Equal(turtle.Position(), glm::vec3(0.0f, 0.0f, 0.0f)));
     }
+
+    SECTION("turtle can change output buffer") {
+        REQUIRE(turtle.OutputBuffer() == 0);
+
+        turtle.OutputBuffer(1);
+        REQUIRE(turtle.OutputBuffer() == 1);
+    }
 }
