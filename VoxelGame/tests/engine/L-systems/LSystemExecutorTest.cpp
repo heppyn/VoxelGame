@@ -42,4 +42,19 @@ TEST_CASE("L-system executor test", "[engine, LSystemExecutor]") {
         INFO("Object 2 " << Helpers::ToString(objects[2].Position()));
         REQUIRE(Helpers::Math::Equal(objects[2].Position(), glm::vec3(0.0f, 0.25f + 0.125f, 0.0f)));
     }
+
+    SECTION("executor can create objects when turtle rotates") {
+        LSystems::Detail::RandomGrammar grammar("U&&U^^U");
+        const LSystems::LSystem lSystem(std::move(grammar), 45.0f, 45.f, 0.5f);
+
+        const auto objects = executor.GenerateBasedOn(glm::vec3(0.0f), lSystem, 1.0f, 0, 1);
+
+        REQUIRE(objects.size() == 3);
+        INFO("Object 0 " << Helpers::ToString(objects[0].Position()));
+        REQUIRE(Helpers::Math::Equal(objects[0].Position(), glm::vec3(0.0f, 0.0f, 0.0f)));
+        INFO("Object 1 " << Helpers::ToString(objects[1].Position()));
+        REQUIRE(Helpers::Math::Equal(objects[1].Position(), glm::vec3(0.0f, 1.0f, 0.0f)));
+        INFO("Object 2 " << Helpers::ToString(objects[2].Position()));
+        REQUIRE(Helpers::Math::Equal(objects[2].Position(), glm::vec3(0.0f, 1.0f, 1.0f)));
+    }
 }
