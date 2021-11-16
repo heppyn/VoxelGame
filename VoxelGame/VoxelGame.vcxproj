@@ -713,8 +713,8 @@
     <Text Include="res\l-systems\plants\Grass.txt" />
     <Text Include="res\l-systems\plants\Shrubs.txt" />
     <Text Include="res\textures\voxel-pack-updated\License.txt" />
-    <Text Include="tests\engine\L-systems\grammar.txt" />
-    <Text Include="tests\engine\L-systems\multipleGrammars.txt" />
+    <Text Include="tests\engine\L-systems\testData\grammar.txt" />
+    <Text Include="tests\engine\L-systems\testData\multipleGrammars.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -4,7 +4,7 @@
 
 TEST_CASE("grammar parser test", "[engine, grammarParser]") {
     SECTION("grammar can be loaded from file") {
-        const auto grammar = LSystems::LSystemParser::LoadLSystemFromFile("./tests/engine/L-systems/grammar.txt");
+        const auto grammar = LSystems::LSystemParser::LoadLSystemFromFile("./tests/engine/L-systems/testData/grammar.txt");
 
         REQUIRE(grammar.size() == 1);
         REQUIRE(grammar[0].Grammar.Derivate(0) == "X");
@@ -13,7 +13,7 @@ TEST_CASE("grammar parser test", "[engine, grammarParser]") {
     }
 
     SECTION("multiple grammars can be loaded from file") {
-        const auto grammar = LSystems::LSystemParser::LoadLSystemFromFile("./tests/engine/L-systems/multipleGrammars.txt");
+        const auto grammar = LSystems::LSystemParser::LoadLSystemFromFile("./tests/engine/L-systems/testData/multipleGrammars.txt");
 
         REQUIRE(grammar.size() == 2);
         REQUIRE(grammar[1].Grammar.Derivate(0) == "X");
