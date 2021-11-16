@@ -18,7 +18,7 @@ inline void Print(const glm::vec4& vec) {
 
 inline std::string ToString(const glm::vec3& vec) {
     std::stringstream ss;
-    ss << vec.x << ' ' << vec.y << ' ' << vec.z;
+    ss << '(' << vec.x << ", " << vec.y << ", " << vec.z << ')';
     return ss.str();
 }
 } // namespace Helpers

@@ -6,9 +6,9 @@
 45.0 20.0 0.7
 E
 U > UU
-E > U[^XE]XU[&XE]^E
-E > U[+^XE]XU[-&XE]-^E
-E > U[-^XE]XU[+&XE]+^E
+E > U[^xE]xU[&xE]^E
+E > U[+^xE]xU[-&xE]-^E
+E > U[-^xE]xU[+&xE]+^E
 
 # 25/d
 # split - grow - double split
@@ -16,12 +16,12 @@ E > U[-^XE]XU[+&XE]+^E
 45.0 20.0 0.7
 A
 U > UU
-A > [^XE]XU[&XE]^E
-A > [+^XE]XU[-&XE]-^E
-A > [-^XE]XU[+&XE]+^E
-E > U[^XE]XU[&XE]^E
-E > U[+^XE]XU[-&XE]-^E
-E > U[-^XE]XU[+&XE]+^E
+A > [^xE]xU[&xE]^E
+A > [+^xE]xU[-&xE]-^E
+A > [-^xE]xU[+&xE]+^E
+E > U[^xE]xU[&xE]^E
+E > U[+^xE]xU[-&xE]-^E
+E > U[-^xE]xU[+&xE]+^E
 
 # 25/d
 # split - grow - double split
@@ -29,32 +29,32 @@ E > U[-^XE]XU[+&XE]+^E
 45.0 20.0 0.7
 A
 U > UU
-A > [^XE][+++^XE]XU[&XE]^XE
-A > [+^XE][--^XE]XU[-&XE]-^XE
-A > [-^XE][++^XE]XU[+&XE]+^XE
-E > U[^XE]XU[&XE]^XE
-E > U[+^XE]XU[-&XE]-^XE
-E > U[-^XE]XU[+&XE]+^XE
+A > [^xE][+++^xE]xU[&xE]^xE
+A > [+^xE][--^xE]xU[-&xE]-^xE
+A > [-^xE][++^xE]xU[+&xE]+^xE
+E > U[^xE]xU[&xE]^xE
+E > U[+^xE]xU[-&xE]-^xE
+E > U[-^xE]xU[+&xE]+^xE
 
 # 25/f
 # too large - doesn't look like a shrub
 # 45.0 22.5 0.7
 # E
 # U > UU
-# E > U&[[XE]^XE]^U[^XUE]&XE
-# E > U+&[[XE]^XE]^U[-^XUE]&XE
-# E > U-&[[XE]^XE]^U[+^XUE]&XE
+# E > U&[[xE]^xE]^U[^xUE]&xE
+# E > U+&[[xE]^xE]^U[-^xUE]&xE
+# E > U-&[[xE]^xE]^U[+^xUE]&xE
 
 # 25/f
 # same as the previous one, but splits from the ground
 45.0 22.5 0.7
 A
 U > UU
-A > &[[XE]+^XE]^U[++^XUE]&XE
-A > +&[[--XE]++^XE]^U[-^XUE]&XE
-A > ++&[[--XE]+^XE]^U[--^XUE]&XE
-A > -&[[+XE]--^XE]^U[+^XUE]&XE
-E > U&[[XE]^-XE]^U[^++XUE]
-E > U&[[XE]^-XE]^U[^--XUE]&XE
-E > U+&[[--XE]+^XE]^U[-^XUE]
-E > U-&[[+XE]-^XE]^U[+^XUE]&XE
+A > &[[xE]+^xE]^U[++^xUE]&xE
+A > +&[[--xE]++^xE]^U[-^xUE]&xE
+A > ++&[[--xE]+^xE]^U[--^xUE]&xE
+A > -&[[+xE]--^xE]^U[+^xUE]&xE
+E > U&[[xE]^-xE]^U[^++xUE]
+E > U&[[xE]^-xE]^U[^--xUE]&xE
+E > U+&[[--xE]+^xE]^U[-^xUE]
+E > U-&[[+xE]-^xE]^U[+^xUE]&xE

@@ -47,7 +47,7 @@ void LSystems::LSystemExecutor::ExecuteLetter(char letter, const LSystem& lSyste
             }
             LastMove_ = { turtle.Scale(), 0.0f };
             break;
-        case 'X': {
+        case 'x': {
             const auto newScale = turtle.Scale() * lSystem.ShrinkRatio;
             const auto moveDiff = (turtle.Scale() - newScale) / 2.0f;
             // move in opposite direction of the previous move
@@ -58,6 +58,21 @@ void LSystems::LSystemExecutor::ExecuteLetter(char letter, const LSystem& lSyste
             }
             else if (LastMove_.y > 0.0f) {
                 turtle.MoveDown(moveDiff);
+            }
+            turtle.Scale(newScale);
+            break;
+        }
+        case 'X': {
+            const auto newScale = turtle.Scale() / lSystem.ShrinkRatio;
+            const auto moveDiff = (newScale - turtle.Scale()) / 2.0f;
+            // move in the same direction as the previous move
+            // objects would be separated by a gap, because the next object will be shrank
+            // add all continuous moves
+            if (LastMove_.x > 0.0f) {
+                turtle.MoveForward(moveDiff);
+            }
+            else if (LastMove_.y > 0.0f) {
+                turtle.MoveUp(moveDiff);
             }
             turtle.Scale(newScale);
             break;
