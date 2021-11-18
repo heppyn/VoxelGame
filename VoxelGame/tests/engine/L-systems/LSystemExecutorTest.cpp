@@ -57,6 +57,22 @@ TEST_CASE("L-system executor test", "[engine, LSystemExecutor]") {
         REQUIRE(Helpers::Math::Equal(objects[3].Position(), glm::vec3(0.0f, 0.75f, 0.0f)));
     }
 
+    SECTION("executor can stack objects that are shrink a then set to the oroginal size") {
+        LSystems::Detail::RandomGrammar grammar("UxxUSU");
+        const LSystems::LSystem lSystem(std::move(grammar), 45.0f, 45.f, 0.5f);
+
+        const auto objects = std::move(executor.GenerateBasedOn(glm::vec3(0.0f), lSystem, 0.5f, 0, 1)[0]);
+
+        REQUIRE(objects.size() == 6);
+        INFO("Object 0 " << Helpers::ToString(objects[0].Position()));
+        REQUIRE(Helpers::Math::Equal(objects[0].Position(), glm::vec3(0.0f, -0.25f, 0.0f)));
+        INFO("Object 1 " << Helpers::ToString(objects[1].Position()));
+        REQUIRE(Helpers::Math::Equal(objects[1].Position(), glm::vec3(0.0f, 0.125f / 2.0f, 0.0f)));
+
+        INFO("Object 5 " << Helpers::ToString(objects[5].Position()));
+        REQUIRE(Helpers::Math::Equal(objects[5].Position(), glm::vec3(0.0f, 4.0f * 0.125f + 0.25f, 0.0f)));
+    }
+
     SECTION("executor can create objects when turtle rotates") {
         LSystems::Detail::RandomGrammar grammar("U&&U^^U");
         const LSystems::LSystem lSystem(std::move(grammar), 45.0f, 45.f, 0.5f);

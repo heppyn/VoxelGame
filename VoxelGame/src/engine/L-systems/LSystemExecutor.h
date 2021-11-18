@@ -24,5 +24,6 @@ class LSystemExecutor {
     glm::vec2 LastMove_{ 0.0f };
 
     void ExecuteLetter(char letter, const LSystem& lSystem, std::vector<std::vector<GameObject>>& objects, Detail::Turtle& turtle, unsigned salt);
+    void UpdateTurtleScale(Detail::Turtle& turtle, float newScale) const;
 };
 } // namespace LSystems

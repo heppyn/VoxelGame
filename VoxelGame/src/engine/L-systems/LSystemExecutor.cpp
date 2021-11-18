@@ -31,6 +31,8 @@ void LSystems::LSystemExecutor::ExecuteLetter(char letter, const LSystem& lSyste
     const auto angleDelta = (Engine::Random::Get1dNoise0_1<float>(salt) - 0.5f) * 2.0f * RandomAngle_;
     // TODO: save this in hash map if it is too slow for large alphabet
     switch (letter) {
+        // same as U, but allows more diverse grammar rules
+        case 'u':
         case 'U':
             for (float x = 0.0f; x < Scale_; x += turtle.Scale()) {
                 objects[turtle.OutputBuffer()].emplace_back(
@@ -47,36 +49,18 @@ void LSystems::LSystemExecutor::ExecuteLetter(char letter, const LSystem& lSyste
             }
             LastMove_ = { turtle.Scale(), 0.0f };
             break;
-        case 'x': {
-            const auto newScale = turtle.Scale() * lSystem.ShrinkRatio;
-            const auto moveDiff = (turtle.Scale() - newScale) / 2.0f;
-            // move in opposite direction of the previous move
-            // objects would be separated by a gap, because the next object will be shrank
-            // add all opposite moves
-            if (LastMove_.x > 0.0f) {
-                turtle.MoveBackward(moveDiff);
-            }
-            else if (LastMove_.y > 0.0f) {
-                turtle.MoveDown(moveDiff);
-            }
-            turtle.Scale(newScale);
+        // shrink turtle
+        case 'x': 
+            UpdateTurtleScale(turtle, turtle.Scale() * lSystem.ShrinkRatio);
             break;
-        }
-        case 'X': {
-            const auto newScale = turtle.Scale() / lSystem.ShrinkRatio;
-            const auto moveDiff = (newScale - turtle.Scale()) / 2.0f;
-            // move in the same direction as the previous move
-            // objects would be separated by a gap, because the next object will be shrank
-            // add all continuous moves
-            if (LastMove_.x > 0.0f) {
-                turtle.MoveForward(moveDiff);
-            }
-            else if (LastMove_.y > 0.0f) {
-                turtle.MoveUp(moveDiff);
-            }
-            turtle.Scale(newScale);
+        // enlarge turtle
+        case 'X': 
+            UpdateTurtleScale(turtle, turtle.Scale() / lSystem.ShrinkRatio);
             break;
-        }
+        // scale back to the original scale
+        case 'S': 
+            UpdateTurtleScale(turtle, Scale_);
+            break;
         // using right hand system, keep + to match the book
         case '+':
             turtle.Rotate(-lSystem.Yaw + angleDelta * lSystem.Yaw, 0.0f);
@@ -121,4 +105,18 @@ void LSystems::LSystemExecutor::ExecuteLetter(char letter, const LSystem& lSyste
         default:
             assert(false && "Incomplete alphabet");
     }
+}
+
+void LSystems::LSystemExecutor::UpdateTurtleScale(Detail::Turtle& turtle, float newScale) const {
+    const auto moveDiff = (turtle.Scale() - newScale) / 2.0f;
+    // move in opposite direction of the previous move if scale is positive
+    // objects would be separated by a gap, because the next object will be shrank
+    // add all opposite moves
+    if (LastMove_.x > 0.0f) {
+        turtle.MoveBackward(moveDiff);
+    }
+    else if (LastMove_.y > 0.0f) {
+        turtle.MoveDown(moveDiff);
+    }
+    turtle.Scale(newScale);
 }
