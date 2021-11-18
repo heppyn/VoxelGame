@@ -21,4 +21,13 @@ inline std::string ToString(const glm::vec3& vec) {
     ss << '(' << vec.x << ", " << vec.y << ", " << vec.z << ')';
     return ss.str();
 }
+
+inline std::string ToString(const glm::mat4& mat) {
+    std::stringstream ss;
+    ss << "[[" << mat[0].x << ", " << mat[0].y << ", " << mat[0].z << ", " << mat[0].w << "]\n";
+    ss << " [" << mat[1].x << ", " << mat[1].y << ", " << mat[1].z << ", " << mat[1].w << "]\n";
+    ss << " [" << mat[2].x << ", " << mat[2].y << ", " << mat[2].z << ", " << mat[2].w << "]\n";
+    ss << " [" << mat[3].x << ", " << mat[3].y << ", " << mat[3].z << ", " << mat[3].w << "]]\n";
+    return ss.str();
+}
 } // namespace Helpers

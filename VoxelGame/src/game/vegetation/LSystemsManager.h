@@ -23,6 +23,7 @@ class LSystemsManager {
 
     // Generate shrub based on preloaded assets
     [[nodiscard]] static std::vector<glm::mat4> GetShrub(const glm::vec3& pos, BlockType blockType);
+    [[nodiscard]] static std::vector<glm::mat4> GetShrub(const glm::vec3& pos, const std::vector<BlockType>& blockTypes);
 
   private:
     LSystemsManager() = default; // LSystemsManager is singleton

@@ -54,21 +54,29 @@ void Terrain::Vegetation::LSystemsManager::Clear() {
 }
 
 std::vector<glm::mat4> Terrain::Vegetation::LSystemsManager::GetShrub(const glm::vec3& pos, BlockType blockType) {
+    return GetShrub(pos, std::vector(1, blockType));
+}
+
+// TODO: get rid of the vector, use template
+std::vector<glm::mat4> Terrain::Vegetation::LSystemsManager::GetShrub(const glm::vec3& pos, const std::vector<BlockType>& blockTypes) {
     assert(!Shrubs_.empty());
     const auto index = Engine::Random::GetNoiseLimited(pos, Shrubs_.size());
     std::vector<glm::mat4> res;
     const auto& plantModel = Shrubs_[index];
     res.reserve(plantModel.Size());
-    const auto texPos = Components::SpritesheetTex(GetTextPos(blockType)).GetTexPos();
+    size_t blockTypeIndex = 0;
 
     for (const auto& plantPart : plantModel.Model) {
+        const auto texPos = Components::SpritesheetTex(GetTextPos(blockTypes[blockTypeIndex])).GetTexPos();
         for (const auto& m : plantPart) {
             // objects may be scaled
             // move by unscaled coords
-            auto model = glm::translate(m, { pos.x / m[0][0], pos.y / m[1][1], pos.z / m[1][1] });
+            auto model = glm::translate(m, { pos.x / m[0][0], pos.y / m[1][1], pos.z / m[2][2] });
             Helpers::Math::PackVecToMatrix(model, texPos);
             res.emplace_back(model);
         }
+        // change texture when one is present
+        blockTypeIndex += blockTypeIndex >= blockTypes.size() - 1 ? 0 : 1;
     }
 
     return res;

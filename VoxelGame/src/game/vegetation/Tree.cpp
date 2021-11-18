@@ -78,10 +78,10 @@ std::vector<GameObject> Terrain::Vegetation::Tree::SpawnSavannaTree(const glm::v
 }
 
 std::vector<GameObject> Terrain::Vegetation::Tree::SpawnCactus(const glm::vec3& pos) {
-    const std::vector cactus ={
-      std::make_pair(glm::vec3(pos.x, pos.y + 1.0f, pos.z), BlockType::CactusSide),
-      std::make_pair(glm::vec3(pos.x, pos.y + 2.0f, pos.z), BlockType::CactusSide),
-      std::make_pair(glm::vec3(pos.x, pos.y + 3.0f, pos.z), BlockType::CactusSide),
+    const std::vector cactus = {
+        std::make_pair(glm::vec3(pos.x, pos.y + 1.0f, pos.z), BlockType::CactusSide),
+        std::make_pair(glm::vec3(pos.x, pos.y + 2.0f, pos.z), BlockType::CactusSide),
+        std::make_pair(glm::vec3(pos.x, pos.y + 3.0f, pos.z), BlockType::CactusSide),
     };
 
     std::vector<GameObject> res;
@@ -104,7 +104,7 @@ std::vector<GameObject> Terrain::Vegetation::Tree::SpawnShrub(const glm::vec3& p
 }
 
 std::vector<glm::mat4> Terrain::Vegetation::Tree::SpawnLSystemShrub(const glm::vec3& pos) {
-    return LSystemsManager::GetShrub({ pos.x, pos.y + 1.0f, pos.z}, BlockType::TrunkSide);
+    return LSystemsManager::GetShrub({ pos.x, pos.y + 1.0f, pos.z }, { BlockType::TrunkSide, BlockType::Leaves });
 }
 
 std::vector<glm::mat4> Terrain::Vegetation::Tree::SpawnLSystemNormalTree(const glm::vec3& pos) {
