@@ -1,11 +1,12 @@
 #include "LSystemExecutor.h"
 
 #include "engine/GameObjectFactory.h"
+#include "engine/Components/Transform.h"
 
 LSystems::LSystemExecutor::LSystemExecutor(int derivationVar) : DerivationVar_(derivationVar) {}
 LSystems::LSystemExecutor::LSystemExecutor(float randomAngle) : RandomAngle_(randomAngle) {}
 
-std::vector<std::vector<GameObject>> LSystems::LSystemExecutor::GenerateBasedOn(const glm::vec3& pos, const LSystem& lSystem, float scale, int numDerivations, unsigned salt) {
+std::vector<std::vector<GameObject>> LSystems::LSystemExecutor::GenerateBasedOn(const glm::vec3& pos, const LSystem& lSystem, float scale, int numDerivations, unsigned salt, bool optimize /* = true*/) {
     if (DerivationVar_) {
         numDerivations += static_cast<int>(Engine::Random::Get1dNoiseLimited(salt, DerivationVar_));
     }
@@ -21,6 +22,10 @@ std::vector<std::vector<GameObject>> LSystems::LSystemExecutor::GenerateBasedOn(
     for (const auto production = lSystem.Grammar.Derivate(numDerivations, salt); const auto letter : production) {
         ExecuteLetter(letter, lSystem, objects, turtle, salt);
         salt = Engine::Random::Get1dNoise(salt);
+    }
+
+    if (optimize) {
+        return OptimizeModel(std::move(objects));
     }
 
     return objects;
@@ -50,15 +55,15 @@ void LSystems::LSystemExecutor::ExecuteLetter(char letter, const LSystem& lSyste
             LastMove_ = { turtle.Scale(), 0.0f };
             break;
         // shrink turtle
-        case 'x': 
+        case 'x':
             UpdateTurtleScale(turtle, turtle.Scale() * lSystem.ShrinkRatio);
             break;
         // enlarge turtle
-        case 'X': 
+        case 'X':
             UpdateTurtleScale(turtle, turtle.Scale() / lSystem.ShrinkRatio);
             break;
         // scale back to the original scale
-        case 'S': 
+        case 'S':
             UpdateTurtleScale(turtle, Scale_);
             break;
         // using right hand system, keep + to match the book
@@ -119,4 +124,32 @@ void LSystems::LSystemExecutor::UpdateTurtleScale(Detail::Turtle& turtle, float 
         turtle.MoveDown(moveDiff);
     }
     turtle.Scale(newScale);
+}
+
+std::vector<std::vector<GameObject>> LSystems::LSystemExecutor::OptimizeModel(std::vector<std::vector<GameObject>>&& model) const {
+    // optimization for use case where leaves are in buffer 1 and are bigger than branches
+    if (model.size() < 2) {
+        return std::move(model);
+    }
+    auto endIt = model[0].end();
+    for (const auto& object : model[1]) {
+        assert(object.HasComponent<Components::Transform>());
+        const auto& trans = object.GetComponent<Components::Transform>();
+        auto it = model[0].begin();
+
+        while (it < endIt) {
+            if (trans.IsOtherInside(*it)) {
+                std::iter_swap(it, (endIt - 1));
+                // last objects will be discarded
+                --endIt;
+                // check current object again - don't move iterator
+            }
+            else {
+                ++it;
+            }
+        }
+    }
+
+    model[0].erase(endIt, model[0].end());
+    return std::move(model);
 }

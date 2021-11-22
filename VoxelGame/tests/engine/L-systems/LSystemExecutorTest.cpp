@@ -118,4 +118,54 @@ TEST_CASE("L-system executor test", "[engine, LSystemExecutor]") {
         INFO("Object 9 " << Helpers::ToString(objects[9][0].Position()));
         REQUIRE(Helpers::Math::Equal(objects[9][0].Position(), glm::vec3(0.0f, 1.0f, 0.0f)));
     }
+
+    SECTION("executor can delete parts of the model that overlap") {
+        SECTION("one overlaps") {
+            LSystems::Detail::RandomGrammar grammar("[U][1U]");
+            const LSystems::LSystem lSystem(std::move(grammar), 45.0f, 45.f, 0.5f);
+
+            const auto objects = executor.GenerateBasedOn(glm::vec3(0.0f), lSystem, 1.0f, 0, 1);
+
+            REQUIRE(objects.size() == 2);
+            REQUIRE(objects[0].empty());
+            REQUIRE(objects[1].size() == 1);
+
+            INFO("Object 0 " << Helpers::ToString(objects[1][0].Position()));
+            REQUIRE(Helpers::Math::Equal(objects[1][0].Position(), glm::vec3(0.0f, 0.0f, 0.0f)));
+        }
+
+        SECTION("two overlaps") {
+            LSystems::Detail::RandomGrammar grammar("U[xU][1U]");
+            const LSystems::LSystem lSystem(std::move(grammar), 45.0f, 45.f, 0.5f);
+
+            const auto objects = executor.GenerateBasedOn(glm::vec3(0.0f), lSystem, 1.0f, 0, 1);
+
+            REQUIRE(objects.size() == 2);
+            REQUIRE(objects[0].size() == 1);
+            REQUIRE(objects[1].size() == 1);
+
+            INFO("Object 0 0 " << Helpers::ToString(objects[0][0].Position()));
+            REQUIRE(Helpers::Math::Equal(objects[0][0].Position(), glm::vec3(0.0f, 0.0f, 0.0f)));
+            INFO("Object 1 0 " << Helpers::ToString(objects[1][0].Position()));
+            REQUIRE(Helpers::Math::Equal(objects[1][0].Position(), glm::vec3(0.0f, 1.0f, 0.0f)));
+        }
+
+        SECTION("no overlap between buffers 0 and 1") {
+            LSystems::Detail::RandomGrammar grammar("[U][U1U]");
+            const LSystems::LSystem lSystem(std::move(grammar), 45.0f, 45.f, 0.5f);
+
+            const auto objects = executor.GenerateBasedOn(glm::vec3(0.0f), lSystem, 1.0f, 0, 1);
+
+            REQUIRE(objects.size() == 2);
+            REQUIRE(objects[0].size() == 2);
+            REQUIRE(objects[1].size() == 1);
+
+            INFO("Object 0 0" << Helpers::ToString(objects[0][0].Position()));
+            REQUIRE(Helpers::Math::Equal(objects[0][0].Position(), glm::vec3(0.0f, 0.0f, 0.0f)));
+            INFO("Object 0 1" << Helpers::ToString(objects[0][1].Position()));
+            REQUIRE(Helpers::Math::Equal(objects[0][1].Position(), glm::vec3(0.0f, 0.0f, 0.0f)));
+            INFO("Object 1 0" << Helpers::ToString(objects[1][0].Position()));
+            REQUIRE(Helpers::Math::Equal(objects[1][0].Position(), glm::vec3(0.0f, 1.0f, 0.0f)));
+        }
+    }
 }
