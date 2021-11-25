@@ -1,5 +1,7 @@
 #include "LSystemExecutor.h"
 
+#include <iostream>
+
 #include "engine/GameObjectFactory.h"
 #include "engine/Components/Transform.h"
 
@@ -39,7 +41,7 @@ void LSystems::LSystemExecutor::ExecuteLetter(char letter, const LSystem& lSyste
         // same as U, but allows more diverse grammar rules
         case 'u':
         case 'U':
-            for (float x = 0.0f; x < Scale_; x += turtle.Scale()) {
+            for (float x = turtle.Scale(); x <= Scale_; x += turtle.Scale()) {
                 objects[turtle.OutputBuffer()].emplace_back(
                   GameObjectFactory::CreateObjectNoTex(turtle.Position(), turtle.Scale()));
                 turtle.MoveUp();
