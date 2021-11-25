@@ -6,7 +6,9 @@
 #include "engine/Components/Transform.h"
 
 LSystems::LSystemExecutor::LSystemExecutor(int derivationVar) : DerivationVar_(derivationVar) {}
-LSystems::LSystemExecutor::LSystemExecutor(float randomAngle) : RandomAngle_(randomAngle) {}
+LSystems::LSystemExecutor::LSystemExecutor(float randomAngle) : RandomAngle_(randomAngle) {
+    assert(randomAngle >= 0.0f && randomAngle <= 1.0f);
+}
 
 std::vector<std::vector<GameObject>> LSystems::LSystemExecutor::GenerateBasedOn(const glm::vec3& pos, const LSystem& lSystem, float scale, int numDerivations, unsigned salt, bool optimize /* = true*/) {
     if (DerivationVar_) {
