@@ -7,7 +7,20 @@
 #include "helpers/Math.h"
 
 std::vector<Terrain::Vegetation::Detail::PlantModel> Terrain::Vegetation::LSystemsManager::Shrubs_{};
+std::vector<LSystems::LSystem> Terrain::Vegetation::LSystemsManager::AcaciaLSystems_{};
 
+
+Terrain::Vegetation::Detail::PlantModel::PlantModel(const std::vector<std::vector<GameObject>>& gameObjects) {
+    for (const auto& plantPart : gameObjects) {
+        Model.emplace_back();
+        Model[Model.size() - 1].reserve(plantPart.size());
+
+        for (const auto& o : plantPart) {
+            assert(o.HasComponent<Components::Transform>());
+            Model[Model.size() - 1].emplace_back(o.GetComponent<Components::Transform>().ModelMat());
+        }
+    }
+}
 
 size_t Terrain::Vegetation::Detail::PlantModel::Size() const {
     size_t modelSize = 0;
@@ -19,6 +32,10 @@ size_t Terrain::Vegetation::Detail::PlantModel::Size() const {
 }
 
 void Terrain::Vegetation::LSystemsManager::Init() {
+    AcaciaLSystems_ = LSystems::LSystemParser::LoadLSystemFromFile(ACACIA_PATH);
+    assert(!AcaciaLSystems_.empty());
+
+    // prepare cached shrubs
     const auto lSystems = LSystems::LSystemParser::LoadLSystemFromFile(SHRUB_PATH);
     assert(!lSystems.empty());
     LSystems::LSystemExecutor executor;
@@ -30,18 +47,7 @@ void Terrain::Vegetation::LSystemsManager::Init() {
             // larger plants have thicker stems
             const auto mod = i % 3;
             const auto tmpObjects = executor.GenerateBasedOn(glm::vec3(0.0f), ls, 0.1f + mod / 20.0f, 2 + mod, salt);
-            Shrubs_.emplace_back();
-
-            for (const auto& plantPart : tmpObjects) {
-                auto& plantModel = Shrubs_[Shrubs_.size() - 1].Model;
-                plantModel.emplace_back();
-                plantModel[plantModel.size() - 1].reserve(plantPart.size());
-
-                for (const auto& o : plantPart) {
-                    assert(o.HasComponent<Components::Transform>());
-                    plantModel[plantModel.size() - 1].emplace_back(o.GetComponent<Components::Transform>().ModelMat());
-                }
-            }
+            Shrubs_.emplace_back(tmpObjects);
 
             salt = Engine::Random::Get1dNoise(salt);
         }
@@ -51,6 +57,7 @@ void Terrain::Vegetation::LSystemsManager::Init() {
 
 void Terrain::Vegetation::LSystemsManager::Clear() {
     Shrubs_.clear();
+    AcaciaLSystems_.clear();
 }
 
 std::vector<glm::mat4> Terrain::Vegetation::LSystemsManager::GetShrub(const glm::vec3& pos, BlockType blockType) {
@@ -61,8 +68,22 @@ std::vector<glm::mat4> Terrain::Vegetation::LSystemsManager::GetShrub(const glm:
 std::vector<glm::mat4> Terrain::Vegetation::LSystemsManager::GetShrub(const glm::vec3& pos, const std::vector<BlockType>& blockTypes) {
     assert(!Shrubs_.empty());
     const auto index = Engine::Random::GetNoiseLimited(pos, Shrubs_.size());
+
+    return GetPlant(pos, Shrubs_[index], blockTypes);
+}
+
+std::vector<glm::mat4> Terrain::Vegetation::LSystemsManager::GetAcacia(const glm::vec3& pos, BlockType trunk, BlockType leaves) {
+    LSystems::LSystemExecutor executor(0.15f);
+    const auto newPos = glm::vec3(pos.x, pos.y + 1, pos.z);
+
+    const auto salt = Engine::Random::GetNoise(newPos);
+    const auto acacia = executor.GenerateBasedOn(newPos, AcaciaLSystems_[0], 1.0f, 4, salt, false);
+
+    return GetPlant(Detail::PlantModel(acacia), { trunk, leaves });
+}
+
+std::vector<glm::mat4> Terrain::Vegetation::LSystemsManager::GetPlant(const glm::vec3& pos, const Detail::PlantModel& plantModel, const std::vector<BlockType>& blockTypes) {
     std::vector<glm::mat4> res;
-    const auto& plantModel = Shrubs_[index];
     res.reserve(plantModel.Size());
     size_t blockTypeIndex = 0;
 
@@ -80,4 +101,9 @@ std::vector<glm::mat4> Terrain::Vegetation::LSystemsManager::GetShrub(const glm:
     }
 
     return res;
+}
+
+std::vector<glm::mat4> Terrain::Vegetation::LSystemsManager::GetPlant(const Detail::PlantModel& plantModel, const std::vector<BlockType>& blockTypes) {
+    // TODO: get rid of the position
+    return GetPlant(glm::vec3(0.0f), plantModel, blockTypes);
 }

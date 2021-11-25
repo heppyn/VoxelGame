@@ -711,6 +711,7 @@
   <ItemGroup>
     <Text Include="res\l-systems\Format.txt" />
     <Text Include="res\l-systems\Koch.txt" />
+    <Text Include="res\l-systems\plants\Acacia.txt" />
     <Text Include="res\l-systems\plants\Grass.txt" />
     <Text Include="res\l-systems\plants\Shrubs.txt" />
     <Text Include="res\textures\voxel-pack-updated\License.txt" />

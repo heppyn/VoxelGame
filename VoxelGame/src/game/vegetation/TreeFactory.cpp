@@ -93,7 +93,7 @@ bool Terrain::Vegetation::TreeFactory::CanHaveTree(const glm::vec3& pos, BiomeTy
         case BiomeType::Shrubland:
             return Engine::Random::IsLocalMaxPerlin({ pos.x, pos.z }, FREQ_SPARSE / 1.9f, DENSITY_DENSE);
         case BiomeType::Savanna:
-            return Engine::Random::IsLocalMaxPerlin({ pos.x, pos.z }, FREQ_SPARSE, DENSITY_DENSE);
+            return Engine::Random::IsLocalMaxPerlin({ pos.x, pos.z }, FREQ_RARE * 1.5f, DENSITY_DENSE);
     }
 
     assert(false && "Undefined biome");

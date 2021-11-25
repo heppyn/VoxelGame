@@ -1634,5 +1634,6 @@
     <Text Include="tests\engine\L-systems\testData\multipleGrammars.txt" />
     <Text Include="res\l-systems\Koch.txt" />
     <Text Include="res\l-systems\plants\Shrubs.txt" />
+    <Text Include="res\l-systems\plants\Acacia.txt" />
   </ItemGroup>
 </Project>
