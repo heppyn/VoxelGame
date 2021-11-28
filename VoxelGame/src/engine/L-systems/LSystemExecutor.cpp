@@ -10,16 +10,25 @@ LSystems::LSystemExecutor::LSystemExecutor(float randomAngle) : RandomAngle_(ran
     assert(randomAngle >= 0.0f && randomAngle <= 1.0f);
 }
 
-std::vector<std::vector<GameObject>> LSystems::LSystemExecutor::GenerateBasedOn(const glm::vec3& pos, const LSystem& lSystem, float scale, int numDerivations, unsigned salt, bool optimize /* = true*/) {
+LSystems::LSystemExecutor::LSystemExecutor(int derivationVar, float randomAngle)
+  : DerivationVar_(derivationVar), RandomAngle_(randomAngle) {
+    assert(randomAngle >= 0.0f && randomAngle <= 1.0f);
+}
+
+std::vector<std::vector<GameObject>> LSystems::LSystemExecutor::GenerateBasedOn(const glm::vec3& pos, const LSystem& lSystem, float minScale, int numDerivations, unsigned salt, bool optimize /* = true*/) {
     if (DerivationVar_) {
-        numDerivations += static_cast<int>(Engine::Random::Get1dNoiseLimited(salt, DerivationVar_));
+        const auto derVar = static_cast<int>(Engine::Random::Get1dNoiseLimited(salt, DerivationVar_));
+        numDerivations += derVar;
+        Scale_ = minScale + static_cast<float>(derVar) * ScaleFactor_;
+    }
+    else {
+        Scale_ = minScale;
     }
     std::vector<std::vector<GameObject>> objects;
     objects.emplace_back();
-    Scale_ = scale;
     LastMove_ = { 0.0f, 0.0f };
     // anchor the starting block to the bottom of the block
-    Detail::Turtle turtle({ pos.x, pos.y - ((1.0f - scale) / 2.0f), pos.z }, scale);
+    Detail::Turtle turtle({ pos.x, pos.y - ((1.0f - Scale_) / 2.0f), pos.z }, Scale_);
 
     //std::cout << lSystem.Grammar.Derivate(numDerivations, salt) << "\n\n";
 
@@ -33,6 +42,15 @@ std::vector<std::vector<GameObject>> LSystems::LSystemExecutor::GenerateBasedOn(
     }
 
     return objects;
+}
+
+void LSystems::LSystemExecutor::ScaleDerivations(int derivationVar, float minScale, float maxScale) {
+    assert(minScale <= maxScale);
+    assert(derivationVar >= 1);
+
+    DerivationVar_ = derivationVar;
+    // derivation variance comes from [0, derivationVar - 1]
+    ScaleFactor_ = (maxScale - minScale) / static_cast<float>(derivationVar - 1);
 }
 
 void LSystems::LSystemExecutor::ExecuteLetter(char letter, const LSystem& lSystem, std::vector<std::vector<GameObject>>& objects, Detail::Turtle& turtle, unsigned salt) {
@@ -90,9 +108,7 @@ void LSystems::LSystemExecutor::ExecuteLetter(char letter, const LSystem& lSyste
             turtle = TStack_.top();
             TStack_.pop();
             break;
-        // character used for expanding grammar
-        case 'E':
-            break;
+
         case '0':
         case '1':
         case '2':
@@ -112,7 +128,8 @@ void LSystems::LSystemExecutor::ExecuteLetter(char letter, const LSystem& lSyste
         }
 
         default:
-            assert(false && "Incomplete alphabet");
+            // Symbol used for intermediate production
+            break;
     }
 }
 

@@ -168,4 +168,23 @@ TEST_CASE("L-system executor test", "[engine, LSystemExecutor]") {
             REQUIRE(Helpers::Math::Equal(objects[1][0].Position(), glm::vec3(0.0f, 1.0f, 0.0f)));
         }
     }
+
+    SECTION("executor can scale objects based on number of derivations") {
+        LSystems::LSystemExecutor e(3);
+        e.ScaleDerivations(3, 0.5f, 1.0f);
+
+        LSystems::Detail::RandomGrammar grammar("U");
+        grammar.AddProduction('U', "uU");
+
+        const LSystems::LSystem lSystem(std::move(grammar), 45.0f, 45.f, 0.5f);
+
+        for (int i = 0; i < 10; ++i) {
+            const auto objects = std::move(e.GenerateBasedOn(glm::vec3(0.0f), lSystem, 1.0f, 0, i)[0]);
+
+            REQUIRE(!objects.empty());
+            CHECK(Helpers::Math::Equal(
+              objects[0].Scale().x,
+              1.0f + static_cast<float>(objects.size() - 1) * 0.25f));
+        }
+    }
 }

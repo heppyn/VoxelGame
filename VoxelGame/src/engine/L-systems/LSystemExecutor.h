@@ -11,10 +11,13 @@ class LSystemExecutor {
     LSystemExecutor() = default;
     explicit LSystemExecutor(int derivationVar);
     explicit LSystemExecutor(float randomAngle);
-    [[nodiscard]] std::vector<std::vector<GameObject>> GenerateBasedOn(const glm::vec3& pos, const LSystem& lSystem, float scale, int numDerivations, unsigned salt, bool optimize = true);
+    explicit LSystemExecutor(int derivationVar, float randomAngle);
+    [[nodiscard]] std::vector<std::vector<GameObject>> GenerateBasedOn(const glm::vec3& pos, const LSystem& lSystem, float minScale, int numDerivations, unsigned salt, bool optimize = true);
+    void ScaleDerivations(int derivationVar, float minScale, float maxScale);
 
   private:
     int DerivationVar_{ 0 };
+    float ScaleFactor_{ 0.0f };
     // variation of L-system angle
     // percentage of angle change [0.0, 1.0]
     float RandomAngle_{ 0.2f };
