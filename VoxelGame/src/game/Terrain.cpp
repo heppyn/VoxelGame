@@ -62,48 +62,50 @@ glm::vec2 Terrain::GetTextPos(BlockType blockType) {
             return { 3.0f, 3.0f };
         case BlockType::Leaves:
             return { 4.0f, 3.0f };
-        case BlockType::LeavesOrange:
+        case BlockType::Leaves2:
             return { 5.0f, 3.0f };
-        case BlockType::LeavesOrangeTransparent:
+        case BlockType::LeavesOrange:
             return { 6.0f, 3.0f };
-        case BlockType::LeavesTransparent:
+        case BlockType::LeavesOrangeTransparent:
             return { 7.0f, 3.0f };
-        case BlockType::Redsand:
+        case BlockType::LeavesTransparent:
             return { 0.0f, 4.0f };
-        case BlockType::Redstone:
+        case BlockType::Redsand:
             return { 1.0f, 4.0f };
-        case BlockType::RedstoneSand:
+        case BlockType::Redstone:
             return { 2.0f, 4.0f };
-        case BlockType::Rock:
+        case BlockType::RedstoneSand:
             return { 3.0f, 4.0f };
-        case BlockType::RockMoss:
+        case BlockType::Rock:
             return { 4.0f, 4.0f };
-        case BlockType::Sand:
+        case BlockType::RockMoss:
             return { 5.0f, 4.0f };
-        case BlockType::Snow:
+        case BlockType::Sand:
             return { 6.0f, 4.0f };
-        case BlockType::Stone:
+        case BlockType::Snow:
             return { 7.0f, 4.0f };
-        case BlockType::StoneDirt:
+        case BlockType::Stone:
             return { 0.0f, 5.0f };
-        case BlockType::StoneGrass:
+        case BlockType::StoneDirt:
             return { 1.0f, 5.0f };
-        case BlockType::StoneSand:
+        case BlockType::StoneGrass:
             return { 2.0f, 5.0f };
-        case BlockType::StoneSnow:
+        case BlockType::StoneSand:
             return { 3.0f, 5.0f };
-        case BlockType::TrunkOrangeSide:
+        case BlockType::StoneSnow:
             return { 4.0f, 5.0f };
-        case BlockType::TrunkSide:
+        case BlockType::TrunkOrangeSide:
             return { 5.0f, 5.0f };
-        case BlockType::TrunkTop:
+        case BlockType::TrunkSide:
             return { 6.0f, 5.0f };
-        case BlockType::TrunkWhiteSide:
+        case BlockType::TrunkTop:
             return { 7.0f, 5.0f };
-        case BlockType::TrunkWhiteTop:
+        case BlockType::TrunkWhiteSide:
             return { 0.0f, 6.0f };
-        case BlockType::Water:
+        case BlockType::TrunkWhiteTop:
             return { 1.0f, 6.0f };
+        case BlockType::Water:
+            return { 2.0f, 6.0f };
     }
 
     assert(false && "Block with undefined texture");

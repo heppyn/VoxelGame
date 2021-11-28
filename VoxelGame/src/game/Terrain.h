@@ -32,6 +32,7 @@ enum class BlockType {
     Ice,
     Lava,
     Leaves,
+    Leaves2,
     LeavesOrange,
     LeavesOrangeTransparent,
     LeavesTransparent,
