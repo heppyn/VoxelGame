@@ -94,7 +94,7 @@ def generate_func_def(frames) -> str:
     func = func + """
     }
 
-    assert("Block with undefined texture", false);
+    assert(false && "Block with undefined texture");
     return { 0.0f, 0.0f };\n}
     """
 
@@ -119,7 +119,7 @@ def generate_cpp_file(frames):
         f.write(generate_enum() + "\n\n" + generate_func_def(frames))
         f.close()
     except:
-        print("file already exists")
+        print("file with definitions already exists")
 
 
 if __name__ == "__main__":
