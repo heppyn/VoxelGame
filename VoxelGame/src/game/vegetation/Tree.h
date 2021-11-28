@@ -13,11 +13,11 @@ class Tree {
     static std::vector<GameObject> SpawnCactus(const glm::vec3& pos);
     static std::vector<GameObject> SpawnShrub(const glm::vec3& pos);
 
+    static std::vector<glm::mat4> SpawnLSystemNormalTree(const glm::vec3& pos);
     static std::vector<glm::mat4> SpawnLSystemShrub(const glm::vec3& pos);
     static std::vector<glm::mat4> SpawnLSystemSavannaTree(const glm::vec3& pos);
 
     // TODO: use L-systems for this
-    static std::vector<glm::mat4> SpawnLSystemNormalTree(const glm::vec3& pos);
     static std::vector<glm::mat4> SpawnLSystemJungleTree(const glm::vec3& pos, float height = 6.0f, float heightVar = 3.0f);
     static std::vector<glm::mat4> SpawnLSystemCactus(const glm::vec3& pos);
 

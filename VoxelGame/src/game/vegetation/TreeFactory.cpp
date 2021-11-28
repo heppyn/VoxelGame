@@ -88,7 +88,7 @@ bool Terrain::Vegetation::TreeFactory::CanHaveTree(const glm::vec3& pos, BiomeTy
         case BiomeType::Woodland:
         case BiomeType::SeasonalForest:
         case BiomeType::BorealForest:
-            return Engine::Random::IsLocalMaxPerlin({ pos.x, pos.z }, FREQ_DENSE, DENSITY_NORMAL);
+            return Engine::Random::IsLocalMaxPerlin({ pos.x, pos.z }, FREQ_NORMAL, DENSITY_NORMAL);
 
         case BiomeType::Shrubland:
             return Engine::Random::IsLocalMaxPerlin({ pos.x, pos.z }, FREQ_SPARSE / 1.9f, DENSITY_DENSE);

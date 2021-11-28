@@ -108,13 +108,14 @@ std::vector<glm::mat4> Terrain::Vegetation::Tree::SpawnLSystemShrub(const glm::v
 }
 
 std::vector<glm::mat4> Terrain::Vegetation::Tree::SpawnLSystemNormalTree(const glm::vec3& pos) {
-    return GenerateObjectData(SpawnNormalTree(pos));
+    const auto trunk = Engine::Random::GetNoise0_1<float>(pos) > 0.3f ? BlockType::TrunkSide : BlockType::TrunkWhiteSide;
+    return LSystemsManager::GetNormalTree({ pos.x, pos.y + 1.0f, pos.z }, trunk, BlockType::Leaves);
 }
 std::vector<glm::mat4> Terrain::Vegetation::Tree::SpawnLSystemJungleTree(const glm::vec3& pos, float height, float heightVar) {
     return GenerateObjectData(SpawnJungleTree(pos, height, heightVar));
 }
 std::vector<glm::mat4> Terrain::Vegetation::Tree::SpawnLSystemSavannaTree(const glm::vec3& pos) {
-    return LSystemsManager::GetAcacia(pos, BlockType::TrunkOrangeSide, BlockType::LeavesOrange);
+    return LSystemsManager::GetAcacia({ pos.x, pos.y + 1.0f, pos.z }, BlockType::TrunkOrangeSide, BlockType::LeavesOrange);
 }
 std::vector<glm::mat4> Terrain::Vegetation::Tree::SpawnLSystemCactus(const glm::vec3& pos) {
     return GenerateObjectData(SpawnCactus(pos));

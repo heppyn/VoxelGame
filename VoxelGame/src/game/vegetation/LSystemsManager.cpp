@@ -8,6 +8,7 @@
 
 std::vector<Terrain::Vegetation::Detail::PlantModel> Terrain::Vegetation::LSystemsManager::Shrubs_{};
 std::vector<LSystems::LSystem> Terrain::Vegetation::LSystemsManager::AcaciaLSystems_{};
+std::vector<LSystems::LSystem> Terrain::Vegetation::LSystemsManager::NormalTreeLSystems_{};
 
 
 Terrain::Vegetation::Detail::PlantModel::PlantModel(const std::vector<std::vector<GameObject>>& gameObjects) {
@@ -35,6 +36,9 @@ void Terrain::Vegetation::LSystemsManager::Init() {
     AcaciaLSystems_ = LSystems::LSystemParser::LoadLSystemFromFile(ACACIA_PATH);
     assert(!AcaciaLSystems_.empty());
 
+    NormalTreeLSystems_ = LSystems::LSystemParser::LoadLSystemFromFile(NORMAL_TREE_PATH);
+    assert(!NormalTreeLSystems_.empty());
+
     // prepare cached shrubs
     const auto lSystems = LSystems::LSystemParser::LoadLSystemFromFile(SHRUB_PATH);
     assert(!lSystems.empty());
@@ -58,6 +62,7 @@ void Terrain::Vegetation::LSystemsManager::Init() {
 void Terrain::Vegetation::LSystemsManager::Clear() {
     Shrubs_.clear();
     AcaciaLSystems_.clear();
+    NormalTreeLSystems_.clear();
 }
 
 std::vector<glm::mat4> Terrain::Vegetation::LSystemsManager::GetShrub(const glm::vec3& pos, BlockType blockType) {
@@ -74,12 +79,22 @@ std::vector<glm::mat4> Terrain::Vegetation::LSystemsManager::GetShrub(const glm:
 
 std::vector<glm::mat4> Terrain::Vegetation::LSystemsManager::GetAcacia(const glm::vec3& pos, BlockType trunk, BlockType leaves) {
     LSystems::LSystemExecutor executor(0.15f);
-    const auto newPos = glm::vec3(pos.x, pos.y + 1, pos.z);
 
-    const auto salt = Engine::Random::GetNoise(newPos);
-    const auto acacia = executor.GenerateBasedOn(newPos, AcaciaLSystems_[0], 1.0f, 4, salt, false);
+    const auto salt = Engine::Random::GetNoise(pos);
+    const auto acacia = executor.GenerateBasedOn(pos, AcaciaLSystems_[0], 1.0f, 4, salt, false);
 
     return GetPlant(Detail::PlantModel(acacia), { trunk, leaves });
+}
+
+std::vector<glm::mat4> Terrain::Vegetation::LSystemsManager::GetNormalTree(const glm::vec3& pos, BlockType trunk, BlockType leaves) {
+    LSystems::LSystemExecutor executor(0.1f);
+    constexpr auto minScale = 0.7f;
+    executor.ScaleDerivations(3, minScale, 1.0f);
+
+    const auto salt = Engine::Random::GetNoise(pos);
+    const auto tree = executor.GenerateBasedOn(pos, NormalTreeLSystems_[0], minScale, 3, salt, false);
+
+    return GetPlant(Detail::PlantModel(tree), { trunk, leaves });
 }
 
 std::vector<glm::mat4> Terrain::Vegetation::LSystemsManager::GetPlant(const glm::vec3& pos, const Detail::PlantModel& plantModel, const std::vector<BlockType>& blockTypes) {
