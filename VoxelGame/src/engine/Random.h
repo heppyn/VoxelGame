@@ -55,15 +55,18 @@ class Random {
     }
 
     // use for random index
+    // [0, upperLimit)
     template<typename T>
     static unsigned Get1dNoiseLimited(T x, unsigned upperLimit, unsigned int seed = Seed) {
         return static_cast<unsigned>(Get1dNoise0_1<float>(x, seed) * upperLimit);
     }
     template<typename T>
+    // [0, upperLimit)
     static unsigned Get2dNoiseLimited(T x, T y, unsigned upperLimit, unsigned int seed = Seed) {
         return static_cast<unsigned>(Get2dNoise0_1<float>(x, y, seed) * upperLimit);
     }
     template<typename T>
+    // [0, upperLimit)
     static unsigned Get3dNoiseLimited(T x, T y, T z, unsigned upperLimit, unsigned int seed = Seed) {
         return static_cast<unsigned>(Get3dNoise0_1<float>(x, y, z, seed) * upperLimit);
     }
