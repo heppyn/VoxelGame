@@ -56,23 +56,30 @@ void LSystems::LSystemExecutor::ScaleDerivations(int derivationVar, float minSca
 void LSystems::LSystemExecutor::ExecuteLetter(char letter, const LSystem& lSystem, std::vector<std::vector<GameObject>>& objects, Detail::Turtle& turtle, unsigned salt) {
     // [-1.0, 1.0] * percentage
     const auto angleDelta = (Engine::Random::Get1dNoise0_1<float>(salt) - 0.5f) * 2.0f * RandomAngle_;
+    auto first = true;
     // TODO: save this in hash map if it is too slow for large alphabet
     switch (letter) {
         // same as U, but allows more diverse grammar rules
         case 'u':
         case 'U':
-            for (float x = turtle.Scale(); x <= Scale_; x += turtle.Scale()) {
+            // always place at least one block
+            for (float x = turtle.Scale(); x <= Scale_ || first; x += turtle.Scale()) {
                 objects[turtle.OutputBuffer()].emplace_back(
                   GameObjectFactory::CreateObjectNoTex(turtle.Position(), turtle.Scale()));
                 turtle.MoveUp();
+                first = false;
             }
             LastMove_ = { 0.0f, turtle.Scale() };
             break;
+        // same as F, but allows more diverse grammar rules
+        case 'f':
         case 'F':
-            for (float x = 0.0f; x < Scale_; x += turtle.Scale()) {
+            // always place at least one block
+            for (float x = turtle.Scale(); x <= Scale_ || first; x += turtle.Scale()) {
                 objects[turtle.OutputBuffer()].emplace_back(
                   GameObjectFactory::CreateObjectNoTex(turtle.Position(), turtle.Scale()));
                 turtle.MoveForward();
+                first = false;
             }
             LastMove_ = { turtle.Scale(), 0.0f };
             break;
