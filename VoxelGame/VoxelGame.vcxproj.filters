@@ -1637,5 +1637,6 @@
     <Text Include="res\l-systems\plants\Acacia.txt" />
     <Text Include="res\l-systems\plants\NormalTree.txt" />
     <Text Include="res\l-systems\plants\Pine.txt" />
+    <Text Include="res\l-systems\plants\JungleTree.txt" />
   </ItemGroup>
 </Project>

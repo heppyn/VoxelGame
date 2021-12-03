@@ -32,6 +32,7 @@ class LSystemsManager {
 
     [[nodiscard]] static std::vector<glm::mat4> GetAcacia(const glm::vec3& pos, BlockType trunk, BlockType leaves);
     [[nodiscard]] static std::vector<glm::mat4> GetNormalTree(const glm::vec3& pos, BlockType trunk, BlockType leaves);
+    [[nodiscard]] static std::vector<glm::mat4> GetJungleTree(const glm::vec3& pos, BlockType trunk, BlockType leaves, int index = -1);
 
   private:
     LSystemsManager() = default; // LSystemsManager is singleton
@@ -39,12 +40,14 @@ class LSystemsManager {
     static std::vector<Detail::PlantModel> Shrubs_;
     static std::vector<LSystems::LSystem> AcaciaLSystems_;
     static std::vector<LSystems::LSystem> NormalTreeLSystems_;
+    static std::vector<LSystems::LSystem> JungleTreeLSystems_;
 
     static constexpr int SHRUB_COUNT{ 8 };
 
     inline static const auto SHRUB_PATH{ "./res/l-systems/plants/Shrubs.txt" };
     inline static const auto ACACIA_PATH{ "./res/l-systems/plants/Acacia.txt" };
     inline static const auto NORMAL_TREE_PATH{ "./res/l-systems/plants/NormalTree.txt" };
+    inline static const auto JUNGLE_TREE_PATH{ "./res/l-systems/plants/JungleTree.txt" };
 
     [[nodiscard]] static std::vector<glm::mat4> GetPlant(const glm::vec3& pos, const Detail::PlantModel& plantModel, const std::vector<BlockType>& blockTypes);
     [[nodiscard]] static std::vector<glm::mat4> GetPlant(const Detail::PlantModel& plantModel, const std::vector<BlockType>& blockTypes);

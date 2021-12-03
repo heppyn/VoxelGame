@@ -4,11 +4,13 @@
 #include "engine/Components/SpritesheetTex.h"
 #include "engine/L-systems/LSystemParser.h"
 #include "engine/L-systems/LSystemExecutor.h"
+#include "game/BlockFactory.h"
 #include "helpers/Math.h"
 
 std::vector<Terrain::Vegetation::Detail::PlantModel> Terrain::Vegetation::LSystemsManager::Shrubs_{};
 std::vector<LSystems::LSystem> Terrain::Vegetation::LSystemsManager::AcaciaLSystems_{};
 std::vector<LSystems::LSystem> Terrain::Vegetation::LSystemsManager::NormalTreeLSystems_{};
+std::vector<LSystems::LSystem> Terrain::Vegetation::LSystemsManager::JungleTreeLSystems_{};
 
 
 Terrain::Vegetation::Detail::PlantModel::PlantModel(const std::vector<std::vector<GameObject>>& gameObjects) {
@@ -39,6 +41,9 @@ void Terrain::Vegetation::LSystemsManager::Init() {
     NormalTreeLSystems_ = LSystems::LSystemParser::LoadLSystemFromFile(NORMAL_TREE_PATH);
     assert(!NormalTreeLSystems_.empty());
 
+    JungleTreeLSystems_ = LSystems::LSystemParser::LoadLSystemFromFile(JUNGLE_TREE_PATH);
+    assert(!JungleTreeLSystems_.empty());
+
     // prepare cached shrubs
     const auto lSystems = LSystems::LSystemParser::LoadLSystemFromFile(SHRUB_PATH);
     assert(!lSystems.empty());
@@ -63,6 +68,7 @@ void Terrain::Vegetation::LSystemsManager::Clear() {
     Shrubs_.clear();
     AcaciaLSystems_.clear();
     NormalTreeLSystems_.clear();
+    JungleTreeLSystems_.clear();
 }
 
 std::vector<glm::mat4> Terrain::Vegetation::LSystemsManager::GetShrub(const glm::vec3& pos, BlockType blockType) {
@@ -93,6 +99,21 @@ std::vector<glm::mat4> Terrain::Vegetation::LSystemsManager::GetNormalTree(const
 
     const auto salt = Engine::Random::GetNoise(pos);
     const auto tree = executor.GenerateBasedOn(pos, NormalTreeLSystems_[0], minScale, 3, salt, false);
+
+    return GetPlant(Detail::PlantModel(tree), { trunk, leaves });
+}
+
+std::vector<glm::mat4> Terrain::Vegetation::LSystemsManager::GetJungleTree(const glm::vec3& pos, BlockType trunk, BlockType leaves, int index /*= -1*/) {
+    assert(index == -1 || static_cast<unsigned>(index) < JungleTreeLSystems_.size());
+
+    LSystems::LSystemExecutor executor(0.1f);
+    constexpr auto minScale = 0.35f;
+    executor.ScaleDerivations(3, minScale, 0.5f);
+
+    // pick index if given, otherwise choose random index
+    const auto i = index >= 0 ? index : Engine::Random::GetNoiseLimited(pos, JungleTreeLSystems_.size());
+    const auto salt = Engine::Random::GetNoise(pos);
+    const auto tree = executor.GenerateBasedOn(pos, JungleTreeLSystems_[i], minScale, 3, salt, false);
 
     return GetPlant(Detail::PlantModel(tree), { trunk, leaves });
 }
