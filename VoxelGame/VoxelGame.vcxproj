@@ -713,6 +713,7 @@
     <Text Include="res\l-systems\Koch.txt" />
     <Text Include="res\l-systems\plants\Acacia.txt" />
     <Text Include="res\l-systems\plants\Grass.txt" />
+    <Text Include="res\l-systems\plants\Grass2D.txt" />
     <Text Include="res\l-systems\plants\JungleTree.txt" />
     <Text Include="res\l-systems\plants\NormalTree.txt" />
     <Text Include="res\l-systems\plants\Pine.txt" />
