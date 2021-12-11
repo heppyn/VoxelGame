@@ -55,7 +55,7 @@ void Terrain::Vegetation::LSystemsManager::Init() {
             // add different grow stages
             // larger plants have thicker stems
             const auto mod = i % 3;
-            const auto tmpObjects = executor.GenerateBasedOn(glm::vec3(0.0f), ls, 0.1f + mod / 20.0f, 2 + mod, salt);
+            const auto tmpObjects = executor.GenerateBasedOn(glm::vec3(0.0f), ls, 0.1f + mod / 20.0f, 2 + mod, salt, true);
             Shrubs_.emplace_back(tmpObjects);
 
             salt = Engine::Random::Get1dNoise(salt);

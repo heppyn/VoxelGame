@@ -12,7 +12,7 @@ class LSystemExecutor {
     explicit LSystemExecutor(int derivationVar);
     explicit LSystemExecutor(float randomAngle);
     explicit LSystemExecutor(int derivationVar, float randomAngle);
-    [[nodiscard]] std::vector<std::vector<GameObject>> GenerateBasedOn(const glm::vec3& pos, const LSystem& lSystem, float minScale, int numDerivations, unsigned salt, bool optimize = true);
+    [[nodiscard]] std::vector<std::vector<GameObject>> GenerateBasedOn(const glm::vec3& pos, const LSystem& lSystem, float minScale, int numDerivations, unsigned salt, bool optimize = false);
     void ScaleDerivations(int derivationVar, float minScale, float maxScale);
 
   private:

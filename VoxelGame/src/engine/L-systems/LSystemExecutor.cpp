@@ -15,7 +15,7 @@ LSystems::LSystemExecutor::LSystemExecutor(int derivationVar, float randomAngle)
     assert(randomAngle >= 0.0f && randomAngle <= 1.0f);
 }
 
-std::vector<std::vector<GameObject>> LSystems::LSystemExecutor::GenerateBasedOn(const glm::vec3& pos, const LSystem& lSystem, float minScale, int numDerivations, unsigned salt, bool optimize /* = true*/) {
+std::vector<std::vector<GameObject>> LSystems::LSystemExecutor::GenerateBasedOn(const glm::vec3& pos, const LSystem& lSystem, float minScale, int numDerivations, unsigned salt, bool optimize /* = false*/) {
     if (DerivationVar_) {
         const auto derVar = static_cast<int>(Engine::Random::Get1dNoiseLimited(salt, DerivationVar_));
         numDerivations += derVar;
