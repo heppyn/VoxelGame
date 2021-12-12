@@ -124,7 +124,7 @@ TEST_CASE("L-system executor test", "[engine, LSystemExecutor]") {
             LSystems::Detail::RandomGrammar grammar("[U][1U]");
             const LSystems::LSystem lSystem(std::move(grammar), 45.0f, 45.f, 0.5f);
 
-            const auto objects = executor.GenerateBasedOn(glm::vec3(0.0f), lSystem, 1.0f, 0, 1);
+            const auto objects = executor.GenerateBasedOn(glm::vec3(0.0f), lSystem, 1.0f, 0, 1, true);
 
             REQUIRE(objects.size() == 2);
             REQUIRE(objects[0].empty());
@@ -138,7 +138,7 @@ TEST_CASE("L-system executor test", "[engine, LSystemExecutor]") {
             LSystems::Detail::RandomGrammar grammar("U[xU][1U]");
             const LSystems::LSystem lSystem(std::move(grammar), 45.0f, 45.f, 0.5f);
 
-            const auto objects = executor.GenerateBasedOn(glm::vec3(0.0f), lSystem, 1.0f, 0, 1);
+            const auto objects = executor.GenerateBasedOn(glm::vec3(0.0f), lSystem, 1.0f, 0, 1, true);
 
             REQUIRE(objects.size() == 2);
             REQUIRE(objects[0].size() == 1);
@@ -154,7 +154,7 @@ TEST_CASE("L-system executor test", "[engine, LSystemExecutor]") {
             LSystems::Detail::RandomGrammar grammar("[U][U1U]");
             const LSystems::LSystem lSystem(std::move(grammar), 45.0f, 45.f, 0.5f);
 
-            const auto objects = executor.GenerateBasedOn(glm::vec3(0.0f), lSystem, 1.0f, 0, 1);
+            const auto objects = executor.GenerateBasedOn(glm::vec3(0.0f), lSystem, 1.0f, 0, 1, true);
 
             REQUIRE(objects.size() == 2);
             REQUIRE(objects[0].size() == 2);
