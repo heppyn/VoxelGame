@@ -7,3 +7,10 @@ E > F[+xE]F[-xE]+E
 E
 F > FF
 E > F[+E][-E]FE
+
+# exaple of stochastic grammar
+25.7 20.0 1
+F
+F > F[+F]F[-F]F
+F > F[+F]F
+F > F[-F]F

@@ -30,13 +30,13 @@ void Scene::UpdateOrig() {
             Chunk chunk(glm::vec2(0.0f));
             auto pos = glm::vec3(0.0f);
             for (const auto& lSystem : lSystems) {
-                auto objects = ge.GenerateBasedOn(pos, lSystem, 0.3f, 7, 2);
+                auto objects = ge.GenerateBasedOn(pos, lSystem, 0.3f, 5, Engine::Random::GetNoise(pos));
                 for (auto& o : objects[0]) {
                     o.AddComponent<Components::SpritesheetTex>(glm::vec2(1.0f, 0.0f));
                 }
                 chunk.GetObjects().insert(chunk.GetObjects().end(), std::make_move_iterator(objects[0].begin()), std::make_move_iterator(objects[0].end()));
 
-                pos += glm::vec3(30.0f, 0.0f, 0.0f);
+                pos += glm::vec3(10.0f, 0.0f, 0.0f);
             }
             chunk.FinisChunk();
             ObjectsDataCache_.push_back(chunk.GetInstancesData());
