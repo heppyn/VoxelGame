@@ -42,6 +42,12 @@ class MoveRightCommand : public Command {
     void Execute(float delta) override;
 };
 
+class SwitchPauseCommand : public Command {
+  public:
+    explicit SwitchPauseCommand(Renderer::Camera* actor) : Command(actor) {}
+    void Execute(float delta) override;
+};
+
 class MouseCommand {
   protected:
     // TODO: change to game object
@@ -58,9 +64,8 @@ class MouseCommand {
     virtual void ExecuteScroll(float yOffset);
 };
 
-class MouseCommandNull : public MouseCommand
-{
-public:
+class MouseCommandNull : public MouseCommand {
+  public:
     MouseCommandNull() : MouseCommandNull(nullptr) {}
     explicit MouseCommandNull(Renderer::Camera* actor) : MouseCommand(actor) {}
 

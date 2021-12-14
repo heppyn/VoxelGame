@@ -1,23 +1,23 @@
 #include "Commands.h"
 
-void Commands::MoveForwardCommand::Execute(float delta)
-{
+void Commands::MoveForwardCommand::Execute(float delta) {
     Actor->Move(delta, 0.0, 1.0);
 }
 
-void Commands::MoveBackCommand::Execute(float delta)
-{
+void Commands::MoveBackCommand::Execute(float delta) {
     Actor->Move(delta, 0.0, -1.0);
 }
 
-void Commands::MoveLeftCommand::Execute(float delta)
-{
+void Commands::MoveLeftCommand::Execute(float delta) {
     Actor->Move(delta, -1.0);
 }
 
-void Commands::MoveRightCommand::Execute(float delta)
-{
+void Commands::MoveRightCommand::Execute(float delta) {
     Actor->Move(delta, 1.0);
+}
+
+void Commands::SwitchPauseCommand::Execute(float delta) {
+    Actor->SwitchStopState();
 }
 
 void Commands::MouseCommand::ExecuteMove(float xPos, float yPos) {
@@ -35,7 +35,6 @@ void Commands::MouseCommand::ExecuteMove(float xPos, float yPos) {
     Actor->ProcessMouseMovement(xOffset, yOffset);
 }
 
-void Commands::MouseCommand::ExecuteScroll(float yOffset)
-{
+void Commands::MouseCommand::ExecuteScroll(float yOffset) {
     Actor->ProcessMouseScroll(yOffset);
 }

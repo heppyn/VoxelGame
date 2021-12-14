@@ -5,11 +5,15 @@
 
 namespace Input::Detail {
 void CursorPosCallback(GLFWwindow*, double xPos, double yPos) {
-    Details::currentHandler->ProcessMouse(static_cast<float>(xPos), static_cast<float>(yPos));
+    currentHandler->ProcessMouse(static_cast<float>(xPos), static_cast<float>(yPos));
 }
 
 void ScrollCallback(GLFWwindow*, double, double yOffset) {
-    Details::currentHandler->ProcessMouseScroll(static_cast<float>(yOffset));
+    currentHandler->ProcessMouseScroll(static_cast<float>(yOffset));
+}
+
+void KeyCallback(GLFWwindow*, int key, int scanCode, int action, int mods) {
+    currentHandler->ProcessKey(key, scanCode, action, mods);
 }
 } // namespace Input::Detail
 
@@ -20,7 +24,6 @@ void Input::InputHandlerGl::ProcessInput(float delta) const {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
         WindowManagerGl::CloseMainWindow();
     }
-
     if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS) {
         WindowManagerGl::MaximizeWindow();
     }
@@ -39,6 +42,13 @@ void Input::InputHandlerGl::ProcessInput(float delta) const {
     }
 }
 
+void Input::InputHandlerGl::ProcessKey(int key, [[maybe_unused]] int scanCode, int action, [[maybe_unused]] int mods) {
+    if (key == GLFW_KEY_P && action == GLFW_PRESS) {
+        // delta is not relevant for stopping camera
+        Commands[Keys::P]->Execute(0.0f);
+    }
+}
+
 void Input::InputHandlerGl::ProcessMouse(float xPos, float yPos) const {
     MouseCommand->ExecuteMove(xPos, yPos);
 }
@@ -53,7 +63,8 @@ void Input::InputHandlerGl::Init(Renderer::Camera* actor) {
 }
 
 void Input::InputHandlerGl::SetCallBacks() {
-    Details::currentHandler = this;
+    Detail::currentHandler = this;
     WindowManagerGl::SetCursorPosCallback(Detail::CursorPosCallback);
     WindowManagerGl::SetScrollCallback(Detail::ScrollCallback);
+    WindowManagerGl::SetKeyCallback(Detail::KeyCallback);
 }

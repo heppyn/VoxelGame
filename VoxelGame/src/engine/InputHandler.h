@@ -12,6 +12,7 @@ namespace Keys {
         S,
         A,
         D,
+        P,
         Count
     };
 }

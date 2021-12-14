@@ -35,6 +35,9 @@ void Renderer::Camera::ProcessKeyboard(CameraMovement direction, float deltaTime
 }
 
 void Renderer::Camera::ProcessMouseMovement(float xOffset, float yOffset, GLboolean constrainPitch /*= true*/) {
+    if (Stopped_)
+        return;
+
     xOffset *= MouseSensitivity;
     yOffset *= MouseSensitivity;
 
@@ -54,6 +57,9 @@ void Renderer::Camera::ProcessMouseMovement(float xOffset, float yOffset, GLbool
 }
 
 void Renderer::Camera::ProcessMouseScroll(float yOffset) {
+    if (Stopped_)
+        return;
+
     Zoom -= yOffset;
     if (Zoom < 1.0f)
         Zoom = 1.0f;
@@ -62,6 +68,9 @@ void Renderer::Camera::ProcessMouseScroll(float yOffset) {
 }
 
 void Renderer::Camera::Move(float delta, float x, float y) {
+    if (Stopped_)
+        return;
+
     if (x > 0) {
         ProcessKeyboard(CameraMovement::RIGHT, delta);
     }

@@ -56,8 +56,12 @@ class Camera {
     void ProcessMouseScroll(float yOffset);
 
     void Move(float delta, float x, float y = 0.0);
+    void Stop() { Stopped_ = true; }
+    void Resume() { Stopped_ = false; }
+    void SwitchStopState() { Stopped_ = !Stopped_; }
 
   private:
+    bool Stopped_{ false };
     // calculates the front vector from the Camera's (updated) Euler Angles
     void UpdateCameraVectors();
 };
