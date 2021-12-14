@@ -21,6 +21,10 @@ void Input::InputHandlerGl::ProcessInput(float delta) const {
         WindowManagerGl::CloseMainWindow();
     }
 
+    if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS) {
+        WindowManagerGl::MaximizeWindow();
+    }
+
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
         Commands[Keys::W]->Execute(delta);
     }

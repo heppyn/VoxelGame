@@ -11,6 +11,7 @@ class WindowManagerGl {
 
     static GLFWwindow* CreateMainWindow(bool debug = false);
     static void CloseMainWindow();
+    static void MaximizeWindow();
     static void SetCursorPosCallback(GLFWcursorposfun callback);
     static void SetScrollCallback(GLFWcursorposfun callback);
     /**

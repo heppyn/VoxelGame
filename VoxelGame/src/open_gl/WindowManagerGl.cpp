@@ -61,6 +61,10 @@ void WindowManagerGl::CloseMainWindow() {
     glfwSetWindowShouldClose(MainWindow, true);
 }
 
+void WindowManagerGl::MaximizeWindow() {
+    glfwMaximizeWindow(MainWindow);
+}
+
 void WindowManagerGl::SetCursorPosCallback(GLFWcursorposfun callback) {
     glfwSetCursorPosCallback(MainWindow, callback);
 }
