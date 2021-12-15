@@ -104,23 +104,30 @@ std::vector<GameObject> Terrain::Vegetation::Tree::SpawnShrub(const glm::vec3& p
 }
 
 std::vector<glm::mat4> Terrain::Vegetation::Tree::SpawnLSystemShrub(const glm::vec3& pos) {
-    return LSystemsManager::GetShrub({ pos.x, pos.y + 1.0f, pos.z }, { BlockType::TrunkSide, BlockType::Leaves });
+    return GenerateObjectData(SpawnShrub(pos));
+
+    //return LSystemsManager::GetShrub({ pos.x, pos.y + 1.0f, pos.z }, { BlockType::TrunkSide, BlockType::Leaves });
 }
 
 std::vector<glm::mat4> Terrain::Vegetation::Tree::SpawnLSystemNormalTree(const glm::vec3& pos) {
-    const auto oak = Engine::Random::GetNoise0_1<float>(pos) > 0.3f;
-    const auto trunk = oak ? BlockType::TrunkSide : BlockType::TrunkWhiteSide;
-    const auto leaves = oak ? BlockType::Leaves : BlockType::Leaves2;
-    return LSystemsManager::GetNormalTree({ pos.x, pos.y + 1.0f, pos.z }, trunk, leaves);
+    return GenerateObjectData(SpawnNormalTree(pos));
+
+    //const auto oak = Engine::Random::GetNoise0_1<float>(pos) > 0.3f;
+    //const auto trunk = oak ? BlockType::TrunkSide : BlockType::TrunkWhiteSide;
+    //const auto leaves = oak ? BlockType::Leaves : BlockType::Leaves2;
+    //return LSystemsManager::GetNormalTree({ pos.x, pos.y + 1.0f, pos.z }, trunk, leaves);
 }
 std::vector<glm::mat4> Terrain::Vegetation::Tree::SpawnLSystemJungleTree(const glm::vec3& pos) {
-    const auto baobab = Engine::Random::GetNoise0_1<float>(pos) > 0.7f;
-    const auto trunk = baobab ? BlockType::TrunkOrangeSide : BlockType::TrunkSide;
+    return GenerateObjectData(SpawnJungleTree(pos));
 
-    return LSystemsManager::GetJungleTree({ pos.x, pos.y + 1.0f, pos.z }, trunk, BlockType::Leaves2, baobab ? 1 : 0);
+    //const auto baobab = Engine::Random::GetNoise0_1<float>(pos) > 0.7f;
+    //const auto trunk = baobab ? BlockType::TrunkOrangeSide : BlockType::TrunkSide;
+
+    //return LSystemsManager::GetJungleTree({ pos.x, pos.y + 1.0f, pos.z }, trunk, BlockType::Leaves2, baobab ? 1 : 0);
 }
 std::vector<glm::mat4> Terrain::Vegetation::Tree::SpawnLSystemSavannaTree(const glm::vec3& pos) {
-    return LSystemsManager::GetAcacia({ pos.x, pos.y + 1.0f, pos.z }, BlockType::TrunkOrangeSide, BlockType::LeavesOrange);
+    return GenerateObjectData(SpawnSavannaTree(pos));
+    //return LSystemsManager::GetAcacia({ pos.x, pos.y + 1.0f, pos.z }, BlockType::TrunkOrangeSide, BlockType::LeavesOrange);
 }
 std::vector<glm::mat4> Terrain::Vegetation::Tree::SpawnLSystemCactus(const glm::vec3& pos) {
     return GenerateObjectData(SpawnCactus(pos));
