@@ -42,7 +42,7 @@ class LSystemsManager {
     static std::vector<LSystems::LSystem> NormalTreeLSystems_;
     static std::vector<LSystems::LSystem> JungleTreeLSystems_;
 
-    static constexpr int SHRUB_COUNT{ 8 };
+    static constexpr int SHRUB_COUNT{ 12 };
 
     inline static const auto SHRUB_PATH{ "./res/l-systems/plants/Shrubs.txt" };
     inline static const auto ACACIA_PATH{ "./res/l-systems/plants/Acacia.txt" };

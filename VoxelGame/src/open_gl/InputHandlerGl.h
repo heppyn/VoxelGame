@@ -9,7 +9,7 @@ class InputHandlerGl : public InputHandler {
     // process state of input as it is
     void ProcessInput(float delta) const override;
     // process key when action was executed on it
-    // use when one action is required - process just one key down
+    // process the action just once
     void ProcessKey(int key, int scanCode, int action, int mods);
     void ProcessMouse(float xPos, float yPos) const;
     void ProcessMouseScroll(float yOffset) const;
