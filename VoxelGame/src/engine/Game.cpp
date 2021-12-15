@@ -24,7 +24,7 @@ void Game::Init() {
     ResourceManager::LoadTexture2D(Constants::VOXEL_PACK_PATH_SH + "sprite_sheet.png", true, Constants::SPRITE_SHEET);
     ResourceManager::LoadTexture2D(Constants::VOXEL_PACK_PATH_SH + "sprite_sheet.png", true, Constants::SPRITE_SHEET_SPEC)->SetTypeSpecular();
     ResourceManager::SpriteSheet = { 128.0f, 128.0f, Constants::SPRITE_SHEET };
-    Engine::Random::Init();
+    Engine::Random::Init(111);
     Terrain::Vegetation::LSystemsManager::Init();
 
     Camera = std::make_shared<Renderer::Camera>(glm::vec3(0.0f, 30.0f, 0.0f));
