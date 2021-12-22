@@ -5,6 +5,7 @@
 #include "../open_gl/WindowManagerGl.h"
 #include "../helpers/Constants.h"
 #include "Random.h"
+#include "engine/files/Export.h"
 
 
 Game::~Game() {
@@ -46,6 +47,12 @@ void Game::Update([[maybe_unused]] float delta) {
 
 void Game::Render() const {
     Renderer->Render(Scene_, Width(), Height());
+}
+
+void Game::ExportScene() {
+    // generate all chunks
+    Scene_.Update(true);
+    Engine::Files::Export::ExportScene(Scene_, "./export.json");
 }
 
 unsigned Game::Width() const {

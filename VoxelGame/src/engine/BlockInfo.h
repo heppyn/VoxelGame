@@ -39,4 +39,6 @@ class BlockInfo {
     void SetBiome(unsigned biome);
     void SetHumidity(unsigned humidity);
     void SetTemperature(unsigned temperature);
+
+    [[nodiscard]] uint32_t Value() const { return Info_; }
 };

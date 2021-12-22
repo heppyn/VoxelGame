@@ -18,8 +18,7 @@ Renderer::Camera* camera;
 float deltaTime = 0.0f; // time between current frame and last frame
 float lastFrame = 0.0f;
 
-int main() {
-
+int main(const int argc, const char* argv[]) {
     // enable debug by passing true
     auto* window = WindowManagerGl::CreateMainWindow(true);
     glfwSetFramebufferSizeCallback(window, WindowManagerGl::FramebufferSizeCallback);
@@ -43,21 +42,28 @@ int main() {
         return result;
     }
 
-    while (!glfwWindowShouldClose(window)) {
-        const auto currentFrame = static_cast<float>(glfwGetTime());
-        deltaTime = currentFrame - lastFrame;
-        lastFrame = currentFrame;
-        //std::cout << "FPS: " << 1.0f / deltaTime << '\n';
-
-        game->ProcessInput(deltaTime);
-        game->Update(deltaTime);
-        game->Render();
-
-        // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
-        // -------------------------------------------------------------------------------
-        glfwSwapBuffers(window);
-        glfwPollEvents();
+    // only terrain generator is supposed to run
+    if (argc >= 2 && (std::string(argv[1]) == "--export" || std::string(argv[1]) == "-e")) {
+        game->ExportScene();
     }
+    else {
+        while (!glfwWindowShouldClose(window)) {
+            const auto currentFrame = static_cast<float>(glfwGetTime());
+            deltaTime = currentFrame - lastFrame;
+            lastFrame = currentFrame;
+            //std::cout << "FPS: " << 1.0f / deltaTime << '\n';
+
+            game->ProcessInput(deltaTime);
+            game->Update(deltaTime);
+            game->Render();
+
+            // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
+            // -------------------------------------------------------------------------------
+            glfwSwapBuffers(window);
+            glfwPollEvents();
+        }
+    }
+
     // glfw: terminate, clearing all previously allocated GLFW resources.
     // ------------------------------------------------------------------
     delete game;

@@ -49,7 +49,7 @@ void Scene::UpdateOrig() {
 }
 
 
-void Scene::Update() {
+void Scene::Update(bool updateAll /*= false*/) {
     const auto startTime = glfwGetTime();
     const auto centerChunkPos = GetCenterChunkPos();
     auto updated{ false };
@@ -68,8 +68,8 @@ void Scene::Update() {
     for (auto i = -RenderDistance_; i <= RenderDistance_; ++i) {
         for (auto j = -RenderDistance_; j <= RenderDistance_; ++j) {
             // pause world generation if frame rate would drop
-            if (glfwGetTime() - startTime > Constants::FRAME_LEN) {
-                overFrame = true;
+            overFrame = glfwGetTime() - startTime > Constants::FRAME_LEN;
+            if (overFrame && !updateAll) {
                 break;
             }
             const auto chunkPos = glm::vec2(
@@ -82,7 +82,7 @@ void Scene::Update() {
                 std::cout << "Chunk generated in " << (glfwGetTime() - startTimeChunk) * 1000.0 << " ms\n";
             }
         }
-        if (overFrame)
+        if (overFrame && !updateAll)
             break;
     }
 

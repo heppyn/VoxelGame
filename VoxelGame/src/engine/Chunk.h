@@ -37,6 +37,7 @@ class Chunk {
 
     [[nodiscard]] BlockInfo& GetBlockInfo(const glm::vec2& pos);
     [[nodiscard]] BlockInfo& GetBlockInfo(const glm::vec3& pos);
+    [[nodiscard]] const std::vector<std::vector<BlockInfo>>& GetBlockInfos() const { return BlockInfos_; }
 
   private:
     void RecalculateBlockHeights();

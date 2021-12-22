@@ -15,6 +15,7 @@ class Game {
     void ProcessInput(float delta) const;
     void Update(float delta);
     void Render() const;
+    void ExportScene();
 
     [[nodiscard]] unsigned int Width() const;
     [[nodiscard]] unsigned int Height() const;

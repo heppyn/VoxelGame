@@ -30,4 +30,17 @@ inline std::string ToString(const glm::mat4& mat) {
     ss << " [" << mat[3].x << ", " << mat[3].y << ", " << mat[3].z << ", " << mat[3].w << "]]\n";
     return ss.str();
 }
+
+// return [pos.x, pos.y, pos.z, scale, tex.x, tex.y]
+inline std::string PackedMatToString(const glm::mat4& mat) {
+    std::stringstream ss;
+    // position
+    ss << '[' << mat[3].x << ',' << mat[3].y << ',' << mat[3].z << ',';
+    // scale
+    ss << mat[0].x << ',';
+    // texture
+    ss << mat[0].w << ',' << mat[1].w << ']';
+
+    return ss.str();
+}
 } // namespace Helpers
