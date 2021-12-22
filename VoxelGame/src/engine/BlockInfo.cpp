@@ -12,8 +12,8 @@ void BlockInfo::AddTree() {
 }
 
 void BlockInfo::SetBiome(unsigned biome) {
-    assert(biome < 8);
-    Info_ = (Info_ & 0xFFF8FF) | (biome << 8);
+    assert(biome < 16);
+    Info_ = (Info_ & 0xFFF0FF) | (biome << 8);
 }
 
 void BlockInfo::SetHumidity(unsigned humidity) {

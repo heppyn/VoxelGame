@@ -35,6 +35,12 @@ TEST_CASE("block info test", "[engine, block_info]") {
 
         blockInfo.SetBiome(5);
         REQUIRE(blockInfo.GetBiome() == 5u);
+
+        blockInfo.SetBiome(15);
+        REQUIRE(blockInfo.GetBiome() == 15u);
+
+        blockInfo.SetBiome(0);
+        REQUIRE(blockInfo.GetBiome() == 0u);
     }
 
     SECTION("change humidity") {
