@@ -35,6 +35,9 @@ class Chunk {
     [[nodiscard]] const std::vector<GameObject>& GetObjectsTrans() const;
     [[nodiscard]] std::vector<GameObject>& GetObjectsTrans();
 
+    [[nodiscard]] BlockInfo& GetBlockInfo(const glm::vec2& pos);
+    [[nodiscard]] BlockInfo& GetBlockInfo(const glm::vec3& pos);
+
   private:
     void RecalculateBlockHeights();
     static void GenerateInstanceData(const std::vector<GameObject>& objects, std::shared_ptr<std::vector<glm::mat4>> buffer);

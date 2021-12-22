@@ -69,6 +69,16 @@ std::vector<GameObject>& Chunk::GetObjectsTrans() {
     return ObjectsTrans_;
 }
 
+BlockInfo& Chunk::GetBlockInfo(const glm::vec2& pos) {
+    const auto x = static_cast<unsigned>(std::abs(pos.x)) % static_cast<unsigned>(ChunkSize);
+    const auto y = static_cast<unsigned>(std::abs(pos.y)) % static_cast<unsigned>(ChunkSize);
+    return BlockInfos_[x][y];
+}
+
+BlockInfo& Chunk::GetBlockInfo(const glm::vec3& pos) {
+    return GetBlockInfo({ pos.x, pos.y });
+}
+
 void Chunk::RecalculateBlockHeights() {
     std::cout << "Warning! Using expansive function\n";
 

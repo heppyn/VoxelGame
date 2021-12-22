@@ -3,7 +3,12 @@
 #include <cassert>
 
 void BlockInfo::SetSurfaceHeight(float height) {
-    assert(height >= 0);
+    assert(height >= 0.0f && height <= 255.0f);
+    Info_ = (Info_ & 0xFFFF00) | static_cast<uint32_t>(height);
+}
+
+void BlockInfo::SetSurfaceHeight(int height) {
+    assert(height >= 0 && height <= 255);
     Info_ = (Info_ & 0xFFFF00) | static_cast<uint32_t>(height);
 }
 

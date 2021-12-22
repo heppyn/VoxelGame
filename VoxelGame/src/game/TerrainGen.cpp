@@ -42,6 +42,9 @@ Terrain::BiomeType Terrain::TerrainGen::PlaceBlock(Chunk& chunk, const glm::vec2
     const auto temp = GetTemperature({ pos.x, static_cast<float>(h), pos.y });
     const auto biome = Biome::GetBiome(pos, hum, temp);
 
+    // set metadata to save chunk to a file
+    SetBlockInfo(chunk, pos, hum, temp, biome, h);
+
     do {
         const glm::vec3 blockPos{
             pos.x, static_cast<float>(h), pos.y
@@ -71,6 +74,14 @@ void Terrain::TerrainGen::PlaceVegetation(Chunk& chunk, const glm::vec2& pos, Bi
           std::make_move_iterator(grass.begin()),
           std::make_move_iterator(grass.end()));
     }
+}
+
+void Terrain::TerrainGen::SetBlockInfo(Chunk& chunk, const glm::vec2& pos, Weather::Humidity humidity, Weather::Temperature temperature, BiomeType biome, int height) {
+    auto& blockInfo = chunk.GetBlockInfo(pos);
+    blockInfo.SetHumidity(humidity.Value);
+    blockInfo.SetTemperature(temperature.Value);
+    blockInfo.SetBiome(static_cast<unsigned>(biome));
+    blockInfo.SetSurfaceHeight(height);
 }
 
 float Terrain::TerrainGen::LowestNeigh(const glm::vec2& pos) {

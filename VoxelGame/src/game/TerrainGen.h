@@ -21,6 +21,7 @@ class TerrainGen {
 
     static BiomeType PlaceBlock(Chunk& chunk, const glm::vec2& pos);
     static void PlaceVegetation(Chunk& chunk, const glm::vec2& pos, BiomeType biome);
+    static void SetBlockInfo(Chunk& chunk, const glm::vec2& pos, Weather::Humidity humidity, Weather::Temperature temperature, BiomeType biome, int height);
     static float LowestNeigh(const glm::vec2& pos);
     static float LowestNeighSmooth(const glm::vec2& pos);
     static float HightestNeigh(const glm::vec2& pos);

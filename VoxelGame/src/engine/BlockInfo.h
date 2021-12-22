@@ -34,6 +34,7 @@ class BlockInfo {
     [[nodiscard]] unsigned GetTemperature() const { return ( Info_ >> 12 ) & 0xF; }
 
     void SetSurfaceHeight(float height);
+    void SetSurfaceHeight(int height);
     void AddTree();
     void SetBiome(unsigned biome);
     void SetHumidity(unsigned humidity);
