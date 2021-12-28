@@ -31,7 +31,7 @@ void Engine::Files::Export::ExportChunk(std::ofstream& stream, const Chunk& chun
 
     for (const auto& vec : chunk.GetBlockInfos()) {
         for (const auto& bi : vec) {
-            stream << bi.Value() << ',';
+            stream << Helpers::ToJson(bi) << ',';
         }
     }
 

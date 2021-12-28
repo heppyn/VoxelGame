@@ -4,6 +4,8 @@
 
 #include "glm/mat4x4.hpp"
 
+#include "engine/BlockInfo.h"
+
 namespace Helpers {
 inline void PrintMat4(const glm::mat4& mat) {
     std::cout << mat[0].x << ' ' << mat[0].y << ' ' << mat[0].z << ' ' << mat[0].w << '\n';
@@ -40,6 +42,16 @@ inline std::string PackedMatToString(const glm::mat4& mat) {
     ss << mat[0].x << ',';
     // texture
     ss << mat[0].w << ',' << mat[1].w << ']';
+
+    return ss.str();
+}
+
+inline std::string ToJson(const BlockInfo& info) {
+    std::stringstream ss;
+    ss << "{\"tree\":" << info.HasTree()
+       << ",\"hum\":" << info.GetHumidity()
+       << ",\"tem\":" << info.GetTemperature()
+       << ",\"height\":" << info.GetSurfaceHeight() << '}';
 
     return ss.str();
 }
