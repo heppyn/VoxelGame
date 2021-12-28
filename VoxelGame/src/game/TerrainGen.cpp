@@ -61,11 +61,14 @@ Terrain::BiomeType Terrain::TerrainGen::PlaceBlock(Chunk& chunk, const glm::vec2
 
 void Terrain::TerrainGen::PlaceVegetation(Chunk& chunk, const glm::vec2& pos, BiomeType biome) {
     //TODO: call vegetation generation based on biome type. Return game object - not tree, grass, etc.
-    const auto h = BlockHeightSmooth(pos);
+    const auto h = chunk.GetBlockInfo(pos).GetSurfaceHeight();
     // place trees
     auto tree = Vegetation::TreeFactory::GenerateTree({ pos.x, h, pos.y }, biome);
     const auto s = tree.size();
-    chunk.AddObjectData(std::move(tree));
+    if (s) {
+        chunk.AddObjectData(std::move(tree));
+        chunk.GetBlockInfo(pos).AddTree();
+    }
 
     if (s == 0) {
         auto grass = Vegetation::GrassFactory::GenerateGrass({ pos.x, h + 1.0f, pos.y }, biome);
