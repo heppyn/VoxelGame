@@ -51,6 +51,7 @@ inline std::string ToJson(const BlockInfo& info) {
     ss << "{\"tree\":" << info.HasTree()
        << ",\"hum\":" << info.GetHumidity()
        << ",\"tem\":" << info.GetTemperature()
+       << ",\"biome\":" << info.GetBiome()
        << ",\"height\":" << info.GetSurfaceHeight() << '}';
 
     return ss.str();
