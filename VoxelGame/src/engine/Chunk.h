@@ -17,6 +17,9 @@ class Chunk {
     std::shared_ptr<std::vector<glm::mat4>> InstancesData_;
     // separate transparent textures from non transparent, so semi transparent textures are correctly blended
     std::shared_ptr<std::vector<glm::mat4>> InstancesDataTrans_;
+    // vector of rows in chunk
+    // [0, 1], [1, 1]
+    // [0, 0], [1, 0]
     std::vector<std::vector<BlockInfo>> BlockInfos_;
 
   public:

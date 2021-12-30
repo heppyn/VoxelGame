@@ -23,7 +23,7 @@ Chunk Terrain::TerrainGen::GenerateChunk(const glm::vec2& position) {
     for (unsigned int i = 0; i < chunkSize; ++i) {
         for (unsigned int j = 0; j < chunkSize; ++j) {
             const auto pos =
-              glm::vec2(position.x + static_cast<float>(i), position.y + static_cast<float>(j));
+              glm::vec2(position.x + static_cast<float>(j), position.y + static_cast<float>(i));
 
             const auto biome = PlaceBlock(chunk, pos);
             PlaceVegetation(chunk, pos, biome);

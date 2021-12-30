@@ -70,9 +70,9 @@ std::vector<GameObject>& Chunk::GetObjectsTrans() {
 }
 
 BlockInfo& Chunk::GetBlockInfo(const glm::vec2& pos) {
-    const auto x = static_cast<unsigned>(std::abs(pos.x)) % static_cast<unsigned>(ChunkSize);
-    const auto y = static_cast<unsigned>(std::abs(pos.y)) % static_cast<unsigned>(ChunkSize);
-    return BlockInfos_[x][y];
+    const auto x = static_cast<unsigned>(pos.x - Position.x);
+    const auto y = static_cast<unsigned>(pos.y - Position.y);
+    return BlockInfos_[y][x];
 }
 
 BlockInfo& Chunk::GetBlockInfo(const glm::vec3& pos) {
@@ -89,10 +89,8 @@ void Chunk::RecalculateBlockHeights() {
     }
 
     for (const auto& o : Objects_) {
-        const auto& pos = o.Position();
-        const auto x = static_cast<int>(pos.x);
-        const auto y = static_cast<int>(pos.z);
-        BlockInfos_[x][y].SetSurfaceHeight(std::max(BlockInfos_[x][y].GetSurfaceHeight(), pos.y));
+        GetBlockInfo(o.Position()).SetSurfaceHeight(
+            std::max(GetBlockInfo(o.Position()).GetSurfaceHeight(), o.Position().y));
     }
 }
 
