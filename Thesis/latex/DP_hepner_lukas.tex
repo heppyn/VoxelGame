@@ -24,6 +24,8 @@
 % \iflanguage{czech}{\renewcommand*{\acronymname}{Seznam pou{\v z}it{\' y}ch zkratek}}{}
 % \makeglossaries
 
+\usepackage{gensymb} %symbol stupne
+
 \newcommand{\tg}{\mathop{\mathrm{tg}}} %cesky tangens
 \newcommand{\cotg}{\mathop{\mathrm{cotg}}} %cesky cotangens
 
@@ -58,9 +60,244 @@
 
 \chapter{Cíl práce}
 
-\chapter{Analýza a návrh}
+\chapter{Modelování rostlin s využitím L-systémů}
+Herní svět obsahuje velké množství vegetace a ač jsou si všechny stromy, keře typově podobné, hráč si velice rychle všimne, že jsou identické. Na obrázku~\ref{fig:identicke_stromy} vidíme tři druhy stromů, které jsou zkopírované po scéně. Stromy v levé zadní části mají různou výšku, přesto působí umělým dojmem.
 
-\chapter{Realizace}
+Stromy v reálném světě jsou si podobné -- rozeznáváme jednotlivé druhy stromů, přesto neexistují dva stejné stromy. Pokud druh stromu zapíšeme formální gramatikou nazývanou L-systém, docílíme podobné struktury stromů, které se budou lišit v detailech.
+
+\begin{figure}\centering
+	\includegraphics[width=\textwidth]{images/identical_trees}
+	\caption[Identické stromy]{Identické stromy}\label{fig:identicke_stromy}
+\end{figure}
+
+\section{L-systém}
+L-systém nebo také Lindenmayerův systém je paralelní přepisovací systém vyvinutý maďarským teoretickým biologem a botanistou Aristidem Lindenmayerem v roce 1968. L-systém je typ formální gramatiky skládající se z abecedy, přepisovacích pravidel a počátečního axiomu. Pomocí postupného derivování počátečního axiomu je možné simulovat vývoj rostliny v čase \cite{pcgbook75}.
+
+\section{Interpretace řetězců pomocí želvy}
+Řetězce lze graficky reprezentovat pomocí želvy, konsumující symboly abecedy. Každý symbol určuje akci, kterou má želva vykonat. Želva se může pohybovat ve 2D nebo 3D prostoru. Ve 2D si můžeme interpretaci představit jako želvu, držící tužku, pohybující se po papíře.
+
+Želvu lze reprezentovat jako trojici $(x, y, \alpha)$, kde $(x, y)$ představuje kartézské souřadnice reprezentující polohu v prostoru a $\alpha$ úhel kam želva směřuje. Zadáním délky kroku \textit{d} a změny úhlu $\delta$ lze želvu ovládat pomocí následujících symbolů.
+
+\begin{itemize}
+\item F -- Posun dopředu o délku $d$. Stav želvy se změní na $(x’, y‘, \alpha)$, kde $x = x + d \cos \alpha$ a $y = y + d \sin \alpha$. Mezi body $(x, y)$ a $(x’, y‘)$ je nakreslena čára.
+\item + -- Rotace doleva o úhel $\delta$. Nový stav želvy $(x, y, \alpha + \delta)$.
+\item - -- Rotace doprava o úhel $\delta$. Nový stav želvy $(x, y, \alpha - \delta)$.
+\end{itemize}
+
+Nechť je definován následující L-systém. Buď $\omega$ počáteční axiom, $p$ přepisovací pravidlo, $\delta = 90\degree$ a $d$ zmenšené čtyřnásobně pro každý obrázek~\cite{abop7}.
+
+\bigskip
+$\omega: F-F-F-F$
+
+\medskip
+$p: F \rightarrow F-F+F+FF-F-F+F$
+
+\bigskip
+Želva interpretující daný L-systém generuje kvadratické Kochovy ostrovy~\ref{fig:koch_island}. Obrázky jsou vygenerovány derivacemi o délce 0 až 3.
+
+\begin{figure}\centering
+	\includegraphics[width=\textwidth]{images/koch_island}
+	\caption[Kvadratické Kochovy ostrovy]{Kvadratické Kochovy ostrovy}\label{fig:koch_island}
+\end{figure}
+
+\section{Větvení v L-systémech}
+S danými přepisovacími pravidly není možné generovat větvící se struktury. Želva vždy pokračuje od své poslední pozice. Říše rostlin je dominovaná větvícími se strukturami, potřebujeme proto matematické vyjádření této skutečnosti.
+
+Větvení v řetězci můžeme reprezentovat pomocí dvou symbolů [ a ], kde [ značí začátek větve a ] konec větve~\cite{abop24}.
+
+Symboly jsou interpretovány želvou následovně:
+
+\begin{itemize}
+\item $[$ -- Ulož atributy želvy do zásobníku.
+\item $]$ -- Načti atributy želvy ze zásobníku a smaž je z vrcholu zásobníku (operace pop). Při této operaci není nakreslená žádná čára.
+\end{itemize}
+
+Díky nově přidaným symbolům lze generovat struktury připomínající rostliny. Struktury na obrázku~\ref{fig:plant_like_str} jsou generované následujícími L-systémy:
+
+\begin{enumerate}
+\item $\delta = 20\degree$
+
+	$\omega: E$
+	
+	$p1: F \rightarrow FF$
+	
+	$p2: E \rightarrow F[+E]F[-E]+E$
+	
+\item $\delta = 25,7\degree$
+
+	$\omega: E$
+	
+	$p1: F \rightarrow FF$
+	
+	$p2: E \rightarrow F[+E][-E]FE$
+
+\end{enumerate}
+
+L-systém 1 generuje rostlinu vlevo, L-systém 2 generuje rostlinu vpravo.
+
+\begin{figure}\centering
+	\includegraphics[width=\textwidth]{images/plant_d_e}
+	\caption[Struktury připomínajících rostliny]{Struktury připomínajících rostliny generované pomocí závorkovaného systému}\label{fig:plant_like_str}
+\end{figure}
+
+\section{Stochastické L-systémy}
+Rostliny generované deterministickým L-systémem jsou všechny stejné. Jejich použití v scéně by vytvářelo stejný efekt, který je popsán na začátku kapitoly. 
+
+K předejití tohoto efektu je nutné zavést variace v rámci druhu. Náhodná interpretace řetězce má limitované využití. Změna úhlu větvení, šířky a výšky segmentů rostliny zachovávají topologii struktury, ze které je generovaná. Stochastické L-systémy mohou měnit topologii struktury~\cite{abop28}.
+
+-systém, který byl do teď používán nemohl mít více přepisovacích pravidel pro stejný symbol abecedy. Pokud má stochastický L-systém vice přepisovacích pravidel, je z nich vybrána jedna s pravděpodobností $1/n$, kde $n$ je počet přepisovacích pravidel pro daný symbol abecedy
+\footnote{Tato definice se liší, od definice uvedené ve~\cite{abop28}. Tento způsob náhodného výběru je použit v implementaci, kde pravděpodobností distribuci zastupuje několikanásobné zopakování přepisovacího pravidla.}.
+
+Scéna~\ref{fig:plant_stoch} byla vygenerována za pomocí stochastického L-systému, kde:
+
+\bigskip 
+$\delta = 25,7\degree$
+
+\medskip
+$\omega: F$
+
+\medskip
+$p1: F \rightarrow F[+F]F[-F]F$
+
+\medskip
+$p2: F \rightarrow F[+F]F$
+
+\medskip
+$p3: F \rightarrow F[-F]F$
+
+\begin{figure}\centering
+	\includegraphics[width=\textwidth]{images/plant_stoch}
+	\caption[Využití stochastického L-systému]{Využití stochastického L-systému}\label{fig:plant_stoch}
+\end{figure}
+
+\section{Implementace}
+\subsection{Formát L-systému}
+
+L-systém může být načten ze souboru pomocí třídy \texttt{LSystemParser}. L-systém musí mít následující formát:
+
+\begin{verbatim}
+yaw_angle pitch_angle shring_ratio
+axiom
+letter > production
+.
+.
+.
+letter > production
+\end{verbatim}
+
+Soubor může obsahovat za sebou jdoucí L-systémy. \texttt{LSystemParser} je vrátí jako pole. Soubor může obsahovat komentáře na nových řádcích, začínající symbolem \#.
+
+Třída \texttt{LSystem} obsahuje gramatiku a tři atributy specifikující úhel náklonu podle osy y (yaw), podle osy x (pitch) a změnu velikosti bloku. Poslední atribut je využit při rozvětvení rostliny. Potomci mateřské větve by se měly řídit postulátem Leonarda da Vinci: „všechny větve stromu, v každé úrovni jeho růstu jsou v součtu jejich tloušťky rovné tloušťce kmene pod nimi.“ V případě dvojitého rozvětvení, tloušťky mateřské větve $w_1$, tloušťky potomků $w_2$ dostaneme rovnici~\cite{abop57}:
+
+\[ w_1^2 = 2w_2^2 \]
+\[ \frac{w_2}{w_1} = \frac{1}{\sqrt{2}} \approx 0,707\]
+
+Hodnotu 0,7 je možné nalézt v L-systémech modelující keře.
+
+\subsection{Želva}
+Třída \texttt{Turtle} rozšiřuje pohyb želvy –- popsané v kapitole Interpretace řetězců pomocí želvy –- do 3D prostoru. Vnitřní stav želvy určují následující atributy:
+
+\begin{itemize}
+\item Pozice v prostoru.
+\item Velikost bloku vytvořeného želvou.
+\item Barva použitá pro kreslení (výstupní pole).
+\item Yaw –- rotace podle osy y.
+\item Pitch –- rotace podle osy x.
+\end{itemize}
+
+Želva si udržuje tři navzájem kolmé směrové vektory (nahoru, dopředu, doprava) jednotkové délky, které využívá pro pohyb po scéně. Vektory jsou aktualizované po každé rotaci. Pro výpočet je nutné znát vektor směrující kolmo vzhůru vůči scéně (\texttt{WORLD\_UP}). Generovaný svět je plochý, proto lze tento vektor nahradit konstantním vektorem $(0, 1, 0)$.
+
+\begin{verbatim}
+glm::vec3 front;
+front.x = cos(glm::radians(Yaw_)) * cos(glm::radians(Pitch_));
+front.y = sin(glm::radians(Pitch_));
+front.z = sin(glm::radians(Yaw_)) * cos(glm::radians(Pitch_));
+
+Front_ = glm::normalize(front);
+Right_ = glm::normalize(glm::cross(Front_, WORLD_UP));
+Up_ = glm::normalize(glm::cross(Right_, Front_));
+\end{verbatim}
+
+Délku \textit{x} v rovině určené osami \textit{x} a \textit{z} lze spočítat jako délku přilehlé odvěsny. $\cos(Yaw) = x / h$, kde \textit{h} je délka přepony. Víme, že vektor má jednotkovou délku, proto $h = 1$. Stejný postup aplikujeme pro rovinu určenou osami \textit{x} a \textit{y}.
+
+Tímto způsobem dopočítáme délky \textit{y} a \textit{z} vektoru směrujícího dopředu a normalizujeme ho. Jelikož jsou na sebe vektory kolmé, využijeme vektorového součinu, jehož výsledkem je vektor kolmý k oběma původním vektorům. Všechny vektory je nutné normalizovat, aby se předešlo jejich zkracování s tím, jak se Pitch blíží $\pm 90\degree$.
+
+K zamezení převrácení os jsou z definičního oboru Pitch vyjmuty násobky 90\degree.
+
+\begin{verbatim}
+if (Helpers::Math::Equal(cos(glm::radians(Pitch_)), 0.0f))
+    Pitch_ -= 0.01f;
+\end{verbatim}
+
+Výsledná nepřesnost je menší než maximální rozdíl dvou čísle typu float~$\epsilon$, která jsou považována za stejná. Funkce \texttt{Equal} porovnává desetinná čísla s přesností~$\epsilon$.
+
+Želva vystavuje metody pro pohyb ve všech třech osách využívající vektorů \texttt{Up\_, Right\_, Forward\_}. K pozici želvy je přičten patřičný vektor naškálovaný délkou pohybu. Např.:
+
+\begin{verbatim}
+void LSystems::Detail::Turtle::MoveForward(float dz) {
+    Position_ += Front_ * dz;
+}
+\end{verbatim}
+
+\subsection{Rozšířená abeceda}
+Následující symboly abecedy mají speciální význam pro jejich interpretaci.
+
+\begin{itemize}
+\item U a u –- Posuň želvu nahoru.
+\item F a f –- Posuň želvu dopředu.
+\item x –- Zmenši želvu.
+\item X –- Zvětši želvu.
+\item S –- Nastav původní velikost želvy.
+\item + –- Rotuj želvu doleva podle osy y.
+\item - –- Rotuj želvu doprava podle osy y.
+\item $\hat{}$ –- Rotuj želvu nahoru podle osy x.
+\item \& –- Rotuj želvu dolů podle osy x.
+\item $[$ –- Ulož kopii želvy na vrchol zásobníku.
+\item $]$ –- Vyjmi želvu z vrcholu zásobníku.
+\item $0-9$ –- Přepni výstupní pole.
+\end{itemize}
+
+L-systém může obsahovat jakýkoliv jiný ASCII symbol –- mimo bílých znaků a \# –- určený pro expanzi přepisovacích pravidel. Není želvou interpretován.
+
+\subsection{Ovládání želvy}
+Implementace želvy se nachází ve jmenném prostoru \texttt{LSystems::Detail}, uživatel by ji neměl využívat přímo, ale je pro něj připravena třída \texttt{LSystemExecutor} zajišťující generování herních objektů z poskytnutého L-systému.
+
+\texttt{LSystemExecutor} umožňuje generovat herní objekty na základě stochastického L-systému –- topologie struktury výsledného modelu se může měnit mezi jednotlivými voláními generátoru na základě parametru \texttt{salt}. L-systém lze náhodně interpretovat na základě těchto parametrů:
+
+\begin{itemize}
+\item Rozsah počtu provedených derivací.
+\item Variace v rotaci želvy. K úhlu, o který se má želva otočit, se přičte x * původní úhel, kde x je z [-angleVar, angleVar]. Defaultní hodnota angleVar je 0,2.
+\item Výchozí velikost generovaných objektů. Lze určit rozsahem korespondujícím s počtem derivací.
+\end{itemize}
+
+Přidání náhodného úhlu má výrazný efekt na organický vzhled rostliny. Na obrázku níže lze vidět akáciové stromy vyznačující se plochou korunou. V definici L-systému jsou všechny listy ve stejné výšce, výsledný rozdíl ve výškách je způsoben opakovaným rotováním želvy. V zápisu lze vidět, že se želva otočí o 45\degree nahoru (~$\hat{}$~), pokládá větve (u, U), skloní se o 45\degree (\&) a pokládá listy (F). Listy by tak měly být ve stejné rovině, ale nejsou.
+
+L-systém generující akácie:
+
+\begin{verbatim}
+45.0 45.0 0.8
+# make sure the plant has splits
+# random lenght stem - then split
+^uA1S&F+F+F+F
+U > uU
+A > +uuE
+A > -uE
+A > +uE
+A > -E
+A > uuE
+A > uE
+# top of the plant
+E > x[++++UE1S&F+F+F+F]+UE
+E > x[++++++UE1S&F+F+F+F]++UE
+E > x[++UE1S&F+F+F+F]-UE
+
+\end{verbatim}
+
+
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+% % ZAVER
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % 
 
 \begin{conclusion}
 	%sem napište závěr Vaší práce
