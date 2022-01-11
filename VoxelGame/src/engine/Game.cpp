@@ -47,12 +47,17 @@ void Game::Update([[maybe_unused]] float delta) {
 
 void Game::Render() const {
     Renderer->Render(Scene_, Width(), Height());
+    WindowManagerGl::EndFrame();
 }
 
 void Game::ExportScene() {
     // generate all chunks
     Scene_.Update(true);
     Engine::Files::Export::ExportScene(Scene_, "./export.json");
+}
+
+bool Game::Finished() const {
+    return WindowManagerGl::ShouldCloseMainWindow();
 }
 
 unsigned Game::Width() const {

@@ -47,7 +47,7 @@ int main(const int argc, const char* argv[]) {
         game->ExportScene();
     }
     else {
-        while (!glfwWindowShouldClose(window)) {
+        while (!game->Finished()) {
             const auto currentFrame = static_cast<float>(glfwGetTime());
             deltaTime = currentFrame - lastFrame;
             lastFrame = currentFrame;
@@ -56,11 +56,6 @@ int main(const int argc, const char* argv[]) {
             game->ProcessInput(deltaTime);
             game->Update(deltaTime);
             game->Render();
-
-            // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
-            // -------------------------------------------------------------------------------
-            glfwSwapBuffers(window);
-            glfwPollEvents();
         }
     }
 

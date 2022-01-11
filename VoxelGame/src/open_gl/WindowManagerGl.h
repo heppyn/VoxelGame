@@ -11,6 +11,7 @@ class WindowManagerGl {
 
     static GLFWwindow* CreateMainWindow(bool debug = false);
     static void CloseMainWindow();
+    static bool ShouldCloseMainWindow();
     static void MaximizeWindow();
     static void SetCursorPosCallback(GLFWcursorposfun callback);
     static void SetScrollCallback(GLFWcursorposfun callback);
@@ -22,6 +23,10 @@ class WindowManagerGl {
      * \param height new height
      */
     static void FramebufferSizeCallback([[maybe_unused]] GLFWwindow* window, int width, int height);
+    /**
+     * \brief swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
+     */
+    static void EndFrame();
 
   private:
     // singleton

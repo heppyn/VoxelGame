@@ -17,6 +17,7 @@ class Game {
     void Render() const;
     void ExportScene();
 
+    [[nodiscard]] bool Finished() const;
     [[nodiscard]] unsigned int Width() const;
     [[nodiscard]] unsigned int Height() const;
     [[nodiscard]] Renderer::Camera* GetCamera() const { return Camera.get(); }

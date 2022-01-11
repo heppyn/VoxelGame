@@ -61,6 +61,10 @@ void WindowManagerGl::CloseMainWindow() {
     glfwSetWindowShouldClose(MainWindow, true);
 }
 
+bool WindowManagerGl::ShouldCloseMainWindow() {
+    return glfwWindowShouldClose(MainWindow);
+}
+
 void WindowManagerGl::MaximizeWindow() {
     glfwMaximizeWindow(MainWindow);
 }
@@ -84,4 +88,9 @@ void WindowManagerGl::FramebufferSizeCallback([[maybe_unused]] GLFWwindow* windo
     Width = static_cast<unsigned int>(width);
     Height = static_cast<unsigned int>(height);
     glViewport(0, 0, width, height);
+}
+
+void WindowManagerGl::EndFrame() {
+    glfwSwapBuffers(MainWindow);
+    glfwPollEvents();
 }
