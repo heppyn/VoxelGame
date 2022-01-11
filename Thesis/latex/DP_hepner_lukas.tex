@@ -270,7 +270,7 @@ Implementace želvy se nachází ve jmenném prostoru \texttt{LSystems::Detail},
 \item Výchozí velikost generovaných objektů. Lze určit rozsahem korespondujícím s počtem derivací.
 \end{itemize}
 
-Přidání náhodného úhlu má výrazný efekt na organický vzhled rostliny. Na obrázku níže lze vidět akáciové stromy vyznačující se plochou korunou. V definici L-systému jsou všechny listy ve stejné výšce, výsledný rozdíl ve výškách je způsoben opakovaným rotováním želvy. V zápisu lze vidět, že se želva otočí o 45\degree nahoru (~$\hat{}$~), pokládá větve (u, U), skloní se o 45\degree (\&) a pokládá listy (F). Listy by tak měly být ve stejné rovině, ale nejsou.
+Přidání náhodného úhlu má výrazný efekt na organický vzhled rostliny. Na obrázku~\ref{fig:acacia_random_angle_leaves} lze vidět akáciové stromy vyznačující se plochou korunou. V definici L-systému jsou všechny listy ve stejné výšce, výsledný rozdíl ve výškách je způsoben opakovaným rotováním želvy. V zápisu lze vidět, že se želva otočí o 45\degree nahoru (~$\hat{}$~), pokládá větve (u, U), skloní se o 45\degree (\&) a pokládá listy (F). Listy by tak měly být ve stejné rovině, ale nejsou.
 
 L-systém generující akácie:
 
@@ -290,10 +290,71 @@ A > uE
 E > x[++++UE1S&F+F+F+F]+UE
 E > x[++++++UE1S&F+F+F+F]++UE
 E > x[++UE1S&F+F+F+F]-UE
-
 \end{verbatim}
 
+\begin{figure}\centering
+	\includegraphics[width=\textwidth]{images/acacia_random_angle_leaves}
+	\caption[Nepravidelná koruna akáciového stromu]{Nepravidelná koruna akáciového stromu}\label{fig:acacia_random_angle_leaves}
+\end{figure}
 
+Výstupem generátoru je 2D pole obsahující herní objekty rozdělené podle čísla výstupního bufferu, který měla želva při generování. Část enginu je tak odstíněna od textur, které jsou definované v~části procedurálního generátoru. Díky tomuto rozdělení modelu je možné snadno měnit textury pro jednotlivá pole. Procedurální generátor tohoto využívá a~používá stejný model -- jiný běh generátoru -- pro vytváření bříz a~dubů, lišících se texturou kmene a listů.
+
+\section{Modelování rostlin}
+
+Při modelování vegetace bylo třeba velkého množství pokusů a~ladění, kdy rostlina nevypadala přirozeně, ale nebylo jasné, v jaké časti gramatiky je problém. Nejvíce se mi osvědčila technika nalezení reálné rostliny obrázek~\ref{fig:acacia_nature} a~následné pokusy o její napodobení obrázek~\ref{fig:acacia_engine}.
+
+Velice se osvědčilo pravidlo:
+
+\begin{verbatim}
+U > uU
+\end{verbatim}
+
+Díky němuž jsou větve blíže k zemi delší než větve navazující na korunu stromu. Pokud má rostlina význačné části je vhodné je modelovat samostatně (kmen, větve, koruna) viz L-systém generující akácie.
+
+\begin{figure}\centering
+	\includegraphics[width=\textwidth]{images/acacia_nature}
+	\caption[Akáciový strom rostoucí v přírodě]{Akáciový strom rostoucí v přírodě~\cite{acacia}}\label{fig:acacia_nature}
+\end{figure}
+
+\begin{figure}\centering
+	\includegraphics[width=\textwidth]{images/acacia_engine}
+	\caption[Model akáciového stromu]{Model akáciového stromu}\label{fig:acacia_engine}
+\end{figure}
+
+Tato technika ne vždy přinášela ovoce. Modelování trávy rostoucí na planinách se projevilo jako problém. Tráva neměla dostatečnou hustotu a nezapadala do kresleného vzhledu obrázek~\ref{fig:grass_plains}. S navyšujícím se počtem herních objektů dramaticky rostla spotřeba paměti. Jeden herní objekt s texturou trávy byl nahrazen desítkami herních objektů, z kterých se skládal model trávy. Tento problém by mohl být řešen přesunem vytváření modelu na grafickou kartu, přidáním vertexů v geometry shaderu.
+
+\begin{figure}\centering
+	\includegraphics[width=\textwidth]{images/grass_plains}
+	\caption[Tráva na planinách]{Tráva na planinách}\label{fig:grass_plains}
+\end{figure}
+
+Výsledné modely svou topologií připomínaly strukturu keřů. Byly proto upraveny –- přidáním listí, změnou větvení –- a využity v generátoru keřů.
+
+\subsection{Simulace růstu}
+Křovinatý biotop je porostlý dvěma druhy keřů rozděleným do třech fází růstu. Ty jsou simulovány opakovaným derivováním počátečního axiomu. Keře nejmenšího vzrůstu jsou derivovány 2x, největší keře jsou derivovány 4x. Tloušťka kmene koreluje lineárně s počtem provedených derivací. Větší stromy mají širší kmen a dorůstají vyšší výšky.
+
+Každý druh si zachovává své typické vlastnosti. Na obrázku~\ref{fig:shrub_evolution}\footnote{Pro větší názornost byly odstraněny části modelu představující listy.}  lze pozorovat stejné zakončení větví –- rozdělení do dvou větví rostoucích na opačné strany –- a~podobný úhel v~jakém se větve oddělují od kmene. Topologie rostliny se díky stochastickému L-systému mění mezi jednotlivými jedinci.
+
+\begin{figure}\centering
+	\includegraphics[width=\textwidth]{images/shrub_evolution}
+	\caption[Fáze růstu keře]{Fáze růstu keře}\label{fig:shrub_evolution}
+\end{figure}
+
+Díky těmto krokům biotop obsahuje rostliny navzájem podobného vzhledu, lišících se v~drobných detailech.
+
+\section{Výsledky použití L-systémů}
+Definice L-systémů jsou krátké ($\approx$10 řádků na jeden druh rostliny) a produkují velké množství rozdílných jedinců. Předchozí manuální definování rostlin v kódu bylo náročnější, a i při přidání více jedinců pro každý druh, by bylo snadné najít stejné. Odebráním definic rostlin z kódu se zvýšila jeho čitelnost –- definice L-systémů jsou zdroje dat, který engine konzumuje. Nutnost kompilace při změně modelu byla odstraněna a zvýšila se rychlost iterace, s kterou je možné upravovat model.
+
+Vytvořením vlastního formátu pro zápis modelu rostliny se oddělila závislost na programovacím jazyce. Modely tak může vytvářet jiný člen týmu bez znalosti programování a překladu kódu.
+
+Generováním rostlin za běhu programu se snížila rychlost jeho běhu. Tento problém lze mitigovat cachováním rostlin obsahujících velké množství herních objektů. Toto bylo provedeno pro keře. Před spuštěním generace terénu je naplněn buffer obsahující keře vygenerované na základě seedu. Buffer musí být dostatečně velký na to, aby nedošlo ke snížení diverzity rostlin. Při vytváření keře na scéně je vybrán náhodný index do bufferu, závislý na pozici keře. Vybraný model je zkopírován a přesunut na dané místo.
+
+Při porovnání scény~\ref{fig:identicke_stromy} ze začátku kapitoly si lze všimnout přirozenějšího vzhledu krajiny. Koruny stromů se mohou překrývat, scéna díky tomu působí více organicky –- stromy v přírodě nemají přesně stanové hranice, kde končí jeden a začíná druhý. Výsledná scenérie~\ref{fig:new_vegetation} působí méně jednolitě díky rozdílným vývojovým stádiím rostlin.
+
+\begin{figure}\centering
+	\includegraphics[width=\textwidth]{images/new_vegetation}
+	\caption[Vegetace vygenerovaná na základě L-systémů]{Vegetace vygenerovaná na základě L-systémů}\label{fig:new_vegetation}
+\end{figure}
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
 % % ZAVER
