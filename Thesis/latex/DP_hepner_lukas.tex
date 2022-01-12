@@ -25,6 +25,7 @@
 % \makeglossaries
 
 \usepackage{gensymb} %symbol stupne
+\usepackage{todonotes}
 
 \newcommand{\tg}{\mathop{\mathrm{tg}}} %cesky tangens
 \newcommand{\cotg}{\mathop{\mathrm{cotg}}} %cesky cotangens
@@ -59,6 +60,184 @@
 \end{introduction}
 
 \chapter{Cíl práce}
+
+\chapter{Herní engine}
+\todo{Historie herních enginů?}
+Herní engine zajišťuje vykreslování scény a komunikaci s grafickou kartou, zpracování vstupu od uživatele, správu zdrojů. Poskytuje třídy s obecnou funkcionalitou, využívané generátorem terénu. Mezi ně patří:
+
+\begin{itemize}
+\item Práce s náhodnými jevy.
+\item Načítání a generování L-systémů.
+\item Továrna pro vytváření herních objektů.
+\item Správa textur.
+\end{itemize}
+
+\section{Herní smyčka}
+Moderní grafické programy nezpracovávají data dávkově, ale obvykle čekají na vstup od uživatele, který následně zpracují. Na rozdíl od většiny softwaru, hry běží i když uživatel neposkytuje žádný vstup. Hra nezamrzne, animace se vykreslují, monstra se pohybují po scéně. Klíčovou částí je neblokující zpracování vstupu~\cite{gpp_gl}.
+
+\begin{verbatim}
+while (true) {
+  processInput();
+  update();
+  render();
+}
+\end{verbatim}
+
+Základními kameny jsou zpracování vstupu, co se stal od posledního volání \texttt{processInput}. \texttt{update} posune herní simulaci o jeden krok. \texttt{render} na závěr vše vykreslí na obrazovku. Zde vyvstává otázka, jak rychle herní smyčka běží.
+
+\subsection{Variabilní časový krok}
+Mějme dva hráče. První má výkonný počítač a hra běží rychlostí 60 FPS (snímků za vteřinu). Druhý hráč má méně výkonný počítač a hra běží rychlostí 6 FPS. Avatar druhého hráče by se pohyboval pouze desetinovou rychlostí. Rychlost hry je přímo závislá na rychlosti hardwaru.
+
+Pokud nemáme kontrolu nad hardwarem, na kterém hra běží, je toto řešení nepřípustné. Implementace musí brát v potaz, jak dlouho trvá jedna iterace herní smyčky, a podle ní zvětšit nebo zmenšit krok o který bude simulace posunuta vpřed.
+
+\begin{verbatim}
+while (!game->Finished()) {
+    const auto currentFrame = static_cast<float>(glfwGetTime());
+    deltaTime = currentFrame - lastFrame;
+    lastFrame = currentFrame;
+
+    game->ProcessInput(deltaTime);
+    game->Update(deltaTime);
+    game->Render();
+}
+\end{verbatim}
+
+Metodám měnícím herní stav je předána hodnota \texttt{deltaTime}. Vykreslení zachycuje stav scény v okamžiku zavolání, proto nezávisí na \texttt{deltaTime}. 
+
+\section{Zpracování vstupu}
+
+O vstup z klávesnice a myši se stará abstraktní třída \texttt{InputHandler}, obsahující pole příkazů (třída \texttt{Command}) ovládajících kameru. Konkrétní implementaci má na starosti třída \texttt{InputHandlerGl}, pevně svázaná s voláními OpenGL.
+
+Vstup je zpracován dvojím způsobem:
+
+\begin{enumerate}
+\item \texttt{ProcessInput}, voláno v rámci herní smyčky.
+\item Zpětné volání z OpenGL.
+\end{enumerate}
+
+Pohyb hráče zajišťuje metoda \texttt{ProcessInput}. Délka pohybu je škálována parametrem \texttt{delta}. Vstupy jsou zpracovány při volání metody, kontrolou kláves, které jsou právě stlačené. Tento způsob je ideální pro kontinuální změnu stavu (např. pozice) objektu. Hráč může klávesu držet pro plynulý pohyb, nebo ji opakovaně mačkat pro drobné korekce.
+
+Tento způsob je naprosto nevhodný pro změnu stavu nabývajícího několika diskrétních hodnot. Například vypnutí/zapnutí světla. Hráč musí klávesu stisknout a~pustit po dobu trvání jednoho snímku –- při 60~FPS na 16,67~ms. Při běžném stisknutí může dojít k několikanásobné změně stavu.
+
+\subsection{Zpětné volání z OpenGL}
+
+K zamezení opakovaného čtení stisknuté klávesy lze využít nastavení funkce, kterou OpenGL zavolá při stisknutí klávesy. Signatura této funkce musí být~\cite{glfw_callback}:
+
+\begin{verbatim}
+void function_name(
+    GLFWwindow* window,
+    int key, 
+    int scancode, 
+    int action, 
+    int mods
+)
+\end{verbatim}
+
+Výhody třídní hierarchie (dědění z obecné třídy pro zpracování vstupu a její konkrétní implementace pro OpenGL, možnost mít více objektů kontrolujících vstup a jejich výměna pro změnu ovládaní) znemožňují nastavení přímého volání metody z OpenGL. Zpětné volání zajišťují funkce umístěné ve~jmenném prostoru \texttt{Input::Detail}.
+
+\begin{verbatim}
+namespace Input::Detail {
+void CursorPosCallback(GLFWwindow*, double xPos, double yPos) {
+    currentHandler->ProcessMouse(
+        static_cast<float>(xPos),
+        static_cast<float>(yPos));
+}
+
+void ScrollCallback(GLFWwindow*, double, double yOffset) {
+    currentHandler->ProcessMouseScroll(
+        static_cast<float>(yOffset));
+}
+
+void KeyCallback(GLFWwindow*, int key, 
+                 int scanCode, int action, int mods) {
+    currentHandler->ProcessKey(key, scanCode, action, mods);
+}
+} // namespace Input::Detail
+\end{verbatim}
+
+Tyto funkce nejsou umístěné v hlavičkovém souboru a uživatel by je neměl napřímo využívat.  Zpětné volání je automaticky nastaveno při inicializaci objektu.
+
+\begin{verbatim}
+void Input::InputHandlerGl::SetCallBacks()
+{
+Detail::currentHandler = this;
+WindowManagerGl::SetCursorPosCallback(Detail::CursorPosCallback);
+WindowManagerGl::SetScrollCallback(Detail::ScrollCallback);
+WindowManagerGl::SetKeyCallback(Detail::KeyCallback);
+}
+\end{verbatim}
+
+Jmenný prostor \texttt{Input::Detail} obsahuje pouze jednu proměnnou, označující současný objekt zpracovávající vstup.
+
+\subsection{Návrhový vzor příkaz}
+Jednoduchá implementace kódu zpracovávajícího vstup by mohla vypadat:
+
+\missingfigure{obrázek klávesnice s voláním metod}
+
+\begin{verbatim}
+void InputHandler::handleInput() {
+    if (isPressed(BUTTON_W)) object.MoveForward();
+    else if (isPressed(BUTTON_S)) object.MoveBackward();
+    else if (isPressed(BUTTON_A)) object.MoveLeft();
+    else if (isPressed(BUTTON_D)) object.MoveRight();
+}
+\end{verbatim}
+
+Tento kód funguje, pokud jsme ochotni natvrdo zadrátovat vstup hráče k~herním akcím, ale hodně her hráče nechá nakonfigurovat si vlastní mapování tlačítek. K tomuto potřebujeme vyměnit přímé volání metody A za metodu B. K tomu potřebujeme objekt reprezentující volání metody~\cite{gpp_cmd}.
+
+Definujme abstraktní třídu \texttt{Command} představující spustitelný příkaz.
+
+\begin{verbatim}
+class Command {
+  protected:
+    Renderer::Camera* Actor;
+
+  public:
+    explicit Command(Renderer::Camera* actor) : Actor(actor) {}
+    virtual ~Command() = default;
+
+    virtual void Execute(float delta) = 0;
+};
+\end{verbatim}
+
+V konkrétní implementaci příkazu je z něj poděděno a metoda \texttt{Execute} přepsána pro specifické chování.
+
+\begin{verbatim}
+class MoveForwardCommand : public Command {
+  public:
+    explicit MoveForwardCommand(Renderer::Camera* actor) 
+        : Command(actor) {}
+    void Execute(float delta) override {
+        Actor->Move(delta, 0.0, 1.0);
+	}
+};
+\end{verbatim}
+
+\texttt{InputHandler} je odstíněn od volání prováděných na \texttt{actor}, sníží se tak spojení mezi třídami a zvýší se soudržnost (high cohesion) \texttt{InputHandler} – má na starosti zpracování vstupu, ne ovládání herní postavy.
+
+\missingfigure{diagram tříd -- high cohesion}
+
+Příkazy jsou uloženy v poli:
+\begin{verbatim}
+std::array<std::unique_ptr<Commands::Command>, Keys::Count> 
+    Commands
+\end{verbatim}
+Toto pole je naplněno při inicializaci \texttt{InputHandler}u, neobsahuje tedy žádné \texttt{nullptr} ukazatele. Při odstranění příkazu reagujícího na stlačení tlačítka, by při jeho stisku došlo k vyhození \texttt{nullptr} výjimky a pádu programu. Toto chování může být ošetřeno důslednou kontrolou obsahu \texttt{unique\_ptr}, byl by tím ovšem porušen objektový návrh. Řešení použité v enginu je \texttt{NullCommand}.
+
+\begin{verbatim}
+class NullCommand : public Command {
+  public:
+    NullCommand() : NullCommand(nullptr) {}
+    explicit NullCommand(Renderer::Camera*) :Command(nullptr){}
+    void Execute(float) override {}
+};
+\end{verbatim}
+
+Toto řešení zachovává principy objektového návrhu. Přijímá parametr \texttt{actor}, svému předku však předá \texttt{nullptr}. Tělo metody \texttt{Execute} je prázdné a s \texttt{actor}em není interagováno. Volání metody \texttt{Execute} mohou být bezpečně provedena na všech prvcích pole.
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+% % Modelování rostlin s využitím L-systémů
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % 
 
 \chapter{Modelování rostlin s využitím L-systémů}
 Herní svět obsahuje velké množství vegetace a ač jsou si všechny stromy, keře typově podobné, hráč si velice rychle všimne, že jsou identické. Na obrázku~\ref{fig:identicke_stromy} vidíme tři druhy stromů, které jsou zkopírované po scéně. Stromy v levé zadní části mají různou výšku, přesto působí umělým dojmem.
