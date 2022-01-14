@@ -23,6 +23,8 @@ class BlockFaces {
     static BlockFaces CreateBlockFaces(Types... faces) {
         return GenerateBlockFaces(0, faces...);
     }
+
+    [[nodiscard]] bool HasFace(Faces face) const;
     
     auto operator<=>(const BlockFaces& other) const = default;
   private:
@@ -40,4 +42,7 @@ class BlockFaces {
 
     static uint8_t SetBlockFace(uint8_t value, Faces face);
 };
+
+const BlockFaces ALL_SIDES = BlockFaces::CreateBlockFaces(Faces::ALL);
+const BlockFaces PIPE = BlockFaces::CreateBlockFaces(Faces::FRONT, Faces::BACK, Faces::LEFT, Faces::RIGHT);
 } // namespace Engine::Cube

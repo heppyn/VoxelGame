@@ -57,4 +57,19 @@ TEST_CASE("Block faces test", "[engine, block_faces]") {
           Engine::Cube::BlockFaces::CreateBlockFaces(Engine::Cube::Faces::ALL)
           > Engine::Cube::BlockFaces::CreateBlockFaces(Engine::Cube::Faces::FRONT));
     }
+
+    SECTION("Has face") {
+        REQUIRE(Engine::Cube::ALL_SIDES.HasFace(Engine::Cube::Faces::ALL));
+        REQUIRE(Engine::Cube::ALL_SIDES.HasFace(Engine::Cube::Faces::TOP));
+        REQUIRE(Engine::Cube::ALL_SIDES.HasFace(Engine::Cube::Faces::BOTTOM));
+        REQUIRE(Engine::Cube::ALL_SIDES.HasFace(Engine::Cube::Faces::FRONT));
+        REQUIRE(Engine::Cube::ALL_SIDES.HasFace(Engine::Cube::Faces::BACK));
+        REQUIRE(Engine::Cube::ALL_SIDES.HasFace(Engine::Cube::Faces::LEFT));
+        REQUIRE(Engine::Cube::ALL_SIDES.HasFace(Engine::Cube::Faces::RIGHT));
+
+        REQUIRE(Engine::Cube::PIPE.HasFace(Engine::Cube::Faces::FRONT));
+        REQUIRE(Engine::Cube::PIPE.HasFace(Engine::Cube::Faces::BACK));
+        REQUIRE(Engine::Cube::PIPE.HasFace(Engine::Cube::Faces::LEFT));
+        REQUIRE(Engine::Cube::PIPE.HasFace(Engine::Cube::Faces::RIGHT));
+    }
 }
