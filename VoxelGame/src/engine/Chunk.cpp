@@ -10,14 +10,13 @@ float Chunk::ChunkSize{ 16.0f };
 
 Chunk::Chunk(const glm::vec2& position)
   : Position(position), BlockInfos_(static_cast<size_t>(ChunkSize), std::vector(static_cast<size_t>(ChunkSize), BlockInfo())) {
-    InstancesData_ = std::make_shared<std::vector<glm::mat4>>();
-    InstancesDataTrans_ = std::make_shared<std::vector<glm::mat4>>();
+    InstancesData_[DefaultCube_] = std::make_shared<std::vector<glm::mat4>>();
 }
 
 Chunk::Chunk(const glm::vec2& position, std::vector<GameObject>&& objects)
-  : Position(position), Objects_(std::move(objects)), BlockInfos_(static_cast<size_t>(ChunkSize), std::vector(static_cast<size_t>(ChunkSize), BlockInfo())) {
-    InstancesData_ = std::make_shared<std::vector<glm::mat4>>();
-    InstancesDataTrans_ = std::make_shared<std::vector<glm::mat4>>();
+  : Position(position), BlockInfos_(static_cast<size_t>(ChunkSize), std::vector(static_cast<size_t>(ChunkSize), BlockInfo())) {
+    Objects_[DefaultCube_] = std::move(objects);
+    InstancesData_[DefaultCube_] = std::make_shared<std::vector<glm::mat4>>();
     GenerateInstanceData();
     // not used now
     //RecalculateBlockHeights();
@@ -29,43 +28,79 @@ void Chunk::GenerateInstanceData() {
 }
 
 void Chunk::FinisChunk() {
-    Objects_.shrink_to_fit();
-    ObjectsTrans_.shrink_to_fit();
+    for (auto& [_, objects] : Objects_) {
+        objects.shrink_to_fit();
+    }
+    for (auto& [_, objects] : ObjectsTrans_) {
+        objects.shrink_to_fit();
+    }
     GenerateInstanceData();
 }
 
 // don't make const because data in pointer are changed
 void Chunk::AddObjectData(std::vector<glm::mat4>&& objects) {
-    InstancesData_->insert(
-      InstancesData_->end(),
+    // TODO: choose cube, if so create shared ptr
+    InstancesData_[DefaultCube_]->insert(
+      InstancesData_[DefaultCube_]->end(),
       std::make_move_iterator(objects.begin()),
       std::make_move_iterator(objects.end()));
 }
 
-std::shared_ptr<std::vector<glm::mat4>> Chunk::GetInstancesData() const {
-    assert(!InstancesData_->empty());
+void Chunk::AddObject(GameObject&& object, Engine::Cube::BlockFaces faces) {
+    Objects_[faces].emplace_back(std::move(object));
+}
+void Chunk::AddObjectTrans(GameObject&& object, Engine::Cube::BlockFaces faces) {
+    ObjectsTrans_[faces].emplace_back(std::move(object));
+}
+
+void Chunk::AddObjects(std::vector<GameObject>&& objects, Engine::Cube::BlockFaces faces) {
+    Objects_[faces].insert(
+      Objects_[faces].end(),
+      std::make_move_iterator(objects.begin()),
+      std::make_move_iterator(objects.end()));
+}
+void Chunk::AddObjectsTrans(std::vector<GameObject>&& objects, Engine::Cube::BlockFaces faces) {
+    ObjectsTrans_[faces].insert(
+      ObjectsTrans_[faces].end(),
+      std::make_move_iterator(objects.begin()),
+      std::make_move_iterator(objects.end()));
+}
+
+const std::map<Engine::Cube::BlockFaces, std::shared_ptr<std::vector<glm::mat4>>>& Chunk::GetInstancesData() const {
+    assert(!InstancesData_.at(DefaultCube_)->empty());
 
     return InstancesData_;
 }
 
-const std::vector<GameObject>& Chunk::GetObjects() const {
+std::map<Engine::Cube::BlockFaces, std::shared_ptr<std::vector<glm::mat4>>>& Chunk::GetInstancesData() {
+    assert(!InstancesData_.at(DefaultCube_)->empty());
+
+    return InstancesData_;
+}
+
+const std::map<Engine::Cube::BlockFaces, std::vector<GameObject>>& Chunk::GetObjects() const {
     return Objects_;
 }
 
-std::vector<GameObject>& Chunk::GetObjects() {
+std::map<Engine::Cube::BlockFaces, std::vector<GameObject>>& Chunk::GetObjects() {
     return Objects_;
 }
 
-std::shared_ptr<std::vector<glm::mat4>> Chunk::GetInstancesDataTrans() const {
+std::map<Engine::Cube::BlockFaces, std::shared_ptr<std::vector<glm::mat4>>>& Chunk::GetInstancesDataTrans() {
     // can be empty if no transparent textures are present in the chunk
     return InstancesDataTrans_;
 }
 
-const std::vector<GameObject>& Chunk::GetObjectsTrans() const {
+const std::map<Engine::Cube::BlockFaces, std::shared_ptr<std::vector<glm::mat4>>>& Chunk::GetInstancesDataTrans() const {
+    // can be empty if no transparent textures are present in the chunk
+    return InstancesDataTrans_;
+}
+
+const std::map<Engine::Cube::BlockFaces, std::vector<GameObject>>& Chunk::GetObjectsTrans() const {
     return ObjectsTrans_;
 }
 
-std::vector<GameObject>& Chunk::GetObjectsTrans() {
+std::map<Engine::Cube::BlockFaces, std::vector<GameObject>>& Chunk::GetObjectsTrans() {
     return ObjectsTrans_;
 }
 
@@ -88,25 +123,31 @@ void Chunk::RecalculateBlockHeights() {
         }
     }
 
-    for (const auto& o : Objects_) {
-        GetBlockInfo(o.Position()).SetSurfaceHeight(
-            std::max(GetBlockInfo(o.Position()).GetSurfaceHeight(), o.Position().y));
+    for (const auto& o : Objects_[DefaultCube_]) {
+        GetBlockInfo(o.Position()).SetSurfaceHeight(std::max(GetBlockInfo(o.Position()).GetSurfaceHeight(), o.Position().y));
     }
 }
 
-void Chunk::GenerateInstanceData(const std::vector<GameObject>& objects, std::shared_ptr<std::vector<glm::mat4>> buffer) {
-    // don't clear if objects data were added
-    // chunks are not regenerated
-    buffer->reserve(buffer->size() + objects.size());
+void Chunk::GenerateInstanceData(
+  const std::map<Engine::Cube::BlockFaces, std::vector<GameObject>>& objects,
+  std::map<Engine::Cube::BlockFaces, std::shared_ptr<std::vector<glm::mat4>>>& buffer) {
+    for (auto& [cube, obs] : objects) {
+        if (!buffer.contains(cube)) {
+            buffer[cube] = std::make_shared<std::vector<glm::mat4>>();
+        }
+        // don't clear if objects data were added
+        // chunks are not regenerated
+        buffer[cube]->reserve(buffer[cube]->size() + objects.size());
 
-    for (const auto& o : objects) {
-        assert(o.HasComponent<Components::Transform>());
-        auto model = o.GetComponent<Components::Transform>().ModelMat();
+        for (const auto& o : obs) {
+            assert(o.HasComponent<Components::Transform>());
+            auto model = o.GetComponent<Components::Transform>().ModelMat();
 
-        assert(o.HasComponent<Components::SpritesheetTex>());
-        const auto& texPos = o.GetComponent<Components::SpritesheetTex>().GetTexPos();
-        Helpers::Math::PackVecToMatrix(model, texPos);
+            assert(o.HasComponent<Components::SpritesheetTex>());
+            const auto& texPos = o.GetComponent<Components::SpritesheetTex>().GetTexPos();
+            Helpers::Math::PackVecToMatrix(model, texPos);
 
-        buffer->push_back(model);
+            buffer[cube]->push_back(model);
+        }
     }
 }

@@ -9,9 +9,12 @@ namespace Renderer {
 class SceneRenderer {
   private:
     Camera* Camera;
-    CubeRenderer CubeRenderer{};
-    unsigned int InstanceDataBufferId_{ 0 };
-    size_t BufferSize_{ 0 };
+    //CubeRenderer CubeRenderer{};
+    std::map<Engine::Cube::BlockFaces, CubeRenderer> CubeRenderers_{};
+    std::map<Engine::Cube::BlockFaces, unsigned> InstanceDataBufferIds_{};
+    //unsigned int InstanceDataBufferId_{ 0 };
+    std::map<Engine::Cube::BlockFaces, size_t> BufferSizes_{};
+    //size_t BufferSize_{ 0 };
 
   public:
     explicit SceneRenderer(Renderer::Camera* camera);

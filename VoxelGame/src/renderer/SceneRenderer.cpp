@@ -9,7 +9,7 @@ Renderer::SceneRenderer::SceneRenderer(Renderer::Camera* camera)
 }
 
 void Renderer::SceneRenderer::Init() {
-    CubeRenderer.Init();
+    //CubeRenderer.Init();
 }
 
 void Renderer::SceneRenderer::Render(const Scene& scene, unsigned width, unsigned height) {
@@ -58,44 +58,92 @@ void Renderer::SceneRenderer::Render(const Scene& scene, unsigned width, unsigne
         shaders[i]->SetFloat("light.quadratic", 0.0028f);
     }
 
-    // render all objects at once
-    CubeRenderer.SetShader(shaders[2]);
-    CubeRenderer.DrawCubesBatched(scene.GetSceneSize());
+    // render objects depending on cube sides
+    for (auto& [cube, cubeRenderer] : CubeRenderers_) {
+        // render all objects at once
+        cubeRenderer.SetShader(shaders[2]);
+        glBindBuffer(GL_ARRAY_BUFFER, InstanceDataBufferIds_[cube]);
+        cubeRenderer.DrawCubesBatched(scene.GetSceneSize(cube));
+    }
+
+    //// render all objects at once
+    //CubeRenderer.SetShader(shaders[2]);
+    //CubeRenderer.DrawCubesBatched(scene.GetSceneSize());
 
     // draw light separately
-    CubeRenderer.SetShader(shaders[0]);
-    scene.GetLights().front().Draw(CubeRenderer);
+    // doesn't matter which renderer
+    assert(~CubeRenderers_.empty());
+    CubeRenderers_.begin()->second.SetShader(shaders[0]);
+    scene.GetLights().front().Draw(CubeRenderers_.begin()->second);
 }
 
 void Renderer::SceneRenderer::BindInstancesData(const Scene& scene) {
-    const auto instancesData = scene.GetRenderableObjectsData();
-    const size_t newSize = 3 * sizeof(glm::mat4) * scene.GetSceneSize();
+    for (const auto& instancesDataMap = scene.GetRenderableObjectsData();
+        const auto& [cube, instancesData] : instancesDataMap) {
+        const size_t newSize = 3 * sizeof(glm::mat4) * scene.GetSceneSize(cube);
 
-    // configure instanced array
-    if (!InstanceDataBufferId_) {
-        glGenBuffers(1, &InstanceDataBufferId_);
-        glBindBuffer(GL_ARRAY_BUFFER, InstanceDataBufferId_);
+        // configure instanced array
+        if (!InstanceDataBufferIds_.contains(cube)) {
+            glGenBuffers(1, &InstanceDataBufferIds_[cube]);
+            glBindBuffer(GL_ARRAY_BUFFER, InstanceDataBufferIds_[cube]);
+
+            // create cube renderer first time cube with x sides is used
+            // TODO: don't create default renderer
+            CubeRenderers_[cube] = {};
+            CubeRenderers_[cube].Init();
+        }
+
+        // allocate memory
+        if (!BufferSizes_.contains(cube) || BufferSizes_[cube] < newSize) {
+            BufferSizes_[cube] = newSize;
+
+            glBindBuffer(GL_ARRAY_BUFFER, InstanceDataBufferIds_[cube]);
+            glBufferData(
+              GL_ARRAY_BUFFER,
+              static_cast<long>(BufferSizes_[cube]),
+              nullptr,
+              GL_STATIC_DRAW);
+        }
+
+        // bind data
+        glBindBuffer(GL_ARRAY_BUFFER, InstanceDataBufferIds_[cube]);
+        unsigned offset = 0;
+        for (const auto& chunk : instancesData) {
+            glBufferSubData(GL_ARRAY_BUFFER, offset * sizeof(glm::mat4), chunk->size() * sizeof(glm::mat4), chunk->data());
+            offset += chunk->size();
+        }
+
+        // TODO: don't bing default mesh
+        CubeRenderers_[cube].GetDefaultMesh().BindBatchAttribPtrs();
     }
 
-    // allocate memory
-    if (BufferSize_ < newSize) {
-        BufferSize_ = newSize;
+    //const size_t newSize = 3 * sizeof(glm::mat4) * scene.GetSceneSize();
 
-        glBindBuffer(GL_ARRAY_BUFFER, InstanceDataBufferId_);
-        glBufferData(
-          GL_ARRAY_BUFFER,
-          BufferSize_,
-          nullptr,
-          GL_STATIC_DRAW);
-    }
+    //// configure instanced array
+    //if (!InstanceDataBufferId_) {
+    //    glGenBuffers(1, &InstanceDataBufferId_);
+    //    glBindBuffer(GL_ARRAY_BUFFER, InstanceDataBufferId_);
+    //}
 
-    // bind data
-    glBindBuffer(GL_ARRAY_BUFFER, InstanceDataBufferId_);
-    unsigned offset = 0;
-    for (const auto& chunk : instancesData) {
-        glBufferSubData(GL_ARRAY_BUFFER, offset * sizeof(glm::mat4), chunk->size() * sizeof(glm::mat4), chunk->data());
-        offset += chunk->size();
-    }
+    //// allocate memory
+    //if (BufferSize_ < newSize) {
+    //    BufferSize_ = newSize;
 
-    CubeRenderer.GetDefaultMesh().BindBatchAttribPtrs();
+    //    glBindBuffer(GL_ARRAY_BUFFER, InstanceDataBufferId_);
+    //    glBufferData(
+    //      GL_ARRAY_BUFFER,
+    //      BufferSize_,
+    //      nullptr,
+    //      GL_STATIC_DRAW);
+    //}
+
+    //// bind data
+    //glBindBuffer(GL_ARRAY_BUFFER, InstanceDataBufferId_);
+    //unsigned offset = 0;
+    //for (const auto& chunk : instancesData) {
+    //    glBufferSubData(GL_ARRAY_BUFFER, offset * sizeof(glm::mat4), chunk->size() * sizeof(glm::mat4), chunk->data());
+    //    offset += chunk->size();
+    //}
+
+    //CubeRenderer.GetDefaultMesh().BindBatchAttribPtrs();
 }

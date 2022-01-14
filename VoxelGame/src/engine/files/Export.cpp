@@ -39,13 +39,17 @@ void Engine::Files::Export::ExportChunk(std::ofstream& stream, const Chunk& chun
     stream.seekp(-1, std::ios_base::end);
     stream << "],\"objects\":[";
 
-    for (const auto data = chunk.GetInstancesData();
-         const auto& model : *data) {
-        stream << Helpers::PackedMatToString(model) << ',';
+    for (const auto& map = chunk.GetInstancesData();
+         const auto& [_, data] : map) {
+        for (const auto& model : *data) {
+            stream << Helpers::PackedMatToString(model) << ',';
+        }
     }
-    for (const auto data = chunk.GetInstancesDataTrans();
-         const auto& model : *data) {
-        stream << Helpers::PackedMatToString(model) << ',';
+    for (const auto& map = chunk.GetInstancesDataTrans();
+         const auto& [_, data] : map) {
+        for (const auto& model : *data) {
+            stream << Helpers::PackedMatToString(model) << ',';
+        }
     }
 
     // delete ','

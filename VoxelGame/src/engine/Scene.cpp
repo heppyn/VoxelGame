@@ -34,12 +34,15 @@ void Scene::UpdateOrig() {
                 for (auto& o : objects[0]) {
                     o.AddComponent<Components::SpritesheetTex>(glm::vec2(1.0f, 0.0f));
                 }
-                chunk.GetObjects().insert(chunk.GetObjects().end(), std::make_move_iterator(objects[0].begin()), std::make_move_iterator(objects[0].end()));
+                chunk.GetObjects()[Chunk::DefaultCube_].insert(
+                  chunk.GetObjects()[Chunk::DefaultCube_].end(),
+                  std::make_move_iterator(objects[0].begin()),
+                  std::make_move_iterator(objects[0].end()));
 
                 pos += glm::vec3(10.0f, 0.0f, 0.0f);
             }
             chunk.FinisChunk();
-            ObjectsDataCache_.push_back(chunk.GetInstancesData());
+            ObjectsDataCache_[Chunk::DefaultCube_].push_back(chunk.GetInstancesData()[Chunk::DefaultCube_]);
             Chunks_.emplace(glm::vec2(0.0f), std::move(chunk));
         }
         else {
@@ -98,14 +101,14 @@ const std::map<glm::vec2, Chunk, Helpers::CmpGlmVec<glm::vec2>>& Scene::GetChunk
     return Chunks_;
 }
 
-std::vector<std::shared_ptr<std::vector<glm::mat4>>> Scene::GetRenderableObjectsData() const {
+const std::map<Engine::Cube::BlockFaces, std::vector<std::shared_ptr<std::vector<glm::mat4>>>>& Scene::GetRenderableObjectsData() const {
     return ObjectsDataCache_;
 }
 
-size_t Scene::GetSceneSize() const {
+size_t Scene::GetSceneSize(const Engine::Cube::BlockFaces& faces) const {
     size_t size = 0;
-    for (const auto& chunk : GetRenderableObjectsData()) {
-        size += chunk->size();
+    for (const auto& chunkObjects : GetRenderableObjectsData().at(faces)) {
+        size += chunkObjects->size();
     }
 
     return size;
@@ -129,7 +132,9 @@ void Scene::UpdateObjectsData() {
               centerChunkPos.x + static_cast<float>(i) * Chunk::ChunkSize,
               centerChunkPos.y + static_cast<float>(j) * Chunk::ChunkSize);
             if (Chunks_.contains(chunkPos)) {
-                ObjectsDataCache_.push_back(Chunks_.at(chunkPos).GetInstancesData());
+                for (const auto& [cube, data] : Chunks_.at(chunkPos).GetInstancesData()) {
+                    ObjectsDataCache_[cube].push_back(data);
+                }
             }
         }
     }
@@ -142,7 +147,9 @@ void Scene::UpdateObjectsData() {
               centerChunkPos.x + static_cast<float>(i) * Chunk::ChunkSize,
               centerChunkPos.y + static_cast<float>(j) * Chunk::ChunkSize);
             if (Chunks_.contains(chunkPos)) {
-                ObjectsDataCache_.push_back(Chunks_.at(chunkPos).GetInstancesDataTrans());
+                for (const auto& [cube, data] : Chunks_.at(chunkPos).GetInstancesDataTrans()) {
+                    ObjectsDataCache_[cube].push_back(data);
+                }
             }
         }
     }
