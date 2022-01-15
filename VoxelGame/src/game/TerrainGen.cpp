@@ -18,8 +18,7 @@ Chunk Terrain::TerrainGen::GenerateChunk(const glm::vec2& position) {
     const auto chunkSize = static_cast<unsigned>(Chunk::ChunkSize);
     Chunk chunk(position);
     chunk.GetObjects()[Chunk::DefaultCube_].reserve(chunkSize * chunkSize);
-    // TODO: reserve grass buffer
-    chunk.GetObjectsTrans()[Chunk::DefaultCube_].reserve(chunkSize * chunkSize);
+    chunk.GetObjectsTrans()[Vegetation::GrassFactory::GrassCube()].reserve(chunkSize * chunkSize);
 
     for (unsigned int i = 0; i < chunkSize; ++i) {
         for (unsigned int j = 0; j < chunkSize; ++j) {
@@ -70,8 +69,7 @@ void Terrain::TerrainGen::PlaceVegetation(Chunk& chunk, const glm::vec2& pos, Bi
     }
     else {
         auto grass = Vegetation::GrassFactory::GenerateGrass({ pos.x, h + 1.0f, pos.y }, biome);
-        // TODO: insert only four sides
-        chunk.AddObjectsTrans(std::move(grass));
+        chunk.AddObjectsTrans(std::move(grass), Vegetation::GrassFactory::GrassCube());
     }
 }
 

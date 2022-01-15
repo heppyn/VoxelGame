@@ -4,6 +4,7 @@
 
 #include "Shader.h"
 #include "Mesh.h"
+#include "engine/BlockFaces.h"
 
 class GameObject;
 
@@ -21,15 +22,23 @@ class CubeRenderer {
     [[nodiscard]] const Mesh& GetDefaultMesh() const { return DefaultMesh_; }
 
     [[nodiscard]] static Mesh GetCubeMesh(bool batched = false);
-    [[nodiscard]] static Mesh GetCubeMesh(glm::vec2, bool batched = false);
+    [[nodiscard]] static Mesh GetCubeMesh(const glm::vec2& texPos, bool batched = false);
+    [[nodiscard]] static Mesh GetCubeMeshFrom(
+      const Engine::Cube::BlockFaces& faces,
+      glm::vec2 texPos = { 0.0f, 0.0f },
+      bool batched = false);
+
+    void SetMeshFrom(const Engine::Cube::BlockFaces& faces);
 
   private:
     Shader* Shader{ nullptr };
-    unsigned int CubeVao{ 0 };
-    unsigned int CubeVbo{ 0 };
+    unsigned int CubeVao{ 0 }; // TODO: delete
+    unsigned int CubeVbo{ 0 }; // TODO: delete
     Mesh DefaultMesh_{};
 
     [[nodiscard]] static std::vector<Vertex> GetVertices();
+    [[nodiscard]] static std::vector<Vertex> GetVerticesWithTexture(const glm::vec2& texSize);
     [[nodiscard]] static std::vector<unsigned> GetIndices();
+    [[nodiscard]] static std::vector<unsigned> GetIndicesFrom(const Engine::Cube::BlockFaces& faces);
 };
 } // namespace Renderer

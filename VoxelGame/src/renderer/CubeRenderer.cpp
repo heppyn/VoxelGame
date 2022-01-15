@@ -42,19 +42,19 @@ Renderer::Mesh Renderer::CubeRenderer::GetCubeMesh(bool batched /*= false*/) {
     return GetCubeMesh({ 0, 0 }, batched);
 }
 
-Renderer::Mesh Renderer::CubeRenderer::GetCubeMesh(glm::vec2 texPos, bool batched /*= false*/) {
+Renderer::Mesh Renderer::CubeRenderer::GetCubeMesh(const glm::vec2& texPos, bool batched /*= false*/) {
+    return GetCubeMeshFrom(Engine::Cube::ALL_SIDES, texPos, batched);
+}
+
+Renderer::Mesh Renderer::CubeRenderer::GetCubeMeshFrom(const Engine::Cube::BlockFaces& faces, glm::vec2 texPos, bool batched) {
     const auto& texSize = ResourceManager::GetSpriteSheetSize();
     texPos.y = texSize.y - 1 - texPos.y;
 
-    auto vertices = GetVertices();
+    return Mesh(GetVerticesWithTexture(texSize), GetIndicesFrom(faces), texPos, batched);
+}
 
-    std::ranges::for_each(vertices, [texSize](Vertex& v) {
-        v.TexCoords = {
-            v.TexCoords.x / texSize.x,
-            v.TexCoords.y / texSize.y,
-        };
-    });
-    return Mesh(vertices, GetIndices(), texPos, batched);
+void Renderer::CubeRenderer::SetMeshFrom(const Engine::Cube::BlockFaces& faces) {
+    DefaultMesh_ = GetCubeMeshFrom(faces);
 }
 
 std::vector<Renderer::Vertex> Renderer::CubeRenderer::GetVertices() {
@@ -95,6 +95,19 @@ std::vector<Renderer::Vertex> Renderer::CubeRenderer::GetVertices() {
     };
 }
 
+std::vector<Renderer::Vertex> Renderer::CubeRenderer::GetVerticesWithTexture(const glm::vec2& texSize) {
+    auto vertices = GetVertices();
+
+    std::ranges::for_each(vertices, [texSize](Vertex& v) {
+        v.TexCoords = {
+            v.TexCoords.x / texSize.x,
+            v.TexCoords.y / texSize.y,
+        };
+    });
+
+    return vertices;
+}
+
 std::vector<unsigned> Renderer::CubeRenderer::GetIndices() {
     return {
         // clang-format off
@@ -118,4 +131,34 @@ std::vector<unsigned> Renderer::CubeRenderer::GetIndices() {
         21, 22, 23,
         // clang-format on
     };
+}
+
+std::vector<unsigned> Renderer::CubeRenderer::GetIndicesFrom(const Engine::Cube::BlockFaces& faces) {
+    if (faces.HasFace(Engine::Cube::Faces::ALL)) {
+        return GetIndices();
+    }
+
+    std::vector<unsigned> newIndices = {};
+    std::vector<unsigned> allIndices = GetIndices();
+
+    if (faces.HasFace(Engine::Cube::Faces::FRONT)) {
+        newIndices.insert(newIndices.end(), allIndices.begin(), allIndices.begin() + 6);
+    }
+    if (faces.HasFace(Engine::Cube::Faces::TOP)) {
+        newIndices.insert(newIndices.end(), allIndices.begin() + 6, allIndices.begin() + 12);
+    }
+    if (faces.HasFace(Engine::Cube::Faces::BOTTOM)) {
+        newIndices.insert(newIndices.end(), allIndices.begin() + 12, allIndices.begin() + 18);
+    }
+    if (faces.HasFace(Engine::Cube::Faces::BACK)) {
+        newIndices.insert(newIndices.end(), allIndices.begin() + 18, allIndices.begin() + 24);
+    }
+    if (faces.HasFace(Engine::Cube::Faces::RIGHT)) {
+        newIndices.insert(newIndices.end(), allIndices.begin() + 24, allIndices.begin() + 30);
+    }
+    if (faces.HasFace(Engine::Cube::Faces::LEFT)) {
+        newIndices.insert(newIndices.end(), allIndices.begin() + 30, allIndices.end());
+    }
+
+    return newIndices;
 }
