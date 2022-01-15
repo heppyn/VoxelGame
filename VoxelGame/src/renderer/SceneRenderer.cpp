@@ -60,8 +60,21 @@ void Renderer::SceneRenderer::Render(const Scene& scene, unsigned width, unsigne
         shaders[i]->SetFloat("light.quadratic", 0.0028f);
     }
 
+    // render all sides first
+    glEnable(GL_CULL_FACE);
+    if (scene.GetRenderableObjectsData().contains(Engine::Cube::ALL_SIDES)) {
+        CubeRenderers_[Engine::Cube::ALL_SIDES].SetShader(shaders[2]);
+        glBindBuffer(GL_ARRAY_BUFFER, InstanceDataBufferIds_[Engine::Cube::ALL_SIDES]);
+        CubeRenderers_[Engine::Cube::ALL_SIDES].DrawCubesBatched(scene.GetSceneSize(Engine::Cube::ALL_SIDES));
+    }
+
+    // disable face culling - all sides can be seen
+    glDisable(GL_CULL_FACE);
     // render objects depending on cube sides
     for (auto& [cube, cubeRenderer] : CubeRenderers_) {
+        if (cube == Engine::Cube::ALL_SIDES)
+            continue;
+
         // render all objects at once
         cubeRenderer.SetShader(shaders[2]);
         glBindBuffer(GL_ARRAY_BUFFER, InstanceDataBufferIds_[cube]);
