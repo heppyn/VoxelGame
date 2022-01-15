@@ -5,7 +5,7 @@
 bool Engine::Cube::BlockFaces::HasFace(Faces face) const {
     switch (face) {
         case Faces::ALL:
-            return Value & 0b00111111;
+            return (Value & 0b00111111) == 0b00111111;
         case Faces::TOP:
             return Value & 0b00100000;
         case Faces::BOTTOM:

@@ -72,4 +72,10 @@ TEST_CASE("Block faces test", "[engine, block_faces]") {
         REQUIRE(Engine::Cube::PIPE.HasFace(Engine::Cube::Faces::LEFT));
         REQUIRE(Engine::Cube::PIPE.HasFace(Engine::Cube::Faces::RIGHT));
     }
+
+    SECTION("Does not have face") {
+        REQUIRE(!Engine::Cube::PIPE.HasFace(Engine::Cube::Faces::ALL));
+        REQUIRE(!Engine::Cube::PIPE.HasFace(Engine::Cube::Faces::TOP));
+        REQUIRE(!Engine::Cube::PIPE.HasFace(Engine::Cube::Faces::BOTTOM));
+    }
 }
