@@ -59,8 +59,6 @@
 	%sem napište úvod Vaší práce
 \end{introduction}
 
-\chapter{Cíl práce}
-
 \chapter{Herní engine}
 \todo{Historie herních enginů?}
 Herní engine zajišťuje vykreslování scény a komunikaci s grafickou kartou, zpracování vstupu od uživatele, správu zdrojů. Poskytuje třídy s obecnou funkcionalitou, využívané generátorem terénu. Mezi ně patří:
@@ -183,7 +181,12 @@ void InputHandler::handleInput() {
 }
 \end{verbatim}
 
-Tento kód funguje, pokud jsme ochotni natvrdo zadrátovat vstup hráče k~herním akcím, ale hodně her hráče nechá nakonfigurovat si vlastní mapování tlačítek. K tomuto potřebujeme vyměnit přímé volání metody A za metodu B. K tomu potřebujeme objekt reprezentující volání metody~\cite{gpp_cmd}.
+Tento kód funguje, pokud jsme ochotni natvrdo zadrátovat vstup hráče k~herním akcím viz obrázek~\ref{fig:ih_old}, ale hodně her hráče nechá nakonfigurovat si vlastní mapování tlačítek. K tomuto potřebujeme vyměnit přímé volání metody A za metodu B. K tomu potřebujeme objekt reprezentující volání metody~\cite{gpp_cmd}.
+
+\begin{figure}\centering
+	\includegraphics[width=\textwidth]{images/ih_old}
+	\caption[Přímé propojení InputHandler s Actor]{Přímé propojení InputHandler s Actor}\label{fig:ih_old}
+\end{figure}
 
 Definujme abstraktní třídu \texttt{Command} představující spustitelný příkaz.
 
@@ -213,9 +216,12 @@ class MoveForwardCommand : public Command {
 };
 \end{verbatim}
 
-\texttt{InputHandler} je odstíněn od volání prováděných na \texttt{actor}, sníží se tak spojení mezi třídami a zvýší se soudržnost (high cohesion) \texttt{InputHandler} – má na starosti zpracování vstupu, ne ovládání herní postavy.
+\texttt{InputHandler} je odstíněn od volání prováděných na \texttt{actor} (obrázek~\ref{fig:ih_new}), sníží se tak spojení mezi třídami a zvýší se soudržnost (high cohesion) \texttt{InputHandler} – má na starosti zpracování vstupu, ne ovládání herní postavy.
 
-\missingfigure{diagram tříd -- high cohesion}
+\begin{figure}\centering
+	\includegraphics[width=\textwidth]{images/ih_new}
+	\caption[Využití třídy Command]{Využití třídy Command}\label{fig:ih_new}
+\end{figure}
 
 Příkazy jsou uloženy v poli:
 \begin{verbatim}
