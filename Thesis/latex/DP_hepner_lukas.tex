@@ -100,7 +100,105 @@ while (!game->Finished()) {
 }
 \end{verbatim}
 
-Metodám měnícím herní stav je předána hodnota \texttt{deltaTime}. Vykreslení zachycuje stav scény v okamžiku zavolání, proto nezávisí na \texttt{deltaTime}. 
+Metodám měnícím herní stav je předána hodnota \texttt{deltaTime}. Vykreslení zachycuje stav scény v okamžiku zavolání, proto nezávisí na \texttt{deltaTime}.
+
+\section{Vykreslování scény}
+
+\todo{world coords, etc.}
+
+Vykreslovací engine má za úkol převod scény definované v 3D prostoru, na 2D plochu zobrazovacího zařízení hráče. Tento proces začíná na CPU, kde jsou herní objekty převedeny na data (matice), která jsou poslána grafické kartě. Zde jsou za pomocí série kroků transformována na zobrazitelné pixely. Tyto kroky jsou vysoce specializované a výstup každého z nich je použit jako vstup pro další. 
+
+Tyto kroky je možné masivně paralelizovat a využít tisíců jader, které může grafická karta obsahovat. Každé jádro spouští malý program, pro každý krok vykreslovacího řetězce. Tyto programy jsou nazývané shadery. Některé ze shaderů může definovat vývojář a nahradit nimi existující výchozí shadery. OpenGL pro jejich programování využívá OpenGL shading language (GLSL)~\cite{lopgl_triangle}.
+
+\subsection{Předání dat grafické kartě}
+
+Scéna je složena z kusů terénu (třída \texttt{Chunk}), obsahující herní objekty. Chunky jsou rozmístěné na ploše vymezené osami \texttt{x} a \texttt{z}. Třída \texttt{Scene} má za úkol správu chunků a serializaci jejich dat do 1D pole, předané grafické kartě.
+
+Každý herní objekt lze reprezentovat jako matici 4x4 obsahující informace o posunu vůči počátku světa, škálování a textuře.
+
+\todo{dopsat informace o model matrix}
+
+Převod herního objektu na matici:
+
+\begin{verbatim}
+for (const auto& o : obs) {
+    assert(o.HasComponent<Components::Transform>());
+    auto model =
+        o.GetComponent<Components::Transform>().ModelMat();
+
+    assert(o.HasComponent<Components::SpritesheetTex>());
+    const auto& texPos = 
+        o.GetComponent<Components::SpritesheetTex>().GetTexPos();
+    Helpers::Math::PackVecToMatrix(model, texPos);
+
+    buffer[cube]->push_back(model);
+}
+
+[[nodiscard]] glm::mat4 ModelMat() const {
+    auto model = glm::mat4(1.0f); // identity matrix
+    model = glm::translate(model, Position);
+    return glm::scale(model, Scale);
+}
+\end{verbatim}
+
+\subsubsection{Instancing}
+
+Herní scéna obsahuje velké množství objektů se stejnou geometrií (např. krychle), s různou transformací vůči počátku světa. Každá krychle je složena z 12 trojúhelníků. Její vykreslení je téměř okamžité. Pokud by pro každou z nich bylo voláno samostatné vykreslení (draw call), velice rychle doje k drastickému snížení výkonu (komunikace s kartou přes sběrnici, uložení dat do patřičných bufferů,\dots). Lepší řešení je poslat všechna data kartě najednou a ty následně vykreslit pomocí stejné geometrie. Toto řešení se nazývá instancing~\cite{lopgl_instancing}.
+
+Scéna umožňuje definovat vlastní geometrie –- krychle, krychle bez podstav, nebo jakákoliv jiná kombinace stěn krychle. Pro každou z nich alokuje místo na grafické kartě, uloží do něj data objektů a následně samostatně vykreslí každou z nich.
+
+\begin{verbatim}
+// bind data
+glBindBuffer(GL_ARRAY_BUFFER, InstanceDataBufferIds_[cube]);
+unsigned offset = 0;
+for (const auto& chunk : instancesData) {
+    glBufferSubData(
+        GL_ARRAY_BUFFER,
+        offset * sizeof(glm::mat4), 
+        chunk->size() * sizeof(glm::mat4), 
+        chunk->data());
+    offset += chunk->size();
+}
+
+CubeRenderers_[cube].GetDefaultMesh().BindBatchAttribPtrs();
+\end{verbatim}
+
+Rozdílné geometrie jsou užitečné, pokud chceme definovat krychli s rozdílnými podstavami a stěnami. Na obrázku~\ref{fig:block_composition}, lze vidět blok trávy složený ze tří částí.
+
+\begin{figure}\centering
+	\includegraphics[width=\textwidth]{images/block_composition}
+	\caption[Složení bloku ze tří částí]{Složení bloku ze tří částí}\label{fig:block_composition}
+\end{figure}
+
+\subsection{Společná data objektů}
+
+Instancing umožňuje grafické kartě používat společná data pro všechny vykreslované objekty. Jeho protějškem v objektovém světe je návrhový vzor Flyweight.
+
+Pokud má být objekt vykreslitelný musí obsahovat komponentu \texttt{Transform} (určující jeho pozici a velikost) a komponentu \texttt{Mesh} (představující geometrii objektu) –- obrázek~\ref{fig:go_components}.
+
+\begin{figure}\centering
+	\includegraphics[width=\textwidth]{images/go_components}
+	\caption[Komponenty herního objektu]{Komponenty herního objektu}\label{fig:go_components}
+\end{figure}
+
+\texttt{Mesh} obsahuje informace o vrcholech (\texttt{Vertex}) vykreslovaných trojúhelníků –- pozici na scéně, normálový vektor k úsečce mezi dvěma vrcholy trojúhelníku, pozici na textuře. A pole indexů, které říká, z jakých vrcholů jsou trojúhelníky složeny. Každý vrchol v má velikost $8 * 4 = 32 B$ a \texttt{Mesh} jich obsahuje $6 * 4$. Každá stěna krychle má čtyři různé vrcholy\footnote{Krychle má 8 vrcholů. Vrcholy jednotlivých stěn se ale liší v normálovém vektoru a pozicí na textuře.}. Pole indexů má velikost $12 * 3 * 4$ (počet trojúhelníků, počet vrcholů trojúhelníku, velikost \texttt{unsigned}). Celková velikost \texttt{Mesh}e představující krychli je:
+
+\[8 * 4 * 6 * 4 + 12 * 3 * 4 = 912 B\]
+
+Pokud má být schopný engine vykreslovat desetitisíce objektů je tato paměťová náročnost neúnosná. Komponentu \texttt{Mesh} není možné odebrat z herního objektu, protože obsahuje pozici na textuře, lišící se mezi objekty. Pozice na textuře představuje čtverec, který bude vybrán z textury a aplikován na povrch krychle. Všechny objekty mají texturu čtverce. Díky tomu je možné definovat čtverec na počátku textury a jeho posun uložit do samostatné komponenty -- \texttt{SpritesheetTex}. Toto nové rozložení je znázorněno na obrázku~\ref{fig:go_components_fw}.
+
+\begin{figure}\centering
+	\includegraphics[width=\textwidth]{images/go_components_fw_2}
+	\caption[Použití vzoru Flyweight]{Použití vzoru Flyweight}\label{fig:go_components_fw}
+\end{figure}
+
+Komponenta \texttt{SpritesheetTex} obsahuje dvě čísla ve formátu float (\texttt{float} je zvolen pro jednodušší komunikaci s grafickou kartou –- všechna předaná data mají formát \texttt{float}). Komponenta v paměti zabírá pouhých 8 B. Velikost herního byla redukována o 904 B.
+
+\texttt{Mesh} není dále používána jako komponenta herního objektu. Její implementace ze jmenného prostoru \texttt{Renderer}, kterou komponenta \texttt{Mesh} obsahuje jako svůj atribut, je použita pro vykreslení všech objektů se stejnou geometrií najednou. Vykreslení objektů zajišťuje třída \texttt{CubeRenderer}, viz obrázek~\ref{fig:go_components_fw}.
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+% % Zpracování vstupu
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % 
 
 \section{Zpracování vstupu}
 
@@ -169,8 +267,6 @@ Jmenný prostor \texttt{Input::Detail} obsahuje pouze jednu proměnnou, označuj
 
 \subsection{Návrhový vzor příkaz}
 Jednoduchá implementace kódu zpracovávajícího vstup by mohla vypadat:
-
-\missingfigure{obrázek klávesnice s voláním metod}
 
 \begin{verbatim}
 void InputHandler::handleInput() {
