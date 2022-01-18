@@ -16,9 +16,10 @@ class Texture2D {
     unsigned int ImageFormat_{ GL_RGB };
 
     unsigned int WrapS_{ GL_CLAMP_TO_EDGE }; // prevent colored bored on transparent textures
-    unsigned int WrapT_{ GL_CLAMP_TO_EDGE };
-    unsigned int FilterMin_{ GL_LINEAR }; // filtering mode if texture pixels < screen pixels
-    unsigned int FilterMax_{ GL_LINEAR }; // filtering mode if texture pixels > screen pixels
+    unsigned int WrapT_{ GL_CLAMP_TO_EDGE }; // only works in single texture
+    // GL_NEAREST prevents lines around textures using sprite sheet
+    unsigned int FilterMin_{ GL_NEAREST }; // filtering mode if texture pixels < screen pixels
+    unsigned int FilterMax_{ GL_NEAREST }; // filtering mode if texture pixels > screen pixels
 
     Texture2D();
     void Generate(unsigned int width, unsigned int height, unsigned char* data);
