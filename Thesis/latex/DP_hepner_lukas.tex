@@ -102,7 +102,7 @@ while (!game->Finished()) {
 
 Metodám měnícím herní stav je předána hodnota \texttt{deltaTime}. Vykreslení zachycuje stav scény v okamžiku zavolání, proto nezávisí na \texttt{deltaTime}.
 
-\section{Vykreslování scény}
+\section{Vykreslení objektů}
 
 \todo{world coords, etc.}
 
@@ -195,6 +195,60 @@ Pokud má být schopný engine vykreslovat desetitisíce objektů je tato pamě�
 Komponenta \texttt{SpritesheetTex} obsahuje dvě čísla ve formátu float (\texttt{float} je zvolen pro jednodušší komunikaci s grafickou kartou –- všechna předaná data mají formát \texttt{float}). Komponenta v paměti zabírá pouhých 8 B. Velikost herního byla redukována o 904 B.
 
 \texttt{Mesh} není dále používána jako komponenta herního objektu. Její implementace ze jmenného prostoru \texttt{Renderer}, kterou komponenta \texttt{Mesh} obsahuje jako svůj atribut, je použita pro vykreslení všech objektů se stejnou geometrií najednou. Vykreslení objektů zajišťuje třída \texttt{CubeRenderer}, viz obrázek~\ref{fig:go_components_fw}.
+
+\subsection{Vyřazení neviditelných částí objektu}
+
+Část scény tvoří krychle mající všech šest stěn vyplněných neprůhlednou texturou. Při pohledu na krychli může hráč vidět maximálně tři její stěny najednou (z určitých úhlů pouze jednu nebo dvě). Minimálně 50~\% každé krychle je vykreslováno zbytečně. OpenGL je schopno vyřadit stěny, které směřují pryč od hráče,s z vykreslovacího procesu a snížit počet volání fragment shaderu. Tato technika se nazývá face culling~\cite{lopgl_faceculling}.
+
+K rozpoznání stěn (trojúhelníků), které směřují pryč od hráče OpenGL používá pořadí jeho vrcholů. Vrcholy mohou být definované ve směru nebo protisměru hodinových ručiček  -- obrázek~\ref{fig:winding_order}. Při pohledu na grafické primitivum z druhé strany, se změní pořadí jeho vrcholů. V~základním nastavení OpenGL, jsou primitiva s vrcholy definovanými po směru hodinových ručiček, považována za směřující k hráči.
+
+\begin{figure}\centering
+	\includegraphics[width=\textwidth]{images/winding_order}
+	\caption[Pořadí vrcholů]{Pořadí vrcholů}\label{fig:winding_order}
+\end{figure}
+
+Tato technika není v základním nastavení OpneGL zapnutá. Musí se povolit zavoláním funkce:
+
+\begin{verbatim}
+glEnable(GL_CULL_FACE);
+\end{verbatim}
+
+Pro objekty, které nemají všech šest stěn nebo mají průhlednou texturu, je nutné vypnou face culling. Hráči se zobrazí i vnitřek objektu, který by jinak nebyl vidět. Příkladem je vykreslování trávy –- obrázek~\ref{fig:face_culling}. Na pravém bloku je tráva vykreslena se zapnutým face cullingem. Na levém bloku je face culling vypnutý.
+
+\begin{figure}\centering
+	\includegraphics[width=\textwidth]{images/face_culling}
+	\caption[Face culling]{Face culling}\label{fig:face_culling}
+\end{figure}
+
+\subsection{Průhledné a poloprůhledné textury}
+
+Při vykreslování textur majících průhlednost (alfa $<$ 1) může nastat několik problémů. Prvním z nich je pořadí vykreslování objektů. Pokud má textura průhlednost, musí se její barva skombinovat s barvami textur, které překrývá. Na obrázku~\ref{fig:alpha} jsou textury vykreslovány postupně z pravého dolního rohu, po řádcích směrem k levému hornímu rohu. Lze si všimnou, že průhledná část trávy je korektně smíchána s~barvou bloku pod ní (je vykreslen první). Bloky v pozadí obrázku jsou překryté modrou barvou v~místech, kde je textura trávy průhledná.
+
+\begin{figure}\centering
+	\includegraphics[width=\textwidth]{images/alpha}
+	\caption[Face culling]{Face culling}\label{fig:alpha}
+\end{figure}
+
+Tento jev nastává kvůli použití depth bufferu, ten šetří výpočetní výkon zahozením fragmentů, které by nebyly vidět. Jsou do něj však uloženy všechny fragmenty nezávisle na průhlednosti. V ideálním případě by nejdříve měly být vykreslené všechny fragmenty, které se budou podílet na barvě pixelu, od nejvzdálenějšího k nejbližšímu~\cite{lopgl_blend}.
+
+Toto řešení vyžaduje řazení objektů na scéně podle jejich vzdálenosti od kamery. Poloha kamery se s~pohybem hráče neustále mění a řazení objektů by snižovalo výkonost.
+
+Avšak objekty bez průhledných části překryjí všechny objekty nehledě na průhlednost. Scénu tak lze rozdělit na dvě části. A objekty bez průhlednosti vykreslit jako první. Na obrázku~\ref{fig:alpha_cut_off} je tato technika implementována. Barva průhledné části trávy je korektně smíchána s barvou bloku v pozadí.
+
+\begin{figure}\centering
+	\includegraphics[width=\textwidth]{images/alpha_cut_off}
+	\caption[Face culling]{Face culling}\label{fig:alpha_cut_off}
+\end{figure}
+
+Problém s pořadím textur obsahujících průhlednost stále přetrvává. Na obrázku~\ref{fig:alpha_cut_off} lze jasně vidět průhlednou část textury trávy, překrývající trávu v pozadí. Pro textury mající části úplně průhledné nebo úplně neprůhledné lze problém vyřešit ve fragment shaderu. Všechny framenty, mající průhlednost menší, než stanovená mez budou vyřazeny z vykreslovacího řetězce.
+
+\begin{verbatim}
+float alpha = vec4(texture(texture_diffuse1, TexCoord)).a;
+if (alpha < 0.05)
+    discard;
+\end{verbatim}
+
+Problém s poloprůhlednými texturami však přetrvává a pro jeho vyřešení je nutné poloprůhledné textury seřadit.
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
 % % Zpracování vstupu
