@@ -58,7 +58,7 @@ class Camera {
     void Move(float delta, float x, float y = 0.0);
     void Stop() { Stopped_ = true; }
     void Resume() { Stopped_ = false; }
-    void SwitchStopState() { Stopped_ = !Stopped_; }
+    void SwitchStopState();
 
   private:
     bool Stopped_{ false };

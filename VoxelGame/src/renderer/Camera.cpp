@@ -1,5 +1,9 @@
 #include "Camera.h"
 
+#include <iostream>
+
+#include "helpers/Print.h"
+
 
 Renderer::Camera::Camera(glm::vec3 position /*= glm::vec3(0.0f, 0.0f, 0.0f)*/, glm::vec3 up /*= glm::vec3(0.0f, 1.0f, 0.0f)*/, float yaw /*= YAW*/, float pitch /*= PITCH*/)
   : Position(position), Front(glm::vec3(0.0f, 0.0f, -1.0f)), WorldUp(up), Yaw(yaw), Pitch(pitch) {
@@ -83,6 +87,12 @@ void Renderer::Camera::Move(float delta, float x, float y) {
     else if (y < 0) {
         ProcessKeyboard(CameraMovement::BACKWARD, delta);
     }
+}
+
+void Renderer::Camera::SwitchStopState() {
+    Stopped_ = !Stopped_;
+
+    std::cout << Helpers::ToString(Position) << ", " << Yaw << ", " << Pitch << '\n';
 }
 
 void Renderer::Camera::UpdateCameraVectors() {

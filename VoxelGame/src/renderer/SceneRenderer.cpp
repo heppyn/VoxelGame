@@ -90,7 +90,7 @@ void Renderer::SceneRenderer::Render(const Scene& scene, unsigned width, unsigne
 
 void Renderer::SceneRenderer::BindInstancesData(const Scene& scene) {
     for (const auto& instancesDataMap = scene.GetRenderableObjectsData();
-        const auto& [cube, instancesData] : instancesDataMap) {
+         const auto& [cube, instancesData] : instancesDataMap) {
         const size_t newSize = 3 * sizeof(glm::mat4) * scene.GetSceneSize(cube);
 
         // configure instanced array

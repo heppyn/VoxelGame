@@ -27,7 +27,7 @@ class Scene {
     void Init(std::shared_ptr<Renderer::Camera> camera);
     void Update(bool updateAll = false);
     // original game scene update, disabled for testing purposes
-    void UpdateOrig();
+    void UpdateOrig(bool updateAll = false);
     void SetCamera(std::shared_ptr<Renderer::Camera> camera);
 
     [[nodiscard]] std::vector<GameObject>& GetLights() {

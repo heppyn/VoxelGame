@@ -43,6 +43,11 @@ void Renderer::Shader::Compile(const char* vertexSource, const char* fragmentSou
 }
 
 void Renderer::Shader::SetFloat(const char* name, float value, bool useShader) {
+    // when writing new code, use glProgramUniform to set uniforms directly
+    // into programs without having to bind or use the program. Only use
+    // the following mechanism if you absolutely must remain backwards compatible
+    // with some functions that set uniforms on a program that is bound to the context.
+    // TODO: use glProgramUniform1f
     if (useShader)
         Use();
     glUniform1f(glGetUniformLocation(Id, name), value);

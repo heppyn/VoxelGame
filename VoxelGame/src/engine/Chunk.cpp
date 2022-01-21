@@ -73,8 +73,6 @@ const std::map<Engine::Cube::BlockFaces, std::shared_ptr<std::vector<glm::mat4>>
 }
 
 std::map<Engine::Cube::BlockFaces, std::shared_ptr<std::vector<glm::mat4>>>& Chunk::GetInstancesData() {
-    assert(!InstancesData_.at(DefaultCube_)->empty());
-
     return InstancesData_;
 }
 

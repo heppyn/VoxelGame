@@ -235,6 +235,7 @@
     <ClCompile Include="src\engine\L-systems\Turtle.cpp" />
     <ClCompile Include="src\engine\Random.cpp" />
     <ClCompile Include="src\engine\Scene.cpp" />
+    <ClCompile Include="src\examples\ExampleScene.cpp" />
     <ClCompile Include="src\game\Biome.cpp" />
     <ClCompile Include="src\game\BlockFactory.cpp" />
     <ClCompile Include="src\game\Terrain.cpp" />
@@ -448,6 +449,7 @@
     <ClInclude Include="src\engine\L-systems\Turtle.h" />
     <ClInclude Include="src\engine\Random.h" />
     <ClInclude Include="src\engine\Scene.h" />
+    <ClInclude Include="src\examples\ExampleScene.h" />
     <ClInclude Include="src\game\Biome.h" />
     <ClInclude Include="src\game\BlockFactory.h" />
     <ClInclude Include="src\game\Terrain.h" />

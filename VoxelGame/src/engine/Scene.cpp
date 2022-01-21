@@ -8,8 +8,9 @@
 #include "ResourceManager.h"
 #include "Components/SpritesheetTex.h"
 #include "game/TerrainGen.h"
-#include "L-systems/LSystemExecutor.h"
 #include "L-systems/LSystemParser.h"
+
+#include "examples/ExampleScene.h"
 
 void Scene::Init(std::shared_ptr<Renderer::Camera> camera) {
     SetCamera(std::move(camera));
@@ -22,32 +23,11 @@ void Scene::Init(std::shared_ptr<Renderer::Camera> camera) {
     Update();
 }
 
-void Scene::UpdateOrig() {
+void Scene::UpdateOrig(bool updateAll /*= false*/) {
     if (Chunks_.empty()) {
-        LSystems::LSystemExecutor ge(0, 0.0f);
-        const auto lSystems = LSystems::LSystemParser::LoadLSystemFromFile("./res/l-systems/plants/Grass2D.txt");
-        if (!lSystems.empty()) {
-            Chunk chunk(glm::vec2(0.0f));
-            auto pos = glm::vec3(0.0f);
-            for (const auto& lSystem : lSystems) {
-                auto objects = ge.GenerateBasedOn(pos, lSystem, 0.3f, 5, Engine::Random::GetNoise(pos));
-                for (auto& o : objects[0]) {
-                    o.AddComponent<Components::SpritesheetTex>(glm::vec2(1.0f, 0.0f));
-                }
-                chunk.GetObjects()[Chunk::DefaultCube_].insert(
-                  chunk.GetObjects()[Chunk::DefaultCube_].end(),
-                  std::make_move_iterator(objects[0].begin()),
-                  std::make_move_iterator(objects[0].end()));
+        Chunks_.emplace(glm::vec2(0.0f), ExampleScene::FaceCullingGrass());
 
-                pos += glm::vec3(10.0f, 0.0f, 0.0f);
-            }
-            chunk.FinisChunk();
-            ObjectsDataCache_[Chunk::DefaultCube_].push_back(chunk.GetInstancesData()[Chunk::DefaultCube_]);
-            Chunks_.emplace(glm::vec2(0.0f), std::move(chunk));
-        }
-        else {
-            std::cout << "Failed to load L-system\n";
-        }
+        UpdateObjectsData();
     }
 }
 
