@@ -66,6 +66,7 @@ Renderer::Mesh& Renderer::Mesh::operator=(Mesh&& other) noexcept {
 
 void Renderer::Mesh::Draw(Shader& shader) const {
     assert(Vao);
+    shader.Use();
     BindTextures(shader);
 
     // draw mesh
@@ -79,7 +80,7 @@ void Renderer::Mesh::Draw(Shader& shader) const {
 
 void Renderer::Mesh::DrawBatched(Shader& shader, unsigned amount) const {
     assert(Vao);
-    //BindTextures(shader);
+    shader.Use();
     BindSpriteSheets(shader);
 
     glBindVertexArray(Vao);
@@ -154,9 +155,9 @@ void Renderer::Mesh::BindTextures(Shader& shader) const {
 
 void Renderer::Mesh::BindSpriteSheets(Shader& shader) const {
     // set sampler to the correct texture unit
-    glUniform1i(glGetUniformLocation(shader.Id, "texture_diffuse1"), 0);
+    glProgramUniform1i(shader.Id, glGetUniformLocation(shader.Id, "texture_diffuse1"), 0);
     ResourceManager::GetTexture2D(Constants::SPRITE_SHEET.c_str())->Bind(0);
-    glUniform1i(glGetUniformLocation(shader.Id, "texture_specular1"), 1);
+    glProgramUniform1i(shader.Id, glGetUniformLocation(shader.Id, "texture_specular1"), 1);
     ResourceManager::GetTexture2D(Constants::SPRITE_SHEET_SPEC.c_str())->Bind(1);
 }
 
