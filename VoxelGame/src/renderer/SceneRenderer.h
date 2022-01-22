@@ -4,7 +4,7 @@
 #include "CubeRenderer.h"
 #include "engine/Scene.h"
 #include "engine/BlockFaces.h"
-
+#include "DepthMap.h"
 
 namespace Renderer {
 class SceneRenderer {
@@ -14,8 +14,11 @@ class SceneRenderer {
     std::map<Engine::Cube::BlockFaces, unsigned> InstanceDataBufferIds_{};
     std::map<Engine::Cube::BlockFaces, size_t> BufferSizes_{};
 
-    Shader* ShaderInstance_;
-    Shader* ShaderMesh_;
+    Shader* ShaderInstance_{nullptr};
+    Shader* ShaderMesh_{nullptr};
+    Shader* ShaderDepth_{ nullptr };
+
+    DepthMap ShadowMap;
 
   public:
     explicit SceneRenderer(Renderer::Camera* camera);
@@ -23,6 +26,8 @@ class SceneRenderer {
     void Render(const Scene& scene, unsigned int width, unsigned int height);
 
   private:
+    void RenderScene(const Scene& scene, Shader* shader);
+    void RenderShadowMap(const Scene& scene);
     void BindInstancesData(const Scene& scene);
     void InitShaders();
 };

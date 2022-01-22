@@ -51,8 +51,8 @@ glm::vec2 ResourceManager::GetSpriteSheetSize() {
         assert(false);
     }
     return {
-        static_cast<float>(Textures[SpriteSheet.TextureName].get()->Width_) / SpriteSheet.ItemWidth,
-        static_cast<float>(Textures[SpriteSheet.TextureName].get()->Height_) / SpriteSheet.ItemHeight
+        static_cast<float>(Textures[SpriteSheet.TextureName].get()->Width) / SpriteSheet.ItemWidth,
+        static_cast<float>(Textures[SpriteSheet.TextureName].get()->Height) / SpriteSheet.ItemHeight
     };
 }
 
@@ -61,7 +61,7 @@ void ResourceManager::Clear() {
         glDeleteProgram(shader->Id);
     }
     for (const auto& [fst, texture] : Textures) {
-        glDeleteTextures(1, &texture->Id_);
+        glDeleteTextures(1, &texture->Id);
     }
 }
 
@@ -110,8 +110,8 @@ Renderer::Texture2D* ResourceManager::LoadTexture2DFromFile(const char* file, bo
     // create texture object
     auto* texture = new Renderer::Texture2D;
     if (alpha) {
-        texture->InternalFormat_ = GL_RGBA;
-        texture->ImageFormat_ = GL_RGBA;
+        texture->InternalFormat = GL_RGBA;
+        texture->ImageFormat = GL_RGBA;
     }
     // load image
     stbi_set_flip_vertically_on_load(true);

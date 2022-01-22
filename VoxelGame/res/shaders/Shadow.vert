@@ -5,14 +5,9 @@ layout(location = 2) in vec2 aTexCoord;
 layout(location = 3) in mat4 aInstanceMatrix;
 
 out vec2 TexCoord;
-out vec3 Normal;
-out vec3 FragPos;
-out vec4 FragPosLightSpace;
 
-uniform mat4 view;
-uniform mat4 projection;
-uniform vec2 tex_size;
 uniform mat4 lightSpaceMatrix;
+uniform vec2 tex_size;
 
 void main() {
     // unpack coords from matrix
@@ -26,12 +21,6 @@ void main() {
         1.0 / tex_size.y * texPos.y
     );
     TexCoord = vec2(aTexCoord.x + shift.x, aTexCoord.y + shift.y);
-    Normal = aNor;
-    // costly calculation - consider doing it on CPU
-    // only needed for non uniform scaling
-//    Normal = mat3(transpose(inverse(model))) * aNor; 
-    FragPos = vec3(model * vec4(aPos, 1.0));
-    // transformation to light space -- shadow map is in light space
-    FragPosLightSpace = lightSpaceMatrix * vec4(FragPos, 1.0);
-    gl_Position = projection * view * vec4(FragPos, 1.0);
+
+    gl_Position = lightSpaceMatrix * model * vec4(aPos, 1.0);
 }

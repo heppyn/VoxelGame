@@ -251,6 +251,7 @@
     <ClCompile Include="src\engine\Game.cpp" />
     <ClCompile Include="src\engine\ResourceManager.cpp" />
     <ClCompile Include="src\renderer\Debug.cpp" />
+    <ClCompile Include="src\renderer\DepthMap.cpp" />
     <ClCompile Include="src\renderer\Mesh.cpp" />
     <ClCompile Include="src\renderer\SceneRenderer.cpp" />
     <ClCompile Include="src\renderer\Shader.cpp" />
@@ -283,12 +284,14 @@
     <None Include="res\shaders\BatchTexture.frag" />
     <None Include="res\shaders\BatchTexture.vert" />
     <None Include="res\shaders\Color.frag" />
+    <None Include="res\shaders\Shadow.frag" />
     <None Include="res\shaders\Light.frag" />
     <None Include="res\shaders\Light.vert" />
     <None Include="res\shaders\LightBatch.vert" />
     <None Include="res\shaders\Mesh.frag" />
     <None Include="res\shaders\Mesh.vert" />
     <None Include="res\shaders\MeshBatch.vert" />
+    <None Include="res\shaders\Shadow.vert" />
     <None Include="res\shaders\Texture.fs" />
     <None Include="res\shaders\Texture.vs" />
     <None Include="res\textures\voxel-pack-updated\Spritesheets\make_spritesheet.py" />
@@ -469,6 +472,7 @@
     <ClInclude Include="src\renderer\CubeRenderer.h" />
     <ClInclude Include="src\engine\ResourceManager.h" />
     <ClInclude Include="src\renderer\Debug.h" />
+    <ClInclude Include="src\renderer\DepthMap.h" />
     <ClInclude Include="src\renderer\Mesh.h" />
     <ClInclude Include="src\renderer\SceneRenderer.h" />
     <ClInclude Include="src\renderer\Shader.h" />

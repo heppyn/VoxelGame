@@ -106,3 +106,28 @@ Chunk ExampleScene::PhongLight() {
     chunk.FinisChunk();
     return chunk;
 }
+
+Chunk ExampleScene::Shadow() {
+    Chunk chunk(glm::vec2(0.0f));
+
+    constexpr int size = 50;
+    for (int i = -size; i < size; ++i) {
+        for (int j = -size; j < size; ++j) {
+            chunk.AddObject(GameObjectFactory::CreateObject(
+              { static_cast<float>(i), 0.0f, static_cast<float>(j) },
+              { 0.0f, 5.0f }));
+        }
+    }
+
+    chunk.AddObject(GameObjectFactory::CreateObject({ 0.0f, 5.0f, 0.0f }, { 2.0f, 2.0f }));
+    chunk.AddObject(GameObjectFactory::CreateObject({ 1.0f, 5.0f, 0.0f }, { 2.0f, 2.0f }));
+    chunk.AddObject(GameObjectFactory::CreateObject({ -10.0f, 5.0f, 0.0f }, { 2.0f, 2.0f }));
+    chunk.AddObject(GameObjectFactory::CreateObject({ -20.0f, 5.0f, -1.0f }, { 2.0f, 2.0f }));
+    chunk.AddObject(GameObjectFactory::CreateObject({ -30.0f, 5.0f, -2.0f }, { 2.0f, 2.0f }));
+    chunk.AddObject(GameObjectFactory::CreateObject({ 10.0f, 5.0f, 1.0f }, { 2.0f, 2.0f }));
+    chunk.AddObject(GameObjectFactory::CreateObject({ 20.0f, 5.0f, 3.0f }, { 2.0f, 2.0f }));
+    chunk.AddObject(GameObjectFactory::CreateObject({ 30.0f, 5.0f, 5.0f }, { 2.0f, 2.0f }));
+
+    chunk.FinisChunk();
+    return chunk;
+}

@@ -136,7 +136,7 @@ void Renderer::Mesh::BindTextures(Shader& shader) const {
     for (unsigned int i = 0; i < Textures.size(); i++) {
         // retrieve texture number (the N in diffuse_textureN)
         std::string number;
-        std::string name = Textures[i].Type_;
+        std::string name = Textures[i].Type;
         if (name == "texture_diffuse")
             number = std::to_string(diffuseNr++);
         else if (name == "texture_specular")
@@ -155,9 +155,9 @@ void Renderer::Mesh::BindTextures(Shader& shader) const {
 
 void Renderer::Mesh::BindSpriteSheets(Shader& shader) const {
     // set sampler to the correct texture unit
-    glProgramUniform1i(shader.Id, glGetUniformLocation(shader.Id, "texture_diffuse1"), 0);
+    shader.SetInteger("texture_diffuse1", 0);
     ResourceManager::GetTexture2D(Constants::SPRITE_SHEET.c_str())->Bind(0);
-    glProgramUniform1i(shader.Id, glGetUniformLocation(shader.Id, "texture_specular1"), 1);
+    shader.SetInteger("texture_specular1", 1);
     ResourceManager::GetTexture2D(Constants::SPRITE_SHEET_SPEC.c_str())->Bind(1);
 }
 

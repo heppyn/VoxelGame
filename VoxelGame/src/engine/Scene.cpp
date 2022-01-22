@@ -25,12 +25,11 @@ void Scene::Init(std::shared_ptr<Renderer::Camera> camera) {
 
 void Scene::UpdateOrig(bool updateAll /*= false*/) {
     if (Chunks_.empty()) {
-        Chunks_.emplace(glm::vec2(0.0f), ExampleScene::FaceCullingGrass());
+        Chunks_.emplace(glm::vec2(0.0f), ExampleScene::Shadow());
 
         UpdateObjectsData();
     }
 }
-
 
 void Scene::Update(bool updateAll /*= false*/) {
     const auto startTime = glfwGetTime();

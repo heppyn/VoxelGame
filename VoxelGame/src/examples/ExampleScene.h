@@ -9,4 +9,5 @@ class ExampleScene {
     [[nodiscard]] static Chunk AlphaBlendingGrass();
     [[nodiscard]] static Chunk LSystemGrass();
     [[nodiscard]] static Chunk PhongLight();
+    [[nodiscard]] static Chunk Shadow();
 };

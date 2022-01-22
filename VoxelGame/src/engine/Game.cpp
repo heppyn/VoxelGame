@@ -14,12 +14,9 @@ Game::~Game() {
 }
 
 void Game::Init() {
-    auto* lightShader = ResourceManager::LoadShader("./res/shaders/Light.vert", "./res/shaders/Light.frag", nullptr, "light");
-    auto* lightBatchShader = ResourceManager::LoadShader("./res/shaders/LightBatch.vert", "./res/shaders/Light.frag", nullptr, "lightBatch");
+    ResourceManager::LoadShader("./res/shaders/LightBatch.vert", "./res/shaders/Light.frag", nullptr, "lightBatch");
     ResourceManager::LoadShader("./res/shaders/Mesh.vert", "./res/shaders/Mesh.frag", nullptr, "meshShader");
-    // texture is loaded from texture unit 0
-    lightShader->SetInteger("texture1", 0, true);
-    lightBatchShader->SetInteger("texture1", 0, true);
+    ResourceManager::LoadShader("./res/shaders/Shadow.vert", "./res/shaders/Shadow.frag", nullptr, "depth");
 
     ResourceManager::LoadTexture2D("./res/textures/white.png", true, "white");
     ResourceManager::LoadTexture2D(Constants::VOXEL_PACK_PATH_SH + "sprite_sheet.png", true, Constants::SPRITE_SHEET);

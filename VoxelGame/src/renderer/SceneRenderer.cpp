@@ -11,15 +11,12 @@ void Renderer::SceneRenderer::Init() {
     CubeRenderers_[Engine::Cube::ALL_SIDES] = {};
     CubeRenderers_[Engine::Cube::ALL_SIDES].Init();
     InitShaders();
+    ShadowMap.Init();
 }
 
 void Renderer::SceneRenderer::Render(const Scene& scene, unsigned width, unsigned height) {
     // TODO: check for change in terrain
     BindInstancesData(scene);
-
-    // TODO: disable this for rendering multiple scenes
-    glClearColor(103 / 255.0f, 157 / 255.0f, 245 / 255.0f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     for (auto* shader : { ShaderInstance_, ShaderMesh_ }) {
         // TODO: set matrices in uniform block for all shaders
@@ -39,10 +36,27 @@ void Renderer::SceneRenderer::Render(const Scene& scene, unsigned width, unsigne
     ShaderInstance_->SetVector3f("light.position", scene.GetLights().front().Position());
     ShaderInstance_->SetVector3f("view_pos", Camera->Position);
 
+    RenderShadowMap(scene);
+
+    glViewport(0, 0, static_cast<GLsizei>(width), static_cast<GLsizei>(height));
+    glClearColor(103 / 255.0f, 157 / 255.0f, 245 / 255.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    ShaderInstance_->SetInteger("texture_shadow", 3);
+    ShadowMap.BindTexture(3);
+    RenderScene(scene, ShaderInstance_);
+
+    // draw light separately
+    // render with all sides
+    assert(CubeRenderers_.contains(Engine::Cube::ALL_SIDES));
+    CubeRenderers_[Engine::Cube::ALL_SIDES].SetShader(ShaderMesh_);
+    scene.GetLights().front().Draw(CubeRenderers_[Engine::Cube::ALL_SIDES]);
+}
+
+void Renderer::SceneRenderer::RenderScene(const Scene& scene, Shader* shader) {
     // render all sides first
     glEnable(GL_CULL_FACE);
     if (scene.GetRenderableObjectsData().contains(Engine::Cube::ALL_SIDES)) {
-        CubeRenderers_[Engine::Cube::ALL_SIDES].SetShader(ShaderInstance_);
+        CubeRenderers_[Engine::Cube::ALL_SIDES].SetShader(shader);
         glBindBuffer(GL_ARRAY_BUFFER, InstanceDataBufferIds_[Engine::Cube::ALL_SIDES]);
         CubeRenderers_[Engine::Cube::ALL_SIDES].DrawCubesBatched(scene.GetSceneSize(Engine::Cube::ALL_SIDES));
     }
@@ -55,16 +69,10 @@ void Renderer::SceneRenderer::Render(const Scene& scene, unsigned width, unsigne
             continue;
 
         // render all objects at once
-        cubeRenderer.SetShader(ShaderInstance_);
+        cubeRenderer.SetShader(shader);
         glBindBuffer(GL_ARRAY_BUFFER, InstanceDataBufferIds_[cube]);
         cubeRenderer.DrawCubesBatched(scene.GetSceneSize(cube));
     }
-
-    // draw light separately
-    // render with all sides
-    assert(CubeRenderers_.contains(Engine::Cube::ALL_SIDES));
-    CubeRenderers_[Engine::Cube::ALL_SIDES].SetShader(ShaderMesh_);
-    scene.GetLights().front().Draw(CubeRenderers_[Engine::Cube::ALL_SIDES]);
 }
 
 void Renderer::SceneRenderer::BindInstancesData(const Scene& scene) {
@@ -109,8 +117,10 @@ void Renderer::SceneRenderer::BindInstancesData(const Scene& scene) {
 void Renderer::SceneRenderer::InitShaders() {
     ShaderInstance_ = ResourceManager::GetShader("lightBatch");
     ShaderMesh_ = ResourceManager::GetShader("meshShader");
+    ShaderDepth_ = ResourceManager::GetShader("depth");
 
     // set sprite sheet size for instancing
+    ShaderDepth_->SetVector2f("tex_size", ResourceManager::GetSpriteSheetSize(), true);
     ShaderInstance_->SetVector2f("tex_size", ResourceManager::GetSpriteSheetSize(), true);
     ShaderInstance_->SetVector3f("light.ambient", glm::vec3(0.25f));
     ShaderInstance_->SetVector3f("light.diffuse", glm::vec3(0.5f));
@@ -121,4 +131,30 @@ void Renderer::SceneRenderer::InitShaders() {
     ShaderInstance_->SetFloat("light.constant", 1.0f);
     ShaderInstance_->SetFloat("light.linear", 0.027f);
     ShaderInstance_->SetFloat("light.quadratic", 0.0028f);
+}
+
+void Renderer::SceneRenderer::RenderShadowMap(const Scene& scene) {
+    ShadowMap.Bind();
+
+    constexpr float nearPlane = 1.0f, farPlane = 40.0f;
+    constexpr float fSize = 20.0f;
+    const glm::mat4 lightProjection = glm::ortho(
+      -fSize, fSize, -fSize, fSize, nearPlane, farPlane);
+
+    // TODO: render shadow, where player is looking
+    const glm::vec3 lightPos = { Camera->Position.x, 40.0f, Camera->Position.z };
+    const glm::mat4 lightView = glm::lookAt(
+      lightPos,
+      lightPos + scene.GetGlobalLight().Direction,
+      glm::vec3(0.0f, 1.0f, 0.0f));
+
+    const glm::mat4 lightSpaceMatrix = lightProjection * lightView;
+
+    ShaderDepth_->SetMatrix4("lightSpaceMatrix", lightSpaceMatrix);
+    ShaderInstance_->SetMatrix4("lightSpaceMatrix", lightSpaceMatrix);
+
+    RenderScene(scene, ShaderDepth_);
+
+    // bind default framebuffer
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
