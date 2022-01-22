@@ -14,6 +14,9 @@ class SceneRenderer {
     std::map<Engine::Cube::BlockFaces, unsigned> InstanceDataBufferIds_{};
     std::map<Engine::Cube::BlockFaces, size_t> BufferSizes_{};
 
+    Shader* ShaderInstance_;
+    Shader* ShaderMesh_;
+
   public:
     explicit SceneRenderer(Renderer::Camera* camera);
     void Init();
@@ -21,5 +24,6 @@ class SceneRenderer {
 
   private:
     void BindInstancesData(const Scene& scene);
+    void InitShaders();
 };
 } // namespace Renderer

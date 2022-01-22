@@ -4,14 +4,13 @@
 #include "engine/Components/Mesh.h"
 
 Renderer::SceneRenderer::SceneRenderer(Renderer::Camera* camera)
-  : Camera(camera) {
-    // default shader is the not batch one
-}
+  : Camera(camera) {}
 
 void Renderer::SceneRenderer::Init() {
     // set up renderer with all sides, otherwise scene containing only light would crash
     CubeRenderers_[Engine::Cube::ALL_SIDES] = {};
     CubeRenderers_[Engine::Cube::ALL_SIDES].Init();
+    InitShaders();
 }
 
 void Renderer::SceneRenderer::Render(const Scene& scene, unsigned width, unsigned height) {
@@ -22,12 +21,7 @@ void Renderer::SceneRenderer::Render(const Scene& scene, unsigned width, unsigne
     glClearColor(103 / 255.0f, 157 / 255.0f, 245 / 255.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    std::vector<Shader*> shaders = {
-        ResourceManager::GetShader("meshShader"),
-        ResourceManager::GetShader("light"),
-        ResourceManager::GetShader("lightBatch"),
-    };
-    for (auto* shader : shaders) {
+    for (auto* shader : { ShaderInstance_, ShaderMesh_ }) {
         // TODO: set matrices in uniform block for all shaders
         // camera may have moved, set new matrices
         shader->SetMatrix4("view", Camera->GetViewMatrix(), true);
@@ -40,30 +34,15 @@ void Renderer::SceneRenderer::Render(const Scene& scene, unsigned width, unsigne
         shader->SetMatrix4("projection", projection);
     }
 
-    // only light shader
-    for (auto i = 1; i <= 2; ++i) {
-        // set sprite sheet size for instancing
-        shaders[i]->SetVector2f("tex_size", ResourceManager::GetSpriteSheetSize(), true);
-
-        shaders[i]->SetVector3f("light.globalDir", scene.GetGlobalLight().Direction);
-        shaders[i]->SetVector3f("light.global", scene.GetGlobalLight().Color);
-        shaders[i]->SetVector3f("light.ambient", glm::vec3(0.25f));
-        shaders[i]->SetVector3f("light.diffuse", glm::vec3(0.5f));
-        shaders[i]->SetVector3f("light.specular", glm::vec3(1.0f));
-        shaders[i]->SetVector3f("light.position", scene.GetLights().front().Position());
-        shaders[i]->SetFloat("material.shininess", 32.0f);
-        shaders[i]->SetVector3f("view_pos", Camera->Position);
-
-        // values taken from http://wiki.ogre3d.org/tiki-index.php?page=-Point+Light+Attenuation
-        shaders[i]->SetFloat("light.constant", 1.0f);
-        shaders[i]->SetFloat("light.linear", 0.027f);
-        shaders[i]->SetFloat("light.quadratic", 0.0028f);
-    }
+    ShaderInstance_->SetVector3f("light.globalDir", scene.GetGlobalLight().Direction);
+    ShaderInstance_->SetVector3f("light.global", scene.GetGlobalLight().Color);
+    ShaderInstance_->SetVector3f("light.position", scene.GetLights().front().Position());
+    ShaderInstance_->SetVector3f("view_pos", Camera->Position);
 
     // render all sides first
     glEnable(GL_CULL_FACE);
     if (scene.GetRenderableObjectsData().contains(Engine::Cube::ALL_SIDES)) {
-        CubeRenderers_[Engine::Cube::ALL_SIDES].SetShader(shaders[2]);
+        CubeRenderers_[Engine::Cube::ALL_SIDES].SetShader(ShaderInstance_);
         glBindBuffer(GL_ARRAY_BUFFER, InstanceDataBufferIds_[Engine::Cube::ALL_SIDES]);
         CubeRenderers_[Engine::Cube::ALL_SIDES].DrawCubesBatched(scene.GetSceneSize(Engine::Cube::ALL_SIDES));
     }
@@ -76,7 +55,7 @@ void Renderer::SceneRenderer::Render(const Scene& scene, unsigned width, unsigne
             continue;
 
         // render all objects at once
-        cubeRenderer.SetShader(shaders[2]);
+        cubeRenderer.SetShader(ShaderInstance_);
         glBindBuffer(GL_ARRAY_BUFFER, InstanceDataBufferIds_[cube]);
         cubeRenderer.DrawCubesBatched(scene.GetSceneSize(cube));
     }
@@ -84,7 +63,7 @@ void Renderer::SceneRenderer::Render(const Scene& scene, unsigned width, unsigne
     // draw light separately
     // render with all sides
     assert(CubeRenderers_.contains(Engine::Cube::ALL_SIDES));
-    CubeRenderers_[Engine::Cube::ALL_SIDES].SetShader(shaders[0]);
+    CubeRenderers_[Engine::Cube::ALL_SIDES].SetShader(ShaderMesh_);
     scene.GetLights().front().Draw(CubeRenderers_[Engine::Cube::ALL_SIDES]);
 }
 
@@ -125,4 +104,21 @@ void Renderer::SceneRenderer::BindInstancesData(const Scene& scene) {
 
         CubeRenderers_[cube].GetDefaultMesh().BindBatchAttribPtrs();
     }
+}
+
+void Renderer::SceneRenderer::InitShaders() {
+    ShaderInstance_ = ResourceManager::GetShader("lightBatch");
+    ShaderMesh_ = ResourceManager::GetShader("meshShader");
+
+    // set sprite sheet size for instancing
+    ShaderInstance_->SetVector2f("tex_size", ResourceManager::GetSpriteSheetSize(), true);
+    ShaderInstance_->SetVector3f("light.ambient", glm::vec3(0.25f));
+    ShaderInstance_->SetVector3f("light.diffuse", glm::vec3(0.5f));
+    ShaderInstance_->SetVector3f("light.specular", glm::vec3(1.0f));
+    ShaderInstance_->SetFloat("material.shininess", 32.0f);
+
+    // values taken from http://wiki.ogre3d.org/tiki-index.php?page=-Point+Light+Attenuation
+    ShaderInstance_->SetFloat("light.constant", 1.0f);
+    ShaderInstance_->SetFloat("light.linear", 0.027f);
+    ShaderInstance_->SetFloat("light.quadratic", 0.0028f);
 }
