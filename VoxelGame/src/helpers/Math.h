@@ -1,4 +1,6 @@
 #pragma once
+#include <vector>
+
 #include "glm/mat4x4.hpp"
 #include <glm/vec3.hpp>
 
@@ -30,6 +32,10 @@ namespace Math {
     T Map(T x, T inMin, T inMax, T outMin, T outMax) {
         return (x - inMin) * (outMax - outMin) / (inMax - inMin) + outMin;
     }
+
+    std::vector<glm::vec4> FrustumCornersWordSpace(const glm::mat4& proj, const glm::mat4& view);
+    glm::vec3 FrustumCenter(const std::vector<glm::vec4>& corners);
+    glm::mat4 OrthoLightSpace(const std::vector<glm::vec4>& corners, const glm::vec3& lightDir, float zMult);
 } // namespace Math
 
 template<typename T>

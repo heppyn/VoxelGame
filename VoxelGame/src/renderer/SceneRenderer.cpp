@@ -2,6 +2,8 @@
 
 #include "engine/ResourceManager.h"
 #include "engine/Components/Mesh.h"
+#include "helpers/Math.h"
+#include "open_gl/WindowManagerGl.h"
 
 Renderer::SceneRenderer::SceneRenderer(Renderer::Camera* camera)
   : Camera(camera) {}
@@ -136,19 +138,18 @@ void Renderer::SceneRenderer::InitShaders() {
 void Renderer::SceneRenderer::RenderShadowMap(const Scene& scene) {
     ShadowMap.Bind();
 
-    constexpr float nearPlane = 1.0f, farPlane = 40.0f;
-    constexpr float fSize = 20.0f;
-    const glm::mat4 lightProjection = glm::ortho(
-      -fSize, fSize, -fSize, fSize, nearPlane, farPlane);
+    const glm::mat4 projection = glm::perspective(
+      glm::radians(Camera->Zoom),
+      static_cast<float>(WindowManagerGl::Width) / static_cast<float>(WindowManagerGl::Height),
+      0.1f,
+      500.0f);
 
-    // TODO: render shadow, where player is looking
-    const glm::vec3 lightPos = { Camera->Position.x, 40.0f, Camera->Position.z };
-    const glm::mat4 lightView = glm::lookAt(
-      lightPos,
-      lightPos + scene.GetGlobalLight().Direction,
-      glm::vec3(0.0f, 1.0f, 0.0f));
+    const auto corners = Helpers::Math::FrustumCornersWordSpace(projection, Camera->GetViewMatrix());
 
-    const glm::mat4 lightSpaceMatrix = lightProjection * lightView;
+    const auto lightSpaceMatrix = Helpers::Math::OrthoLightSpace(
+      corners,
+      scene.GetGlobalLight().Direction,
+      1.0f);
 
     ShaderDepth_->SetMatrix4("lightSpaceMatrix", lightSpaceMatrix);
     ShaderInstance_->SetMatrix4("lightSpaceMatrix", lightSpaceMatrix);
