@@ -196,60 +196,6 @@ Komponenta \texttt{SpritesheetTex} obsahuje dvě čísla ve formátu float (\tex
 
 \texttt{Mesh} není dále používána jako komponenta herního objektu. Její implementace ze jmenného prostoru \texttt{Renderer}, kterou komponenta \texttt{Mesh} obsahuje jako svůj atribut, je použita pro vykreslení všech objektů se stejnou geometrií najednou. Vykreslení objektů zajišťuje třída \texttt{CubeRenderer}, viz obrázek~\ref{fig:go_components_fw}.
 
-\subsection{Vyřazení neviditelných částí objektu}
-
-Část scény tvoří krychle mající všech šest stěn vyplněných neprůhlednou texturou. Při pohledu na krychli může hráč vidět maximálně tři její stěny najednou (z určitých úhlů pouze jednu nebo dvě). Minimálně 50~\% každé krychle je vykreslováno zbytečně. OpenGL je schopno vyřadit stěny, které směřují pryč od hráče,s z vykreslovacího procesu a snížit počet volání fragment shaderu. Tato technika se nazývá face culling~\cite{lopgl_faceculling}.
-
-K rozpoznání stěn (trojúhelníků), které směřují pryč od hráče OpenGL používá pořadí jeho vrcholů. Vrcholy mohou být definované ve směru nebo protisměru hodinových ručiček  -- obrázek~\ref{fig:winding_order}. Při pohledu na grafické primitivum z druhé strany, se změní pořadí jeho vrcholů. V~základním nastavení OpenGL, jsou primitiva s vrcholy definovanými po směru hodinových ručiček, považována za směřující k hráči.
-
-\begin{figure}\centering
-	\includegraphics[width=\textwidth]{images/winding_order}
-	\caption[Pořadí vrcholů]{Pořadí vrcholů}\label{fig:winding_order}
-\end{figure}
-
-Tato technika není v základním nastavení OpneGL zapnutá. Musí se povolit zavoláním funkce:
-
-\begin{verbatim}
-glEnable(GL_CULL_FACE);
-\end{verbatim}
-
-Pro objekty, které nemají všech šest stěn nebo mají průhlednou texturu, je nutné vypnou face culling. Hráči se zobrazí i vnitřek objektu, který by jinak nebyl vidět. Příkladem je vykreslování trávy –- obrázek~\ref{fig:face_culling}. Na pravém bloku je tráva vykreslena se zapnutým face cullingem. Na levém bloku je face culling vypnutý.
-
-\begin{figure}\centering
-	\includegraphics[width=\textwidth]{images/face_culling}
-	\caption[Face culling]{Face culling}\label{fig:face_culling}
-\end{figure}
-
-\subsection{Průhledné a poloprůhledné textury}
-
-Při vykreslování textur majících průhlednost (alfa $<$ 1) může nastat několik problémů. Prvním z nich je pořadí vykreslování objektů. Pokud má textura průhlednost, musí se její barva skombinovat s barvami textur, které překrývá. Na obrázku~\ref{fig:alpha} jsou textury vykreslovány postupně z pravého dolního rohu, po řádcích směrem k levému hornímu rohu. Lze si všimnou, že průhledná část trávy je korektně smíchána s~barvou bloku pod ní (je vykreslen první). Bloky v pozadí obrázku jsou překryté modrou barvou v~místech, kde je textura trávy průhledná.
-
-\begin{figure}\centering
-	\includegraphics[width=\textwidth]{images/alpha}
-	\caption[Face culling]{Face culling}\label{fig:alpha}
-\end{figure}
-
-Tento jev nastává kvůli použití depth bufferu, ten šetří výpočetní výkon zahozením fragmentů, které by nebyly vidět. Jsou do něj však uloženy všechny fragmenty nezávisle na průhlednosti. V ideálním případě by nejdříve měly být vykreslené všechny fragmenty, které se budou podílet na barvě pixelu, od nejvzdálenějšího k nejbližšímu~\cite{lopgl_blend}.
-
-Toto řešení vyžaduje řazení objektů na scéně podle jejich vzdálenosti od kamery. Poloha kamery se s~pohybem hráče neustále mění a řazení objektů by snižovalo výkonost.
-
-Avšak objekty bez průhledných části překryjí všechny objekty nehledě na průhlednost. Scénu tak lze rozdělit na dvě části. A objekty bez průhlednosti vykreslit jako první. Na obrázku~\ref{fig:alpha_cut_off} je tato technika implementována. Barva průhledné části trávy je korektně smíchána s barvou bloku v pozadí.
-
-\begin{figure}\centering
-	\includegraphics[width=\textwidth]{images/alpha_cut_off}
-	\caption[Face culling]{Face culling}\label{fig:alpha_cut_off}
-\end{figure}
-
-Problém s pořadím textur obsahujících průhlednost stále přetrvává. Na obrázku~\ref{fig:alpha_cut_off} lze jasně vidět průhlednou část textury trávy, překrývající trávu v pozadí. Pro textury mající části úplně průhledné nebo úplně neprůhledné lze problém vyřešit ve fragment shaderu. Všechny framenty, mající průhlednost menší, než stanovená mez budou vyřazeny z vykreslovacího řetězce.
-
-\begin{verbatim}
-float alpha = vec4(texture(texture_diffuse1, TexCoord)).a;
-if (alpha < 0.05)
-    discard;
-\end{verbatim}
-
-Problém s poloprůhlednými texturami však přetrvává a pro jeho vyřešení je nutné poloprůhledné textury seřadit.
-
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
 % % Zpracování vstupu
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
@@ -390,6 +336,147 @@ class NullCommand : public Command {
 \end{verbatim}
 
 Toto řešení zachovává principy objektového návrhu. Přijímá parametr \texttt{actor}, svému předku však předá \texttt{nullptr}. Tělo metody \texttt{Execute} je prázdné a s \texttt{actor}em není interagováno. Volání metody \texttt{Execute} mohou být bezpečně provedena na všech prvcích pole.
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+% % Modelování rostlin s využitím L-systémů
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+
+\chapter{Vykreslování scény}
+
+OpenGL představuje stavový automat. Jeho výchozí hodnoty jsou nastaveny při spuštění programu (např.: způsob mísení barev, povolení testu hloubky\dots). Některé se musí měnit podle dat, které se mají vykreslit (např.: face culling). Grafická karta má před každým voláním pro vykreslení scény uložena data objektů ve svých bufferech. Přiřazené textury do texturovacích jednotek. Nastavené proměnné shaderů a shadery, které se mají pro vykreslení použít. Tyto parametry představují stav OpenGL, podle něhož se vykreslí scéna. Vykreslení může probíhat ve více krocích –- vykreslovací příkaz OpenGL je zavolán několikanásobně. Při každém volání proběhnou následující kroky~\cite{kronos_render}:
+
+\begin{enumerate}
+\item Specifikace vrcholů -- Načtení formátu vrcholů a předání dat, která budou zpracována dále v řetězci. 
+
+\item Vertex shader -- Provede zpracování vrcholu na základě uživatelem specifikovaného programu a předá ho k dalšímu zpracování. Zpracován může být pouze jeden vrchol a ten musí být předán do dalšího kroku. Poskytnutí vertex shaderu je povinné.
+
+\item Teselace -- Nepovinný krok, který může rozdělit primitivum (trojúhelník, úsečku\dots) na několik menších primitiv~\cite{kronos_tess}.
+
+\item Geometry shader -- Uživatelem definovaný program, zpracovávající primitiva. Výstupem je nula nebo více primitiv. Vstupní a výstupní primitiva musí být přesně definovaná. Geometry shader může změnit jeho geometrii, provést transformaci souřadnic\dots Tento krok není povinný.
+
+\item Post-processing vrcholů -- Složená primitiva (např.: pruh trojúhelníků) jsou převedena na jednoduchá primitiva (úsečky, body, trojúhelníky). Primitiva jejichž část je mimo obrazovku jsou rozdělena, aby vznikla nová, jež jsou uvnitř prostoru obrazovky. Trojúhelníková primitiva mohou být vyřazena, pokud nemíří k pozorovateli. Všechna nová primitiva jsou uložena do výstupních bufferů pro další zpracování.
+
+\item Rasterizace -- Primitiva, která se dostanou do této fáze jsou převedena na fragmenty. Fragment je soubor hodnot obsahující výstupy předchozích shaderů. Jejich hodnota je nastavena interpolací hodnot vrcholů, z kterých se primitivum skládá. Každý fragment obsahuje pozici v~prostoru obrazovky~\cite{kronos_frag}.
+
+\item Fragment shader -- Výstupem fragment shaderu je list barev, které budou zapsány do výstupních bufferů, hodnota hloubky a hodnota šablony (stencil value). Fragment shader může být definován uživatelem. Pokud není, hodnota barev není definovaná, je pouze zapsána hodnota hloubky a šablony.
+
+\item Operace provedené na vzorcích (Per-Sample Operations) -- Výstupní data fragmentu jsou podrobena sérii testů (mohou být specifikované uživatelem, např.: hloubkový test), které je mohou vyřadit z podílení se na výsledné barvě pixelu. Pokud projdou je provedeno míchání barev s barvami, které již obsahuje framebuffer.
+\end{enumerate}
+
+\todo{world coords, etc.}
+
+\section{Vyřazení neviditelných částí objektu}
+
+Část scény tvoří krychle mající všech šest stěn vyplněných neprůhlednou texturou. Při pohledu na krychli může hráč vidět maximálně tři její stěny najednou (z určitých úhlů pouze jednu nebo dvě). Minimálně 50~\% každé krychle je vykreslováno zbytečně. OpenGL je schopno vyřadit stěny, které směřují pryč od hráče,s z vykreslovacího procesu a snížit počet volání fragment shaderu. Tato technika se nazývá face culling~\cite{lopgl_faceculling}.
+
+K rozpoznání stěn (trojúhelníků), které směřují pryč od hráče OpenGL používá pořadí jeho vrcholů. Vrcholy mohou být definované ve směru nebo protisměru hodinových ručiček  -- obrázek~\ref{fig:winding_order}. Při pohledu na grafické primitivum z druhé strany, se změní pořadí jeho vrcholů. V~základním nastavení OpenGL, jsou primitiva s vrcholy definovanými po směru hodinových ručiček, považována za směřující k hráči.
+
+\begin{figure}\centering
+	\includegraphics[width=\textwidth]{images/winding_order}
+	\caption[Pořadí vrcholů]{Pořadí vrcholů}\label{fig:winding_order}
+\end{figure}
+
+Tato technika není v základním nastavení OpneGL zapnutá. Musí se povolit zavoláním funkce:
+
+\begin{verbatim}
+glEnable(GL_CULL_FACE);
+\end{verbatim}
+
+Pro objekty, které nemají všech šest stěn nebo mají průhlednou texturu, je nutné vypnou face culling. Hráči se zobrazí i vnitřek objektu, který by jinak nebyl vidět. Příkladem je vykreslování trávy –- obrázek~\ref{fig:face_culling}. Na pravém bloku je tráva vykreslena se zapnutým face cullingem. Na levém bloku je face culling vypnutý.
+
+\begin{figure}\centering
+	\includegraphics[width=\textwidth]{images/face_culling}
+	\caption[Face culling]{Face culling}\label{fig:face_culling}
+\end{figure}
+
+\section{Průhledné a poloprůhledné textury}
+
+Při vykreslování textur majících průhlednost (alfa $<$ 1) může nastat několik problémů. Prvním z nich je pořadí vykreslování objektů. Pokud má textura průhlednost, musí se její barva skombinovat s barvami textur, které překrývá. Na obrázku~\ref{fig:alpha} jsou textury vykreslovány postupně z pravého dolního rohu, po řádcích směrem k levému hornímu rohu. Lze si všimnou, že průhledná část trávy je korektně smíchána s~barvou bloku pod ní (je vykreslen první). Bloky v pozadí obrázku jsou překryté modrou barvou v~místech, kde je textura trávy průhledná.
+
+\begin{figure}\centering
+	\includegraphics[width=\textwidth]{images/alpha}
+	\caption[Face culling]{Face culling}\label{fig:alpha}
+\end{figure}
+
+Tento jev nastává kvůli použití depth bufferu, ten šetří výpočetní výkon zahozením fragmentů, které by nebyly vidět. Jsou do něj však uloženy všechny fragmenty nezávisle na průhlednosti. V ideálním případě by nejdříve měly být vykreslené všechny fragmenty, které se budou podílet na barvě pixelu, od nejvzdálenějšího k nejbližšímu~\cite{lopgl_blend}.
+
+Toto řešení vyžaduje řazení objektů na scéně podle jejich vzdálenosti od kamery. Poloha kamery se s~pohybem hráče neustále mění a řazení objektů by snižovalo výkonost.
+
+Avšak objekty bez průhledných části překryjí všechny objekty nehledě na průhlednost. Scénu tak lze rozdělit na dvě části. A objekty bez průhlednosti vykreslit jako první. Na obrázku~\ref{fig:alpha_cut_off} je tato technika implementována. Barva průhledné části trávy je korektně smíchána s barvou bloku v pozadí.
+
+\begin{figure}\centering
+	\includegraphics[width=\textwidth]{images/alpha_cut_off}
+	\caption[Face culling]{Face culling}\label{fig:alpha_cut_off}
+\end{figure}
+
+Problém s pořadím textur obsahujících průhlednost stále přetrvává. Na obrázku~\ref{fig:alpha_cut_off} lze jasně vidět průhlednou část textury trávy, překrývající trávu v pozadí. Pro textury mající části úplně průhledné nebo úplně neprůhledné lze problém vyřešit ve fragment shaderu. Všechny framenty, mající průhlednost menší, než stanovená mez budou vyřazeny z vykreslovacího řetězce.
+
+\begin{verbatim}
+float alpha = vec4(texture(texture_diffuse1, TexCoord)).a;
+if (alpha < 0.05)
+    discard;
+\end{verbatim}
+
+Problém s poloprůhlednými texturami však přetrvává a pro jeho vyřešení je nutné poloprůhledné textury seřadit.
+
+\section{Osvětlení scény}
+
+Osvětlení v reálném světě je extrémně složitý problém. Jeho přesná simulace v aplikacích reálného času je výpočetně náročná. Pro zjednodušení výpočtu existují zjednodušené modely, které produkují výsledky podobné reálnému světu.
+
+\subsection{Phongův osvětlovací model}
+
+Jednou z aproximací reálného světa je Phongův osvětlovací model, skládající se ze tří hlavních částí~\cite{lopgl_basic_light}.
+
+\begin{itemize}
+\item Okolní (ambient) světlo -- I za tmy jsou objekty nasvíceny světlem odraženým od ostatních objektů (měsíc) nebo vzdáleným zdrojem světla (hvězdy). Objekty většinou nejsou zcela tmavé. Nastavením konstanty pro ambientní osvětlení můžeme simulovat tento jev.
+
+\item Difúzní světlo -- Simuluje dopad světla na objekt. Pokud je objekt natočen ke zdroji světla, bude ním více ovlivněn. 
+
+\item Lesklé světlo -- Simuluje odraz světla od lesklého předmětu.
+\end{itemize}
+
+Výpočet osvětlení může být prováděn na CPU, nastavením světlosti každé stěny bloku. Pokud má být docíleno věrnějšího výsledku, je nutné počítat světlost pro každý fragment objektu (úhel dopadu světla se může výrazně lišit pro fragmenty na opačných stranách objektu). Výpočet je proto prováděn na grafické kartě, přesněji ve fragment shaderu.
+
+Ambientní složka světla je předána grafické kartě, kde je vynásobena s barvou objektu -- textury.
+
+\begin{verbatim}
+vec3 ambient = 
+    light.ambient * vec3(texture(texture_diffuse1, TexCoord));
+\end{verbatim}
+
+Pro výpočet difuzní složky, je shaderu předána pozice světla (\texttt{light.position}) a jeho barva (\texttt{light.diffuse}). Světlo dopadající kolmo na fragment má největší efekt na jeho výslednou barvu. Pro výpočet úhlu dopadu je využit normálový vektor fragmentu\footnote{Normálový vektor je předán vertex shaderu jako jeden z~atributů vrcholu trojúhelníku. Ten ho následně předá fragment shaderu.}. Vynásobením (skalární součin) normálového vektoru fragmentu a vektoru směřujícího od fragmentu ke světlu, je získána hodnota 1 pro vektory svírající nulový úhel a 0 pro kolmé vektory. Rozsah hodnot je zaručen normalizací vektorů.
+
+Pokud vektory svírají úhel větší než 90° je hodnota skalárního součinu záporná. Tuto situaci si lze představit jako dopad světla z opačné strany fragmentu. Ten by tedy neměl být osvětlený, \texttt{diff} je nastaven na 0. Hodnota difuzní složky je vynásobena s barvou světla a fragmentu.
+
+\begin{verbatim}
+vec3 lightDir = normalize(light.position - FragPos);
+float diff = max(dot(norm, lightDir), 0.0);
+vec3 diffuse = diff * light.diffuse * 
+    vec3(texture(texture_diffuse1, TexCoord));
+\end{verbatim}
+
+Intenzita odraženého světla (lesklá složka) je závislá na pozici pozorovatele (předána shaderu jako \texttt{view\_pos}). Pokud odražené světlo směřuje přímo do oka pozorovatele, je jeho intenzita nejvyšší. Vektor odraženého světla lze spočítat pomocí funkce \texttt{reflect}. Její první parametr je vektor směřující od světla k~fragmentu, tedy vektor opačný k \texttt{lightDir}. Druhý parametr je normálový vektor.
+
+Intenzita je opět spočítána pomocí skalárního součinu. Intenzita je umocněna lesklostí materiálu. Čím vyšší lesklost, tím méně je světlo rozptýleno do všech směrů a velikost efektu se zmenší~\cite{lopgl_basic_light}.
+
+\begin{verbatim}
+vec3 viewDir = normalize(view_pos - FragPos);
+vec3 reflectDir = reflect(-lightDir, norm);
+float spec = 
+    pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
+vec3 specular = spec * light.specular * 
+    vec3(texture(texture_diffuse1, TexCoord));
+\end{verbatim}
+
+Na obrázku~\ref{fig:phong} je vykreslena bedna osvícena všemi druhy světel a jejich kombinací.
+
+\begin{figure}\centering
+	\includegraphics[width=\textwidth]{images/phong}
+	\caption[Phongův osvětlovací model]{Phongův osvětlovací model}\label{fig:phong}
+\end{figure}
+
+
+
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
 % % Modelování rostlin s využitím L-systémů
