@@ -180,7 +180,10 @@
     <ClCompile Include="src\examples\ExampleScene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\renderer\DepthMap.cpp">
+    <ClCompile Include="src\renderer\light\DepthMap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\renderer\light\ShadowMap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -609,6 +612,10 @@
     <None Include="res\textures\voxel-pack-updated\Spritesheets\make_spritesheet.py" />
     <None Include="res\shaders\Shadow.vert" />
     <None Include="res\shaders\Shadow.frag" />
+    <None Include="res\shaders\Shadow_csm.vert" />
+    <None Include="res\shaders\Shadow_csm.geom" />
+    <None Include="res\shaders\Light_csm.vert" />
+    <None Include="res\shaders\Light_csm.frag" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\vendor\stb_image\stb_image.h">
@@ -1622,7 +1629,10 @@
     <ClInclude Include="src\examples\ExampleScene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\renderer\DepthMap.h">
+    <ClInclude Include="src\renderer\light\DepthMap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\renderer\light\ShadowMap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

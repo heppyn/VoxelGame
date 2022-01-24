@@ -4,7 +4,8 @@
 #include "CubeRenderer.h"
 #include "engine/Scene.h"
 #include "engine/BlockFaces.h"
-#include "DepthMap.h"
+#include "light/DepthMap.h"
+#include "light/ShadowMap.h"
 
 namespace Renderer {
 class SceneRenderer {
@@ -18,7 +19,8 @@ class SceneRenderer {
     Shader* ShaderMesh_{nullptr};
     Shader* ShaderDepth_{ nullptr };
 
-    DepthMap ShadowMap;
+    DepthMap ShadowMap_;
+    ShadowMap ShadowMapCSM_;
 
   public:
     explicit SceneRenderer(Renderer::Camera* camera);

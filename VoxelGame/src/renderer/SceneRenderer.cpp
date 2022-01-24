@@ -13,7 +13,9 @@ void Renderer::SceneRenderer::Init() {
     CubeRenderers_[Engine::Cube::ALL_SIDES] = {};
     CubeRenderers_[Engine::Cube::ALL_SIDES].Init();
     InitShaders();
-    ShadowMap.Init();
+    ShadowMap_.Init();
+    // TODO: define near and far in variables
+    ShadowMapCSM_.Init(3, 0.1f, 150.0f);
 }
 
 void Renderer::SceneRenderer::Render(const Scene& scene, unsigned width, unsigned height) {
@@ -29,7 +31,7 @@ void Renderer::SceneRenderer::Render(const Scene& scene, unsigned width, unsigne
           glm::radians(Camera->Zoom),
           static_cast<float>(width) / static_cast<float>(height),
           0.1f,
-          500.0f);
+          150.0f);
         shader->SetMatrix4("projection", projection);
     }
 
@@ -43,8 +45,10 @@ void Renderer::SceneRenderer::Render(const Scene& scene, unsigned width, unsigne
     glViewport(0, 0, static_cast<GLsizei>(width), static_cast<GLsizei>(height));
     glClearColor(103 / 255.0f, 157 / 255.0f, 245 / 255.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    ShaderInstance_->SetInteger("texture_shadow", 3);
-    ShadowMap.BindTexture(3);
+    //ShaderInstance_->SetInteger("texture_shadow", 3);
+    //ShadowMap_.BindTexture(3);
+    ShadowMapCSM_.BindData(*ShaderInstance_);
+
     RenderScene(scene, ShaderInstance_);
 
     // draw light separately
@@ -117,9 +121,9 @@ void Renderer::SceneRenderer::BindInstancesData(const Scene& scene) {
 }
 
 void Renderer::SceneRenderer::InitShaders() {
-    ShaderInstance_ = ResourceManager::GetShader("lightBatch");
+    ShaderInstance_ = ResourceManager::GetShader("light_csm");
     ShaderMesh_ = ResourceManager::GetShader("meshShader");
-    ShaderDepth_ = ResourceManager::GetShader("depth");
+    ShaderDepth_ = ResourceManager::GetShader("shadow_csm");
 
     // set sprite sheet size for instancing
     ShaderDepth_->SetVector2f("tex_size", ResourceManager::GetSpriteSheetSize(), true);
@@ -136,23 +140,26 @@ void Renderer::SceneRenderer::InitShaders() {
 }
 
 void Renderer::SceneRenderer::RenderShadowMap(const Scene& scene) {
-    ShadowMap.Bind();
+    //ShadowMap_.Bind();
 
-    const glm::mat4 projection = glm::perspective(
-      glm::radians(Camera->Zoom),
-      static_cast<float>(WindowManagerGl::Width) / static_cast<float>(WindowManagerGl::Height),
-      0.1f,
-      500.0f);
+    //const glm::mat4 projection = glm::perspective(
+    //  glm::radians(Camera->Zoom),
+    //  static_cast<float>(WindowManagerGl::Width) / static_cast<float>(WindowManagerGl::Height),
+    //  0.1f,
+    //  500.0f);
 
-    const auto corners = Helpers::Math::FrustumCornersWordSpace(projection, Camera->GetViewMatrix());
+    //const auto corners = Helpers::Math::FrustumCornersWordSpace(projection, Camera->GetViewMatrix());
 
-    const auto lightSpaceMatrix = Helpers::Math::OrthoLightSpace(
-      corners,
-      scene.GetGlobalLight().Direction,
-      1.0f);
+    //const auto lightSpaceMatrix = Helpers::Math::OrthoLightSpace(
+    //  corners,
+    //  scene.GetGlobalLight().Direction,
+    //  1.0f);
 
-    ShaderDepth_->SetMatrix4("lightSpaceMatrix", lightSpaceMatrix);
-    ShaderInstance_->SetMatrix4("lightSpaceMatrix", lightSpaceMatrix);
+    //ShaderDepth_->SetMatrix4("lightSpaceMatrix", lightSpaceMatrix);
+    //ShaderInstance_->SetMatrix4("lightSpaceMatrix", lightSpaceMatrix);
+
+    ShadowMapCSM_.BindLightSpaceMatrices(Camera->GetViewMatrix(), scene.GetGlobalLight().Direction, Camera->Zoom);
+    ShadowMapCSM_.Bind();
 
     RenderScene(scene, ShaderDepth_);
 

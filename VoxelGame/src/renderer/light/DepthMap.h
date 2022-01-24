@@ -1,13 +1,13 @@
 #pragma once
 
-#include "Texture2D.h"
+#include "renderer/Texture2D.h"
 
 namespace Renderer {
 // framebuffer with attached dept component
 class DepthMap {
   public:
-    const int Width{ 1024 };
-    const int Height{ 1024 };
+    const int Width{ 4096 };
+    const int Height{ 4096 };
 
     DepthMap() = default;
     DepthMap(int width, int height);

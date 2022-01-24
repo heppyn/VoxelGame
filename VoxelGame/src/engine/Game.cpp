@@ -17,6 +17,10 @@ void Game::Init() {
     ResourceManager::LoadShader("./res/shaders/LightBatch.vert", "./res/shaders/Light.frag", nullptr, "lightBatch");
     ResourceManager::LoadShader("./res/shaders/Mesh.vert", "./res/shaders/Mesh.frag", nullptr, "meshShader");
     ResourceManager::LoadShader("./res/shaders/Shadow.vert", "./res/shaders/Shadow.frag", nullptr, "depth");
+    ResourceManager::LoadShader(
+      "./res/shaders/Shadow_csm.vert", "./res/shaders/Shadow.frag", "./res/shaders/Shadow_csm.geom", "shadow_csm");
+    ResourceManager::LoadShader(
+      "./res/shaders/Light_csm.vert", "./res/shaders/Light_csm.frag", nullptr, "light_csm");
 
     ResourceManager::LoadTexture2D("./res/textures/white.png", true, "white");
     ResourceManager::LoadTexture2D(Constants::VOXEL_PACK_PATH_SH + "sprite_sheet.png", true, Constants::SPRITE_SHEET);

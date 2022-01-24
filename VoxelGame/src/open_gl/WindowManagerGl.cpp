@@ -4,8 +4,6 @@
 
 #include "renderer/Debug.h"
 
-//#include "../renderer/Debug.h"
-
 
 GLFWwindow* WindowManagerGl::MainWindow = nullptr;
 unsigned int WindowManagerGl::Width = 1500;
@@ -16,7 +14,7 @@ GLFWwindow* WindowManagerGl::CreateMainWindow(bool debug /*= false*/) {
     glfwInit();
     // debug is supported from 4.3
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, debug);
 
