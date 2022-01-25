@@ -40,7 +40,10 @@ Renderer::Texture2D* ResourceManager::GetTexture2D(std::string& name) {
 }
 
 Renderer::Texture2D* ResourceManager::GetTexture2D(const char* name) {
-    // TODO: check for existence
+    if (!Textures.contains(name)) {
+        // checking if texture exists
+        return nullptr;
+    }
     return Textures[name].get();
 }
 

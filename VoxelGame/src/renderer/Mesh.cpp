@@ -157,8 +157,12 @@ void Renderer::Mesh::BindSpriteSheets(Shader& shader) const {
     // set sampler to the correct texture unit
     shader.SetInteger("texture_diffuse1", 0);
     ResourceManager::GetTexture2D(Constants::SPRITE_SHEET.c_str())->Bind(0);
-    shader.SetInteger("texture_specular1", 1);
-    ResourceManager::GetTexture2D(Constants::SPRITE_SHEET_SPEC.c_str())->Bind(1);
+
+    if (auto* spriteSheet = ResourceManager::GetTexture2D(Constants::SPRITE_SHEET_SPEC.c_str());
+        spriteSheet) {
+        shader.SetInteger("texture_specular1", 1);
+        spriteSheet->Bind(1);
+    }
 }
 
 void Renderer::Mesh::UnbindTextures(unsigned num) const {
