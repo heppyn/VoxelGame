@@ -475,8 +475,97 @@ Na obrázku~\ref{fig:phong} je vykreslena bedna osvícena všemi druhy světel a
 	\caption[Phongův osvětlovací model]{Phongův osvětlovací model}\label{fig:phong}
 \end{figure}
 
+\subsection{Materiál objektu}
 
+Obrázek~\ref{fig:phong} zobrazuje dvě možnosti použití lesklého světla. Bedna jejíž celý povrch odráží světlo působí nepřirozeným dojmem. V reálném světě dřevo světlo neodráží\footnote{Dřevo s naleštěným povrchem světlo odrážet může, tato povrchová úprava však pravděpodobně nebude aplikována na přepravní bednu.}. Lesknout by se měl pouze její kovový okraj, a to jen v místech kde není poškozen.
 
+Tento problém je vyřešen předáním nové textury pro lesklé světlo. Řádek vyhodnocující barvu lesklého světla nebude používat texturu \texttt{texture\_diffuse1}, na místo ní využije \texttt{texture\_specular1}.
+
+\begin{verbatim}
+vec3 specular = spec * light.specular * 
+    vec3(texture(texture_specular1, TexCoord));
+\end{verbatim}
+
+Lesklá textura nemusí definovat barvu odrazu -- odražené světlo má barvu zdroje světla, ale pouze její intenzitu. Dřevěná část textury má černou barvu (žádný odraz), kovová část je převedena do černo-bílého spektra~\cite{lopgl_light_maps}.
+
+Pokud objekt nemá používat lesklé odrazy, nemusí být textura definována. Při změně nastavení textur, jsou všechny navázané textury odpojeny (unbonded from texture samplers). Následně jsou navázané všechny definované textury.
+
+\begin{verbatim}
+unsigned int diffuseNr = 1;
+unsigned int specularNr = 1;
+for (unsigned int i = 0; i < Textures.size(); i++) {
+    // retrieve texture number (the N in diffuse_textureN)
+    std::string number;
+    std::string name = Textures[i].Type_;
+    if (name == "texture_diffuse")
+        number = std::to_string(diffuseNr++);
+    else if (name == "texture_specular")
+        number = std::to_string(specularNr++);
+
+    // now set the sampler to the correct texture unit
+    shader.SetInteger((name + number).c_str(), i);
+    Textures[i].Bind(i);
+}
+\end{verbatim}
+
+Pokud dojde ke čtení z textury, která není navázána, bude vrácena černá barva, představující nulový lesk~\cite{unbound_texture}.
+
+\subsection{Zdroje světla}
+
+Aktuální implementace představuje bodový zdroj světla, jehož intenzita neklesá s uraženou vzdáleností. Tento model nereprezentuje reálné chování světla. Zavedené jsou dva nové druhy světla:
+
+\begin{itemize}
+\item Globální osvětlení -- představuje zdroj světla nekonečně vzdálený od scény, jehož paprsky jsou rovnoběžné a jeho intenzita se nemění. Jeho pomocí lze modelovat objekty jako je Slunce. 
+
+\item Bodové osvětlení -- paprsky se šíří všemi směry. Intenzita klesá s uraženou vzdáleností.
+\end{itemize}
+
+\subsubsection{Globální světlo}
+
+Pro výpočet globálního světla není potřeba jeho poloha, pouze směrový vektor jeho paprsků, definovaný směrem od zdroje světla. Při výpočtu intenzity světla byl použit směr od fragmentu ke světlu. Jedinou změnou oproti dosavadnímu výpočtu je změna jeho směru.
+
+\begin{verbatim}
+float globalInt = 
+    max(dot(norm, normalize(-light.globalDir)), 0.0);
+vec3 global = globalInt * light.global * 
+    vec3(texture(texture_diffuse1, TexCoord));
+\end{verbatim}
+
+\subsubsection{Bodové světlo}
+
+Intenzitu světla je možné snižovat lineárně s vzdáleností, kterou urazí. Toto řešení zajistí nižší nasvícení vzdálených objektů, a však vypadá poněkud uměle. Světla v reálném světě jsou z pravidla velmi jasné, pokud se nacházíme v jejich blízkosti. Jejich jas velice rychle klesá s narůstají vzdáleností. V určitém bodě se klesání zpomalí a přibližuje se k nule.
+
+K výpočtu útlumu lze použít následující rovnici~\cite{lopgl_light_casters}:
+
+$$ F_{att} = \frac{1.0}{K_c + K_l * d + K_q * d^2} $$
+
+Proměnná \textit{d} reprezentuje vzdálenost fragmentu od světla. Dále jsou nastaveny tři konstanty:
+
+\begin{itemize}
+\item $K_c$ -- konstantní složka. Obvykle je ponechána na hodnotě 1. Zajišťuje, aby hodnota jmenovatele neklesla pod 1 a nedošlo k navýšení intenzity světla.
+
+\item $K_l$ -- lineární složka. 
+
+\item $K_q$ -- kvadratická složka.
+\end{itemize}
+
+Graf~\ref{fig:lum} zobrazuje porovnání hodnot intenzity světla danou rovnicí výše (oranžová křivka) a lineární závislostí na vzdálenosti (šedá přímka).
+
+\begin{figure}\centering
+	\includegraphics[width=\textwidth]{images/lum}
+	\caption[Intenzita světla v závisloti na vzdálenosti]{Intenzita světla v závisloti na vzdálenosti}\label{fig:lum}
+\end{figure}
+
+Hodnoty parametrů jsou určeny požadovaným dosvitem světla. Parametr $K_l = 0.045$ a $K_q = 0.0075$~\cite{ogre_att}. Lineární rovnice má tvar:
+
+$$ F_{att} = \frac{100 - d}{100} $$
+
+Obrázek~\ref{fig:light} ve své levé části zobrazuje scénu vykreslenou pomocí rovnice útlumu. Pravá část snižuje intenzitu světla lineárně.
+
+\begin{figure}\centering
+	\includegraphics[width=\textwidth]{images/light}
+	\caption[Intenzita světla v závisloti na vzdálenosti]{Intenzita světla v závisloti na vzdálenosti}\label{fig:light}
+\end{figure}
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
 % % Modelování rostlin s využitím L-systémů
