@@ -58,5 +58,9 @@ enum class BlockType {
 
 glm::vec2 GetTextPos(BlockType blockType);
 
-float GetBaseHeight(const glm::vec2& pos);
+float GetBlockHeight(const glm::vec2& pos);
+
+namespace Detail {
+    constexpr float WATER_LEVEL{ 15.0f };
+}
 } // namespace Terrain

@@ -38,9 +38,12 @@ Terrain::BiomeType Terrain::TerrainGen::PlaceBlock(Chunk& chunk, const glm::vec2
     const auto surfHeight = BlockHeightSmooth(pos);
     const auto neighLow = static_cast<int>(LowestNeighSmooth(pos));
     auto h = static_cast<int>(surfHeight);
+    const auto water = Helpers::Math::Equal(surfHeight, Detail::WATER_LEVEL);
+
+    // TODO: connect humidity to water near by
     const auto hum = GetHumidity(pos);
     const auto temp = GetTemperature({ pos.x, static_cast<float>(h), pos.y });
-    const auto biome = Biome::GetBiome(pos, hum, temp);
+    const auto biome = water ? BiomeType::Water : Biome::GetBiome(pos, hum, temp);
 
     // set metadata to save chunk to a file
     SetBlockInfo(chunk, pos, hum, temp, biome, h);
@@ -96,23 +99,10 @@ float Terrain::TerrainGen::HightestNeigh(const glm::vec2& pos) {
     return *std::max_element(neigh.begin(), neigh.end());
 }
 
-float Terrain::TerrainGen::BlockHeight(const glm::vec2& pos) {
-    // TODO: Redo terrain variation
-    const auto heightVar = 10.0f;
-    const auto freq = 2.5f;
-    const glm::vec2 perPos = {
-        pos.x / Chunk::ChunkSize / freq,
-        pos.y / Chunk::ChunkSize / freq
-    };
-
-    return std::floor(
-      GetBaseHeight(pos) + heightVar * Engine::Random::Perlin.normalizedOctaveNoise2D_0_1(perPos.x, perPos.y, 2));
-}
-
 float Terrain::TerrainGen::BlockHeightSmooth(const glm::vec2& pos) {
     const auto high = static_cast<int>(HightestNeigh(pos));
     const auto low = static_cast<int>(LowestNeigh(pos));
-    const auto h = static_cast<int>(BlockHeight(pos));
+    const auto h = static_cast<int>(GetBlockHeight(pos));
 
     if (const auto diff = std::abs(high - low); diff > 3) {
         if (std::abs(h - low) > std::abs(h - high))
@@ -187,6 +177,9 @@ Terrain::BlockType Terrain::TerrainGen::GetBlockType(const glm::vec3& pos, float
             if (Helpers::Math::Equal(pos.y, surfHeight))
                 return BlockType::GrassTopJungle;
             return BlockType::Dirt;
+
+        case BiomeType::Water:
+            return BlockType::Water;
     }
 
     assert(false && "Undefiend biome");
@@ -194,17 +187,21 @@ Terrain::BlockType Terrain::TerrainGen::GetBlockType(const glm::vec3& pos, float
 }
 
 std::vector<float> Terrain::TerrainGen::NeighHeights(const glm::vec2& pos) {
-    return { BlockHeight({ pos.x - 1.0f, pos.y }),
-        BlockHeight({ pos.x + 1.0f, pos.y }),
-        BlockHeight({ pos.x, pos.y - 1.0f }),
-        BlockHeight({ pos.x, pos.y + 1.0f }) };
+    return {
+        GetBlockHeight({ pos.x - 1.0f, pos.y }),
+        GetBlockHeight({ pos.x + 1.0f, pos.y }),
+        GetBlockHeight({ pos.x, pos.y - 1.0f }),
+        GetBlockHeight({ pos.x, pos.y + 1.0f })
+    };
 }
 
 std::vector<float> Terrain::TerrainGen::NeighHeightsSmooth(const glm::vec2& pos) {
-    return { BlockHeightSmooth({ pos.x - 1.0f, pos.y }),
+    return {
+        BlockHeightSmooth({ pos.x - 1.0f, pos.y }),
         BlockHeightSmooth({ pos.x + 1.0f, pos.y }),
         BlockHeightSmooth({ pos.x, pos.y - 1.0f }),
-        BlockHeightSmooth({ pos.x, pos.y + 1.0f }) };
+        BlockHeightSmooth({ pos.x, pos.y + 1.0f })
+    };
 }
 
 Weather::Humidity Terrain::TerrainGen::GetHumidity(const glm::vec2& pos) {

@@ -19,12 +19,12 @@ enum class BiomeType {
     TropicalForest,
     Savanna,
     TropicalRainforest,
+    // not included in the biome table
+    Water,
 };
 
 class Biome {
   public:
-    static float GetFreq(BiomeType type);
-    static float GetHeightVar(BiomeType type);
     static BiomeType GetBiome(const glm::vec2& pos, Weather::Humidity humidity, Weather::Temperature temperature);
     
     static void Init();

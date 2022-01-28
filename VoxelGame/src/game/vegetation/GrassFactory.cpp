@@ -75,6 +75,7 @@ Terrain::Vegetation::GrassDensity Terrain::Vegetation::GrassFactory::GetGrassDen
         case BiomeType::Ice:
         case BiomeType::ColdDesert:
         case BiomeType::SubtropicalDesert:
+        case BiomeType::Water:
             return GrassDensity::None;
 
         case BiomeType::Tundra:

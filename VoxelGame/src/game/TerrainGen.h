@@ -25,7 +25,6 @@ class TerrainGen {
     static float LowestNeigh(const glm::vec2& pos);
     static float LowestNeighSmooth(const glm::vec2& pos);
     static float HightestNeigh(const glm::vec2& pos);
-    static float BlockHeight(const glm::vec2& pos);
     static float BlockHeightSmooth(const glm::vec2& pos);
     static BlockType GetBlockType(const glm::vec3& pos, float surfHeight, BiomeType biome);
     static std::vector<float> NeighHeights(const glm::vec2& pos);

@@ -8,44 +8,6 @@
 float Terrain::Biome::Frequency_{ 10.0f };
 std::vector<std::vector<std::vector<Terrain::BiomeType>>> Terrain::Biome::BiomeTable_{};
 
-
-// TODO: load from file
-float Terrain::Biome::GetFreq([[maybe_unused]] BiomeType type) {
-    return 2.5f;
-    // TODO: revisit this based on height map
-    //switch (type) {
-    //    case BiomeType::Plains:
-    //        return 2.5f;
-    //    case BiomeType::Forrest:
-    //        return 2.0f;
-    //    case BiomeType::Hills:
-    //        return 1.0f;
-    //    case BiomeType::Desert:
-    //        return 1.5f;
-    //}
-
-    //assert("Undefined biome", false);
-    //return 1.0f;
-}
-
-float Terrain::Biome::GetHeightVar([[maybe_unused]] BiomeType type) {
-    return 10.0f;
-    // TODO: revisit this based on height map
-    /*switch (type) {
-        case BiomeType::Plains:
-            return 10.0f;
-        case BiomeType::Forrest:
-            return 8.0f;
-        case BiomeType::Hills:
-            return 30.0f;
-        case BiomeType::Desert:
-            return 14.0f;
-    }
-
-    assert("Undefined biome", false);
-    return 1.0f;*/
-}
-
 Terrain::BiomeType Terrain::Biome::GetBiome(const glm::vec2& pos, Weather::Humidity humidity, Weather::Temperature temperature) {
     constexpr auto zoneSize = 128.0f;
     // TODO: initialize before this call and assert not empty

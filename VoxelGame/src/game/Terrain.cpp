@@ -1,4 +1,6 @@
 #include "Terrain.h"
+
+#include "engine/Chunk.h"
 #include "engine/Random.h"
 
 
@@ -112,8 +114,22 @@ glm::vec2 Terrain::GetTextPos(BlockType blockType) {
     return { 0.0f, 0.0f };
 }
 
-float Terrain::GetBaseHeight(const glm::vec2& pos) {
-    const auto freq = 100.0f;
-    const auto height = 40.0f;
-    return height * Engine::Random::Perlin.noise2D_0_1(pos.x / freq, pos.y / freq);
+float Terrain::GetBlockHeight(const glm::vec2& pos) {
+    constexpr auto freq = 100.0f;
+    constexpr auto baseHeight = 40.0f;
+
+    // TODO: Redo terrain variation
+    constexpr auto heightVar = 10.0f;
+    constexpr auto freq2 = 2.5f;
+    const glm::vec2 perPos = {
+        pos.x / Chunk::ChunkSize / freq2,
+        pos.y / Chunk::ChunkSize / freq2
+    };
+
+    const auto height = std::floor(
+      baseHeight * Engine::Random::Perlin.noise2D_0_1(pos.x / freq, pos.y / freq)
+      + heightVar * Engine::Random::Perlin.normalizedOctaveNoise2D_0_1(perPos.x, perPos.y, 2));
+
+    // don't create any block below global water level
+    return height >= Detail::WATER_LEVEL ? height : Detail::WATER_LEVEL;
 }

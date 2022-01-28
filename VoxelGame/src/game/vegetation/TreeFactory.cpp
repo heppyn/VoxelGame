@@ -77,6 +77,7 @@ bool Terrain::Vegetation::TreeFactory::CanHaveTree(const glm::vec3& pos, BiomeTy
 
         case BiomeType::Ice:
         case BiomeType::ColdDesert:
+        case BiomeType::Water:
             return false;
 
         case BiomeType::SubtropicalDesert:
