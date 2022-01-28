@@ -1,5 +1,6 @@
 #pragma once
 #include "glm/vec2.hpp"
+#include "glm/vec3.hpp"
 
 namespace Terrain {
 enum class BlockType {
@@ -59,6 +60,9 @@ enum class BlockType {
 glm::vec2 GetTextPos(BlockType blockType);
 
 float GetBlockHeight(const glm::vec2& pos);
+bool IsWater(float height);
+bool IsWater(const glm::vec2& pos);
+bool IsNextToWater(const glm::vec3& pos, float range);
 
 namespace Detail {
     constexpr float WATER_LEVEL{ 15.0f };

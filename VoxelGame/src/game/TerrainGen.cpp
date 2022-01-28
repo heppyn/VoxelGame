@@ -38,7 +38,7 @@ Terrain::BiomeType Terrain::TerrainGen::PlaceBlock(Chunk& chunk, const glm::vec2
     const auto surfHeight = BlockHeightSmooth(pos);
     const auto neighLow = static_cast<int>(LowestNeighSmooth(pos));
     auto h = static_cast<int>(surfHeight);
-    const auto water = Helpers::Math::Equal(surfHeight, Detail::WATER_LEVEL);
+    const auto water = IsWater(surfHeight);
 
     // TODO: connect humidity to water near by
     const auto hum = GetHumidity(pos);
@@ -117,6 +117,15 @@ Terrain::BlockType Terrain::TerrainGen::GetBlockType(const glm::vec3& pos, float
     // stone below the surface
     if (pos.y + 3 <= surfHeight)
         return BlockType::Stone;
+
+    if (biome != BiomeType::Water) {
+        if (IsNextToWater(pos, 1.0f))
+            return BlockType::Sand;
+
+        if (IsNextToWater(pos, 2.0f) && Engine::Random::GetNoise0_1<float>(pos) > 0.35f)
+            return BlockType::Sand;
+    }
+
 
     switch (biome) {
         case BiomeType::Ice:

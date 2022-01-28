@@ -87,9 +87,11 @@ class Random {
         return Get2dNoise0_1<T>(vec.x, vec.y, seed);
     }
 
+    // bad statistical properties - use 2D noise
     template<typename T>
     static T GetNoise0_1(const glm::vec3& vec, unsigned int seed = Seed) {
-        return Get3dNoise0_1<T>(vec.x, vec.y, vec.z, seed);
+        //return Get3dNoise0_1<T>(vec.x, vec.y, vec.z, seed);
+        return Get2dNoise0_1<T>(vec.x, vec.z, seed);
     }
 
 

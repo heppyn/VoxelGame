@@ -2,6 +2,7 @@
 
 #include "engine/Chunk.h"
 #include "engine/Random.h"
+#include "helpers/Math.h"
 
 
 glm::vec2 Terrain::GetTextPos(BlockType blockType) {
@@ -132,4 +133,32 @@ float Terrain::GetBlockHeight(const glm::vec2& pos) {
 
     // don't create any block below global water level
     return height >= Detail::WATER_LEVEL ? height : Detail::WATER_LEVEL;
+}
+
+bool Terrain::IsWater(const float height) {
+    return Helpers::Math::Equal(height, Detail::WATER_LEVEL);
+}
+
+bool Terrain::IsWater(const glm::vec2& pos) {
+    return IsWater(GetBlockHeight(pos));
+}
+
+bool Terrain::IsNextToWater(const glm::vec3& pos, const float range) {
+    assert(range >= 1.0f);
+
+    // don't place sand next to water
+    if (pos.y > Detail::WATER_LEVEL + 1.0f && range <= 1.0f) {
+        return false;
+    }
+
+    // TODO: is this the most performance efficient?
+    const std::vector neigh = {
+        glm::vec2(pos.x + range, pos.z),
+        glm::vec2(pos.x - range, pos.z),
+        glm::vec2(pos.x, pos.z + range),
+        glm::vec2(pos.x, pos.z - range)
+    };
+
+    // overloaded functions don't work
+    return std::ranges::any_of(neigh, [](const glm::vec2& p) { return IsWater(p); });
 }
