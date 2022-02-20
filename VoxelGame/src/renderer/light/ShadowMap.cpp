@@ -52,9 +52,7 @@ void Renderer::ShadowMap::Init(const int levels, float nearPlane, const float fa
 
 void Renderer::ShadowMap::Bind() const {
     glBindFramebuffer(GL_FRAMEBUFFER, FBO_);
-    // something happens here
     glBindTexture(GL_TEXTURE_2D_ARRAY, DepthMapId_);
-    //glFramebufferTexture(GL_FRAMEBUFFER, GL_TEXTURE_2D_ARRAY, DepthMapId_, 0);
     glViewport(0, 0, Resolution, Resolution);
     glClear(GL_DEPTH_BUFFER_BIT);
 }
@@ -97,7 +95,7 @@ void Renderer::ShadowMap::SetCascadeLevels(int levels, float farPlane) {
         return;
     }
     // default is 3 levels
-    CascadeLevels_ = { farPlane / 17.0f, farPlane / 4.0f };
+    CascadeLevels_ = { farPlane / 14.0f, farPlane / 4.0f };
 }
 
 std::vector<glm::mat4> Renderer::ShadowMap::LightSpaceMatrices(const glm::mat4& view, const glm::vec3& lightDir, float fov) const {

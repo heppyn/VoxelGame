@@ -140,24 +140,6 @@ void Renderer::SceneRenderer::InitShaders() {
 }
 
 void Renderer::SceneRenderer::RenderShadowMap(const Scene& scene) {
-    //ShadowMap_.Bind();
-
-    //const glm::mat4 projection = glm::perspective(
-    //  glm::radians(Camera->Zoom),
-    //  static_cast<float>(WindowManagerGl::Width) / static_cast<float>(WindowManagerGl::Height),
-    //  0.1f,
-    //  500.0f);
-
-    //const auto corners = Helpers::Math::FrustumCornersWordSpace(projection, Camera->GetViewMatrix());
-
-    //const auto lightSpaceMatrix = Helpers::Math::OrthoLightSpace(
-    //  corners,
-    //  scene.GetGlobalLight().Direction,
-    //  1.0f);
-
-    //ShaderDepth_->SetMatrix4("lightSpaceMatrix", lightSpaceMatrix);
-    //ShaderInstance_->SetMatrix4("lightSpaceMatrix", lightSpaceMatrix);
-
     ShadowMapCSM_.BindLightSpaceMatrices(Camera->GetViewMatrix(), scene.GetGlobalLight().Direction, Camera->Zoom);
     ShadowMapCSM_.Bind();
 

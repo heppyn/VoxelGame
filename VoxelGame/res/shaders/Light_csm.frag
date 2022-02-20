@@ -76,11 +76,14 @@ float ShadowCalculation(vec3 fragPosWorldSpace, float dotLightNormal) {
     // calculate bias (based on depth map resolution and slope)
     float bias = max(0.0085 * (1.0 - dotLightNormal), 0.00085);
     if (layer == cascadeCount) {
-        bias *= 1 / (farPlane * 0.008);
+        bias /= farPlane * 0.008;
     }
     else {
-        bias *= 1 / (cascadePlaneDistances[layer] * 0.02);
+        bias /= cascadePlaneDistances[layer] * 0.02;
     }
+
+//    float closestDepth = texture(texture_shadow, vec3(projCoords.xy, layer)).r;
+//    float shadow = (currentDepth - bias) > closestDepth  ? 1.0 : 0.0;
 
     // PCF
     float shadow = 0.0;

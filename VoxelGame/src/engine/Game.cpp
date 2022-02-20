@@ -16,7 +16,7 @@ Game::~Game() {
 void Game::Init() {
     ResourceManager::LoadShader("./res/shaders/LightBatch.vert", "./res/shaders/Light.frag", nullptr, "lightBatch");
     ResourceManager::LoadShader("./res/shaders/Mesh.vert", "./res/shaders/Mesh.frag", nullptr, "meshShader");
-    ResourceManager::LoadShader("./res/shaders/Shadow.vert", "./res/shaders/Shadow.frag", nullptr, "depth");
+    ResourceManager::LoadShader("./res/shaders/Shadow.vert", "./res/shaders/Shadow.frag", nullptr, "shadow");
     ResourceManager::LoadShader(
       "./res/shaders/Shadow_csm.vert", "./res/shaders/Shadow.frag", "./res/shaders/Shadow_csm.geom", "shadow_csm");
     ResourceManager::LoadShader(
