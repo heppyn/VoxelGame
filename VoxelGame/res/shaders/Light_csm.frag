@@ -41,9 +41,9 @@ uniform float farPlane;
 uniform mat4 view;
 
 layout(std140, binding = 0) uniform LightSpaceMatrices {
-    mat4 lightSpaceMatrices[16];
+    mat4 lightSpaceMatrices[3];
 };
-uniform float cascadePlaneDistances[16];
+uniform float cascadePlaneDistances[3];
 uniform int cascadeCount; // number of frusta - 1
 
 float ShadowCalculation(vec3 fragPosWorldSpace, float dotLightNormal) {
@@ -51,15 +51,12 @@ float ShadowCalculation(vec3 fragPosWorldSpace, float dotLightNormal) {
     vec4 fragPosViewSpace = view * vec4(fragPosWorldSpace, 1.0);
     float depthValue = abs(fragPosViewSpace.z);
 
-    int layer = -1;
+    int layer = cascadeCount;
     for (int i = 0; i < cascadeCount; ++i) {
         if (depthValue < cascadePlaneDistances[i]) {
             layer = i;
             break;
         }
-    }
-    if (layer == -1) {
-        layer = cascadeCount;
     }
 
     vec4 fragPosLightSpace = lightSpaceMatrices[layer] * vec4(fragPosWorldSpace, 1.0);
