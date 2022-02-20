@@ -3,7 +3,7 @@
 #include "Texture2D.h"
 
 namespace Renderer {
-// framebuffer with attached dept component
+// framebuffer with attached depth component
 class DepthMap {
   public:
     const int Width{ 1024 };

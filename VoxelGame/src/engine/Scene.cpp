@@ -61,7 +61,7 @@ void Scene::Update(bool updateAll /*= false*/) {
                 const auto startTimeChunk = glfwGetTime();
                 Chunks_.emplace(chunkPos, Terrain::TerrainGen::GenerateChunk(chunkPos));
                 updated = true;
-                std::cout << "Chunk generated in " << (glfwGetTime() - startTimeChunk) * 1000.0 << " ms\n";
+                //std::cout << "Chunk generated in " << (glfwGetTime() - startTimeChunk) * 1000.0 << " ms\n";
             }
         }
         if (overFrame && !updateAll)

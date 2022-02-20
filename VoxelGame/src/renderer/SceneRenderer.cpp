@@ -1,9 +1,12 @@
 #include "SceneRenderer.h"
 
+#include <iostream>
+
 #include "engine/ResourceManager.h"
 #include "engine/Components/Mesh.h"
 #include "helpers/Math.h"
 #include "open_gl/WindowManagerGl.h"
+#include "open_gl/GpuTimer.h"
 
 Renderer::SceneRenderer::SceneRenderer(Renderer::Camera* camera)
   : Camera(camera) {}
@@ -29,7 +32,7 @@ void Renderer::SceneRenderer::Render(const Scene& scene, unsigned width, unsigne
           glm::radians(Camera->Zoom),
           static_cast<float>(width) / static_cast<float>(height),
           0.1f,
-          500.0f);
+          150.0f);
         shader->SetMatrix4("projection", projection);
     }
 
@@ -142,7 +145,7 @@ void Renderer::SceneRenderer::RenderShadowMap(const Scene& scene) {
       glm::radians(Camera->Zoom),
       static_cast<float>(WindowManagerGl::Width) / static_cast<float>(WindowManagerGl::Height),
       0.1f,
-      500.0f);
+      90.0f);
 
     const auto corners = Helpers::Math::FrustumCornersWordSpace(projection, Camera->GetViewMatrix());
 
@@ -151,10 +154,16 @@ void Renderer::SceneRenderer::RenderShadowMap(const Scene& scene) {
       scene.GetGlobalLight().Direction,
       1.0f);
 
+
+    OpenGl::GpuTimer timer;
+    timer.Start();
+
     ShaderDepth_->SetMatrix4("lightSpaceMatrix", lightSpaceMatrix);
     ShaderInstance_->SetMatrix4("lightSpaceMatrix", lightSpaceMatrix);
 
     RenderScene(scene, ShaderDepth_);
+
+    std::cout << timer.TimeMs() << '\n';
 
     // bind default framebuffer
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
