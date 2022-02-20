@@ -9,8 +9,13 @@ GLFWwindow* WindowManagerGl::MainWindow = nullptr;
 unsigned int WindowManagerGl::Width = 1500;
 unsigned int WindowManagerGl::Height = 800;
 
+void ErrorCallback(int, const char* error) {
+    std::cout << "GLFW Error: " << error << std::endl;
+}
+
 GLFWwindow* WindowManagerGl::CreateMainWindow(bool debug /*= false*/) {
     // glfw: initialize and configure
+    glfwSetErrorCallback(ErrorCallback);
     glfwInit();
     // debug is supported from 4.3
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
