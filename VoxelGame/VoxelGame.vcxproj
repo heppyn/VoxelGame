@@ -244,6 +244,7 @@
     <ClCompile Include="src\game\vegetation\LSystemsManager.cpp" />
     <ClCompile Include="src\game\vegetation\Tree.cpp" />
     <ClCompile Include="src\helpers\Math.cpp" />
+    <ClCompile Include="src\open_gl\GpuTimer.cpp" />
     <ClCompile Include="src\open_gl\InputHandlerGl.cpp" />
     <ClCompile Include="src\open_gl\WindowManagerGl.cpp" />
     <ClCompile Include="src\engine\GameObject.cpp" />
@@ -470,6 +471,7 @@
     <ClInclude Include="src\helpers\Constants.h" />
     <ClInclude Include="src\helpers\Math.h" />
     <ClInclude Include="src\helpers\Print.h" />
+    <ClInclude Include="src\open_gl\GpuTimer.h" />
     <ClInclude Include="src\open_gl\InputHandlerGl.h" />
     <ClInclude Include="src\open_gl\WindowManagerGl.h" />
     <ClInclude Include="src\engine\Game.h" />
