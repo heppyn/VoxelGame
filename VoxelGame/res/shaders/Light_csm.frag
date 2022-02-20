@@ -40,19 +40,21 @@ uniform float farPlane;
 
 uniform mat4 view;
 
+#define CASCADE_COUNT 3
+
 layout(std140, binding = 0) uniform LightSpaceMatrices {
-    mat4 lightSpaceMatrices[3];
+    mat4 lightSpaceMatrices[CASCADE_COUNT];
 };
-uniform float cascadePlaneDistances[3];
-uniform int cascadeCount; // number of frusta - 1
+uniform float cascadePlaneDistances[CASCADE_COUNT - 1];
+
 
 float ShadowCalculation(vec3 fragPosWorldSpace, float dotLightNormal) {
     // select cascade layer
     vec4 fragPosViewSpace = view * vec4(fragPosWorldSpace, 1.0);
     float depthValue = abs(fragPosViewSpace.z);
 
-    int layer = cascadeCount;
-    for (int i = 0; i < cascadeCount; ++i) {
+    int layer = CASCADE_COUNT - 1;
+    for (int i = 0; i < CASCADE_COUNT - 1; ++i) {
         if (depthValue < cascadePlaneDistances[i]) {
             layer = i;
             break;
@@ -72,7 +74,8 @@ float ShadowCalculation(vec3 fragPosWorldSpace, float dotLightNormal) {
     }
     // calculate bias (based on depth map resolution and slope)
     float bias = max(0.0085 * (1.0 - dotLightNormal), 0.00085);
-    if (layer == cascadeCount) {
+    // TODO: Add far plane to cascades
+    if (layer == CASCADE_COUNT - 1) {
         bias /= farPlane * 0.008;
     }
     else {

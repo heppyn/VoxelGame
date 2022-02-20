@@ -280,6 +280,7 @@
     <ClCompile Include="tests\engine\L-systems\TurtleTest.cpp" />
     <ClCompile Include="src\game\vegetation\TreeFactory.cpp" />
     <ClCompile Include="tests\engine\RandomTest.cpp" />
+    <ClCompile Include="tests\renderer\ShaderTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".clang-format" />

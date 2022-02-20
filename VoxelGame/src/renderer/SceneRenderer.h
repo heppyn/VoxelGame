@@ -31,6 +31,6 @@ class SceneRenderer {
     void RenderScene(const Scene& scene, Shader* shader);
     void RenderShadowMap(const Scene& scene);
     void BindInstancesData(const Scene& scene);
-    void InitShaders();
+    void InitShaders(int levels);
 };
 } // namespace Renderer

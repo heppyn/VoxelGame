@@ -1,6 +1,7 @@
 #include "DepthMap.h"
 
 #include <glad/glad.h>
+#include <glm/gtc/matrix_transform.hpp>
 
 #include "helpers/Math.h"
 #include "open_gl/WindowManagerGl.h"

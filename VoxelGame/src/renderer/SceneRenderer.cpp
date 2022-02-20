@@ -15,7 +15,7 @@ void Renderer::SceneRenderer::Init() {
     // set up renderer with all sides, otherwise scene containing only light would crash
     CubeRenderers_[Engine::Cube::ALL_SIDES] = {};
     CubeRenderers_[Engine::Cube::ALL_SIDES].Init();
-    InitShaders();
+    InitShaders(3);
     ShadowMap_.Init();
     // TODO: define near and far in variables
     ShadowMapCSM_.Init(3, 0.1f, 150.0f);
@@ -49,15 +49,7 @@ void Renderer::SceneRenderer::Render(const Scene& scene, unsigned width, unsigne
     glClearColor(103 / 255.0f, 157 / 255.0f, 245 / 255.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    ShadowMap_.BindData(*ShaderInstance_);
-    //ShadowMapCSM_.BindData(*ShaderInstance_);
-
-    //OpenGl::GpuTimer timer;
-    //timer.Start();
-
     RenderScene(scene, ShaderInstance_);
-
-    //std::cout << timer.TimeMs() << '\n';
 
     // draw light separately
     // render with all sides
@@ -128,12 +120,14 @@ void Renderer::SceneRenderer::BindInstancesData(const Scene& scene) {
     }
 }
 
-void Renderer::SceneRenderer::InitShaders() {
-    ShaderInstance_ = ResourceManager::GetShader("lightBatch");
-    //ShaderInstance_ = ResourceManager::GetShader("light_csm");
+void Renderer::SceneRenderer::InitShaders(int levels) {
     ShaderMesh_ = ResourceManager::GetShader("meshShader");
-    ShaderDepth_ = ResourceManager::GetShader("shadow");
-    //ShaderDepth_ = ResourceManager::GetShader("shadow_csm");
+    //ShaderInstance_ = ResourceManager::GetShader("lightBatch");
+    //ShaderDepth_ = ResourceManager::GetShader("shadow");
+    ShaderInstance_ = ResourceManager::SetShaderMacros(
+      "light_csm", { { "CASCADE_COUNT", std::to_string(levels) } });
+    ShaderDepth_ = ResourceManager::SetShaderMacros(
+      "shadow_csm", { { "CASCADE_COUNT", std::to_string(levels) } });
 
     // set sprite sheet size for instancing
     ShaderDepth_->SetVector2f("tex_size", ResourceManager::GetSpriteSheetSize(), true);
@@ -150,15 +144,15 @@ void Renderer::SceneRenderer::InitShaders() {
 }
 
 void Renderer::SceneRenderer::RenderShadowMap(const Scene& scene) {
-    ShadowMap_.Bind();
-    const auto lightSpaceMatrix = ShadowMap_.LightSpaceMatrix(
-      Camera->GetViewMatrix(), scene.GetGlobalLight().Direction, Camera->Zoom);
+    //ShadowMap_.Bind();
+    //const auto lightSpaceMatrix = ShadowMap_.LightSpaceMatrix(
+    //  Camera->GetViewMatrix(), scene.GetGlobalLight().Direction, Camera->Zoom);
 
-    ShaderDepth_->SetMatrix4("lightSpaceMatrix", lightSpaceMatrix);
-    ShaderInstance_->SetMatrix4("lightSpaceMatrix", lightSpaceMatrix);
+    //ShaderDepth_->SetMatrix4("lightSpaceMatrix", lightSpaceMatrix);
+    //ShaderInstance_->SetMatrix4("lightSpaceMatrix", lightSpaceMatrix);
 
-    //ShadowMapCSM_.BindLightSpaceMatrices(Camera->GetViewMatrix(), scene.GetGlobalLight().Direction, Camera->Zoom);
-    //ShadowMapCSM_.Bind();
+    ShadowMapCSM_.BindLightSpaceMatrices(Camera->GetViewMatrix(), scene.GetGlobalLight().Direction, Camera->Zoom);
+    ShadowMapCSM_.Bind();
 
     //OpenGl::GpuTimer timer;
     //timer.Start();
@@ -166,6 +160,9 @@ void Renderer::SceneRenderer::RenderShadowMap(const Scene& scene) {
     RenderScene(scene, ShaderDepth_);
 
     //std::cout << timer.TimeMs() << '\n';
+
+    //ShadowMap_.BindData(*ShaderInstance_);
+    ShadowMapCSM_.BindData(*ShaderInstance_);
 
     // bind default framebuffer
     glBindFramebuffer(GL_FRAMEBUFFER, 0);

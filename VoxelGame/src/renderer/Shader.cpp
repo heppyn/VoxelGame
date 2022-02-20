@@ -1,7 +1,10 @@
 #include "Shader.h"
 
 #include <iostream>
+#include <sstream>
+
 #include <glad/glad.h>
+#include <glm/gtc/type_ptr.hpp>
 
 Renderer::Shader& Renderer::Shader::Use() {
     glUseProgram(Id);
@@ -40,6 +43,19 @@ void Renderer::Shader::Compile(const char* vertexSource, const char* fragmentSou
     glDeleteShader(sFragment);
     if (geometrySource != nullptr)
         glDeleteShader(gShader);
+}
+
+void Renderer::Shader::CompileWithMacros(std::string&& vertexSource, std::string&& fragmentSource, std::string&& geometrySource, const Macros_t& macros) {
+    auto foundMacro = false;
+    foundMacro |= ReplaceMacros(vertexSource, macros);
+    foundMacro |= ReplaceMacros(fragmentSource, macros);
+    foundMacro |= ReplaceMacros(geometrySource, macros);
+
+    if (!foundMacro) {
+        std::cout << "WARNING::SHADER marco not found in shader\n";
+    }
+
+    Compile(vertexSource.c_str(), fragmentSource.c_str(), geometrySource.empty() ? nullptr : geometrySource.c_str());
 }
 
 void Renderer::Shader::SetFloat(const char* name, float value, bool useShader) {
@@ -115,4 +131,34 @@ void Renderer::Shader::CheckCompileErrors(unsigned int object, const std::string
                       << std::endl;
         }
     }
+}
+
+bool Renderer::Shader::ReplaceMacros(std::string& source, const Macros_t& macros) {
+    // Look for #define CONSTANT name
+    std::istringstream in(source);
+    std::ostringstream out;
+    auto foundSome = false;
+
+    for (std::string line; std::getline(in, line, '\n');) {
+        auto found = false;
+        if (line.starts_with("#define ")) {
+            for (const auto& [name, value] : macros) {
+                if (line.starts_with("#define " + name + ' ')) {
+                    foundSome = true;
+                    found = true;
+
+                    out << "#define " << name << ' ' << value << '\n';
+                }
+            }
+        }
+        if (!found) {
+            out << line << '\n';
+        }
+    }
+
+    if (!foundSome)
+        return false;
+
+    source = out.str();
+    return true;
 }

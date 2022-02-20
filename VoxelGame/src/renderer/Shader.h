@@ -1,13 +1,17 @@
 #pragma once
 
 #include <string>
+#include <vector>
+#include <utility>
 
 #include <glm/glm.hpp>
-#include <glm/gtc/type_ptr.hpp>
 
 
 namespace Renderer {
 class Shader {
+  private:
+    using Macros_t = std::vector<std::pair<std::string, std::string>>;
+
   public:
     // state
     unsigned int Id{ 0 };
@@ -15,6 +19,9 @@ class Shader {
     Shader& Use();
     // compiles the shader from given source code
     void Compile(const char* vertexSource, const char* fragmentSource, const char* geometrySource = nullptr);
+    // compiles the shader from given source code
+    // and redefines macros eg. #define LEVELS 3
+    void CompileWithMacros(std::string&& vertexSource, std::string&& fragmentSource, std::string&& geometrySource, const Macros_t& macros);
     // utility functions
     void SetFloat(const char* name, float value, bool useShader = false);
     void SetInteger(const char* name, int value, bool useShader = false);
@@ -29,5 +36,9 @@ class Shader {
   private:
     // checks if compilation or linking failed and if so, print the error logs
     static void CheckCompileErrors(unsigned int object, const std::string& type);
+
+    // used for testing purposes
+  protected:
+    static bool ReplaceMacros(std::string& source, const Macros_t& macros);
 };
 } // namespace Renderer

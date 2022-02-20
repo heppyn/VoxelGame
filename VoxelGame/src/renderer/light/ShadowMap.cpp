@@ -71,9 +71,9 @@ void Renderer::ShadowMap::BindData(Shader& shader) const {
     BindTextures(3);
 
     shader.SetFloat("farPlane", FarPlane_);
-    shader.SetInteger("cascadeCount", static_cast<int>(CascadeLevels_.size()));
     for (size_t i = 0; i < CascadeLevels_.size(); ++i) {
         // TODO: maybe don't do string conversions
+        // TDOO: set far plane as the last level
         shader.SetFloat(std::string("cascadePlaneDistances[" + std::to_string(i) + "]").c_str(), CascadeLevels_[i]);
     }
 }
@@ -95,7 +95,7 @@ void Renderer::ShadowMap::SetCascadeLevels(int levels, float farPlane) {
         return;
     }
     // default is 3 levels
-    CascadeLevels_ = { farPlane / 14.0f, farPlane / 4.0f };
+    CascadeLevels_ = { farPlane / 16.0f, farPlane / 4.0f };
 }
 
 std::vector<glm::mat4> Renderer::ShadowMap::LightSpaceMatrices(const glm::mat4& view, const glm::vec3& lightDir, float fov) const {
