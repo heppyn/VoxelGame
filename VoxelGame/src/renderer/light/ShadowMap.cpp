@@ -72,9 +72,10 @@ void Renderer::ShadowMap::BindData(Shader& shader) const {
 
     shader.SetFloat("farPlane", FarPlane_);
     for (size_t i = 0; i < CascadeLevels_.size(); ++i) {
-        // TODO: maybe don't do string conversions
-        // TDOO: set far plane as the last level
         shader.SetFloat(std::string("cascadePlaneDistances[" + std::to_string(i) + "]").c_str(), CascadeLevels_[i]);
+    }
+    for (size_t i = 0; i < CascadeBiases_.size(); ++i) {
+        shader.SetFloat(std::string("cascadeBiases[" + std::to_string(i) + "]").c_str(), CascadeBiases_[i]);
     }
 }
 
@@ -86,16 +87,29 @@ void Renderer::ShadowMap::BindTextures(unsigned slot) const {
 void Renderer::ShadowMap::SetCascadeLevels(int levels, float farPlane) {
     assert(levels > 1);
 
-    if (levels == 5) {
-        CascadeLevels_ = { farPlane / 50.0f, farPlane / 25.0f, farPlane / 10.0f, farPlane / 2.0f };
-        return;
+    if (levels == 3) {
+        CascadeLevels_ = { farPlane / 16.0f, farPlane / 4.0f };
+        CascadeBiases_ = { 0.1f, 0.03f, 0.01f };
     }
-    if (levels == 4) {
+    else if (levels == 4) {
         CascadeLevels_ = { farPlane / 50.0f, farPlane / 20.0f, farPlane / 5.0f };
-        return;
+        CascadeBiases_ = { 0.9f, 0.1f, 0.03f, 0.01f };
     }
-    // default is 3 levels
-    CascadeLevels_ = { farPlane / 16.0f, farPlane / 4.0f };
+    else if (levels == 5) {
+        CascadeLevels_ = { farPlane / 50.0f, farPlane / 25.0f, farPlane / 10.0f, farPlane / 2.0f };
+        CascadeBiases_ = { 0.9f, 0.2f, 0.09f, 0.03f, 0.001f };
+    }
+    else {
+        assert(false && "Unsuported cascade number");
+    }
+
+    assert(CascadeLevels_.size() + 1 == CascadeBiases_.size());
+
+    size_t i = 0;
+    for (; i < CascadeLevels_.size(); ++i) {
+        CascadeBiases_[i] = 1 / (CascadeBiases_[i] * CascadeLevels_[i]);
+    }
+    CascadeBiases_[i] = 1 / (CascadeBiases_[i] * farPlane);
 }
 
 std::vector<glm::mat4> Renderer::ShadowMap::LightSpaceMatrices(const glm::mat4& view, const glm::vec3& lightDir, float fov) const {

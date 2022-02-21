@@ -46,6 +46,7 @@ layout(std140, binding = 0) uniform LightSpaceMatrices {
     mat4 lightSpaceMatrices[CASCADE_COUNT];
 };
 uniform float cascadePlaneDistances[CASCADE_COUNT - 1];
+uniform float cascadeBiases[CASCADE_COUNT];
 
 
 float ShadowCalculation(vec3 fragPosWorldSpace, float dotLightNormal) {
@@ -74,13 +75,7 @@ float ShadowCalculation(vec3 fragPosWorldSpace, float dotLightNormal) {
     }
     // calculate bias (based on depth map resolution and slope)
     float bias = max(0.0085 * (1.0 - dotLightNormal), 0.00085);
-    // TODO: Add far plane to cascades
-    if (layer == CASCADE_COUNT - 1) {
-        bias /= farPlane * 0.008;
-    }
-    else {
-        bias /= cascadePlaneDistances[layer] * 0.02;
-    }
+    bias *= cascadeBiases[layer];
 
 //    float closestDepth = texture(texture_shadow, vec3(projCoords.xy, layer)).r;
 //    float shadow = (currentDepth - bias) > closestDepth  ? 1.0 : 0.0;

@@ -23,6 +23,7 @@ class ShadowMap {
     unsigned DepthMapId_{ 0 };
     unsigned MatricesUBO_{ 0 };
     std::vector<float> CascadeLevels_{};
+    std::vector<float> CascadeBiases_{};
 
     float NearPlane_{ 0.1f }, FarPlane_{ 150.0f };
 
