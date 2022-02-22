@@ -70,7 +70,6 @@ void Renderer::ShadowMap::BindData(Shader& shader) const {
     shader.SetInteger("texture_shadow", 3);
     BindTextures(3);
 
-    shader.SetFloat("farPlane", FarPlane_);
     for (size_t i = 0; i < CascadeLevels_.size(); ++i) {
         shader.SetFloat(std::string("cascadePlaneDistances[" + std::to_string(i) + "]").c_str(), CascadeLevels_[i]);
     }
@@ -89,15 +88,15 @@ void Renderer::ShadowMap::SetCascadeLevels(int levels, float farPlane) {
 
     if (levels == 3) {
         CascadeLevels_ = { farPlane / 16.0f, farPlane / 4.0f };
-        CascadeBiases_ = { 0.1f, 0.03f, 0.01f };
+        CascadeBiases_ = { 0.1f, 0.03f, 0.009f };
     }
     else if (levels == 4) {
-        CascadeLevels_ = { farPlane / 50.0f, farPlane / 20.0f, farPlane / 5.0f };
-        CascadeBiases_ = { 0.9f, 0.1f, 0.03f, 0.01f };
+        CascadeLevels_ = { farPlane / 25.0f, farPlane / 10.0f, farPlane / 3.5f };
+        CascadeBiases_ = { 0.2f, 0.1f, 0.05f, 0.01f };
     }
     else if (levels == 5) {
-        CascadeLevels_ = { farPlane / 50.0f, farPlane / 25.0f, farPlane / 10.0f, farPlane / 2.0f };
-        CascadeBiases_ = { 0.9f, 0.2f, 0.09f, 0.03f, 0.001f };
+        CascadeLevels_ = { farPlane / 30.0f, farPlane / 16.0f, farPlane / 8.0f, farPlane / 3.5f };
+        CascadeBiases_ = { 0.2f, 0.1f, 0.09f, 0.07f, 0.01f };
     }
     else {
         assert(false && "Unsuported cascade number");
@@ -141,5 +140,5 @@ glm::mat4 Renderer::ShadowMap::LightSpaceMatrix(const glm::mat4& view, const glm
     return Helpers::Math::OrthoLightSpace(
       Helpers::Math::FrustumCornersWordSpace(proj, view),
       lightDir,
-      2.0f);
+      3.0f);
 }

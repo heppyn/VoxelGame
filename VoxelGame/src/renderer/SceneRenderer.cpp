@@ -13,12 +13,13 @@ Renderer::SceneRenderer::SceneRenderer(Renderer::Camera* camera)
 
 void Renderer::SceneRenderer::Init() {
     // set up renderer with all sides, otherwise scene containing only light would crash
+    constexpr int levels = 3;
     CubeRenderers_[Engine::Cube::ALL_SIDES] = {};
     CubeRenderers_[Engine::Cube::ALL_SIDES].Init();
-    InitShaders(3);
+    InitShaders(levels);
     ShadowMap_.Init();
     // TODO: define near and far in variables
-    ShadowMapCSM_.Init(3, 0.1f, 150.0f);
+    ShadowMapCSM_.Init(levels, 0.1f, 150.0f);
 }
 
 void Renderer::SceneRenderer::Render(const Scene& scene, unsigned width, unsigned height) {
@@ -43,13 +44,23 @@ void Renderer::SceneRenderer::Render(const Scene& scene, unsigned width, unsigne
     ShaderInstance_->SetVector3f("light.position", scene.GetLights().front().Position());
     ShaderInstance_->SetVector3f("view_pos", Camera->Position);
 
+    //OpenGl::GpuTimer timer;
+    //timer.Start();
+
     RenderShadowMap(scene);
+
+    //std::cout << timer.TimeMs() << '\n';
 
     glViewport(0, 0, static_cast<GLsizei>(width), static_cast<GLsizei>(height));
     glClearColor(103 / 255.0f, 157 / 255.0f, 245 / 255.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+    //OpenGl::GpuTimer timer;
+    //timer.Start();
+
     RenderScene(scene, ShaderInstance_);
+
+    //std::cout << timer.TimeMs() << '\n';
 
     // draw light separately
     // render with all sides

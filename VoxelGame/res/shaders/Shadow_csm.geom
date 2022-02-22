@@ -11,7 +11,6 @@ in VS_OUT {
 
 out vec2 TexCoord; 
 
-// max 5 shadow levels
 layout(std140, binding = 0) uniform LightSpaceMatrices {
     mat4 lightSpaceMatrices[CASCADE_COUNT];
 };

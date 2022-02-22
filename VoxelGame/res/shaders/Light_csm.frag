@@ -36,7 +36,6 @@ uniform sampler2D texture_specular1;
 uniform sampler2DArray texture_shadow;
 
 uniform vec3 viewPos;
-uniform float farPlane;
 
 uniform mat4 view;
 
@@ -70,9 +69,7 @@ float ShadowCalculation(vec3 fragPosWorldSpace, float dotLightNormal) {
 
     // get depth of current fragment from light's perspective
     float currentDepth = projCoords.z;
-    if (currentDepth > 1.0) {
-        return 0.0;
-    }
+
     // calculate bias (based on depth map resolution and slope)
     float bias = max(0.0085 * (1.0 - dotLightNormal), 0.00085);
     bias *= cascadeBiases[layer];
