@@ -2,6 +2,7 @@
 
 #include <fstream>
 #include <iostream>
+#include <ranges>
 #include <sstream>
 
 #include "stb_image/stb_image.h"
@@ -70,17 +71,17 @@ glm::vec2 ResourceManager::GetSpriteSheetSize() {
 }
 
 void ResourceManager::Clear() {
-    for (const auto& [fst, shader] : Shaders) {
+    for (const auto& shader : Shaders | std::views::values) {
         glDeleteProgram(shader->Id);
     }
-    for (const auto& [fst, texture] : Textures) {
+    for (const auto& texture : Textures | std::views::values) {
         glDeleteTextures(1, &texture->Id);
     }
 }
 
 std::unique_ptr<Renderer::Shader> ResourceManager::LoadShaderFromFile(const char* vShaderFile, const char* fShaderFile, const char* gShaderFile) {
     const std::string vertexCode = LoadShaderCodeFromFile(vShaderFile);
-    const std::string fragmentCode = LoadShaderCodeFromFile(fShaderFile);
+    const std::string fragmentCode = fShaderFile != nullptr ? LoadShaderCodeFromFile(fShaderFile) : "";
     const std::string geometryCode = gShaderFile != nullptr ? LoadShaderCodeFromFile(gShaderFile) : "";
 
     const char* vShaderCode = vertexCode.c_str();
@@ -88,15 +89,18 @@ std::unique_ptr<Renderer::Shader> ResourceManager::LoadShaderFromFile(const char
     const char* gShaderCode = geometryCode.c_str();
 
     auto shader = std::make_unique<Renderer::Shader>();
-    shader->Compile(vShaderCode, fShaderCode, gShaderFile != nullptr ? gShaderCode : nullptr);
+    shader->Compile(
+      vShaderCode,
+      fShaderFile != nullptr ? fShaderCode : nullptr,
+      gShaderFile != nullptr ? gShaderCode : nullptr);
     return shader;
 }
 
 std::unique_ptr<Renderer::Shader> ResourceManager::LoadShaderFromFile(const char* vShaderFile, const char* fShaderFile, const char* gShaderFile, const ShaderMacros_t& macros) {
     std::string vertexCode = LoadShaderCodeFromFile(vShaderFile);
-    std::string fragmentCode = LoadShaderCodeFromFile(fShaderFile);
+    std::string fragmentCode = fShaderFile != nullptr ? LoadShaderCodeFromFile(fShaderFile) : "";
     std::string geometryCode = gShaderFile != nullptr ? LoadShaderCodeFromFile(gShaderFile) : "";
-    
+
     auto shader = std::make_unique<Renderer::Shader>();
     shader->CompileWithMacros(std::move(vertexCode), std::move(fragmentCode), std::move(geometryCode), macros);
     return shader;

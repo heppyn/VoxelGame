@@ -20,6 +20,8 @@ void Game::Init() {
     ResourceManager::LoadShader(
       "./res/shaders/Shadow_csm.vert", "./res/shaders/Shadow.frag", "./res/shaders/Shadow_csm.geom", "shadow_csm");
     ResourceManager::LoadShader(
+      "./res/shaders/Shadow_csm_closed.vert", "./res/shaders/Empty.frag", "./res/shaders/Shadow_csm_closed.geom", "shadow_csm_closed");
+    ResourceManager::LoadShader(
       "./res/shaders/Light_csm.vert", "./res/shaders/Light_csm.frag", nullptr, "light_csm");
 
     ResourceManager::LoadTexture2D("./res/textures/white.png", true, "white");

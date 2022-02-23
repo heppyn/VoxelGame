@@ -12,17 +12,19 @@ Renderer::Shader& Renderer::Shader::Use() {
 }
 
 void Renderer::Shader::Compile(const char* vertexSource, const char* fragmentSource, const char* geometrySource) {
-    unsigned int sVertex, sFragment, gShader = 0;
+    unsigned int sVertex, sFragment = 0, gShader = 0;
     // vertex Shader
     sVertex = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource(sVertex, 1, &vertexSource, NULL);
     glCompileShader(sVertex);
     CheckCompileErrors(sVertex, "VERTEX");
     // fragment Shader
-    sFragment = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(sFragment, 1, &fragmentSource, NULL);
-    glCompileShader(sFragment);
-    CheckCompileErrors(sFragment, "FRAGMENT");
+    if (fragmentSource != nullptr) {
+        sFragment = glCreateShader(GL_FRAGMENT_SHADER);
+        glShaderSource(sFragment, 1, &fragmentSource, NULL);
+        glCompileShader(sFragment);
+        CheckCompileErrors(sFragment, "FRAGMENT");
+    }
     // if geometry shader source code is given, also compile geometry shader
     if (geometrySource != nullptr) {
         gShader = glCreateShader(GL_GEOMETRY_SHADER);
@@ -33,14 +35,18 @@ void Renderer::Shader::Compile(const char* vertexSource, const char* fragmentSou
     // shader program
     Id = glCreateProgram();
     glAttachShader(Id, sVertex);
-    glAttachShader(Id, sFragment);
+    if (fragmentSource != nullptr) {
+        glAttachShader(Id, sFragment);
+    }
     if (geometrySource != nullptr)
         glAttachShader(Id, gShader);
     glLinkProgram(Id);
     CheckCompileErrors(Id, "PROGRAM");
     // delete the shaders as they're linked into our program now and no longer necessary
     glDeleteShader(sVertex);
-    glDeleteShader(sFragment);
+    if (fragmentSource != nullptr) {
+        glDeleteShader(sFragment);
+    }
     if (geometrySource != nullptr)
         glDeleteShader(gShader);
 }
@@ -55,7 +61,10 @@ void Renderer::Shader::CompileWithMacros(std::string&& vertexSource, std::string
         std::cout << "WARNING::SHADER marco not found in shader\n";
     }
 
-    Compile(vertexSource.c_str(), fragmentSource.c_str(), geometrySource.empty() ? nullptr : geometrySource.c_str());
+    Compile(
+      vertexSource.c_str(),
+      fragmentSource.empty() ? nullptr : fragmentSource.c_str(),
+      geometrySource.empty() ? nullptr : geometrySource.c_str());
 }
 
 void Renderer::Shader::SetFloat(const char* name, float value, bool useShader) {

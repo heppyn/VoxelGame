@@ -18,6 +18,7 @@ class SceneRenderer {
     Shader* ShaderInstance_{nullptr};
     Shader* ShaderMesh_{nullptr};
     Shader* ShaderDepth_{ nullptr };
+    Shader* ShaderDepthClosed_{ nullptr };
 
     DepthMap ShadowMap_;
     ShadowMap ShadowMapCSM_;
@@ -28,7 +29,7 @@ class SceneRenderer {
     void Render(const Scene& scene, unsigned int width, unsigned int height);
 
   private:
-    void RenderScene(const Scene& scene, Shader* shader);
+    void RenderScene(const Scene& scene, Shader* shaderClosed, Shader* shaderOpen = nullptr);
     void RenderShadowMap(const Scene& scene);
     void BindInstancesData(const Scene& scene);
     void InitShaders(int levels);

@@ -4,7 +4,6 @@
 
 #include "engine/ResourceManager.h"
 #include "engine/Components/Mesh.h"
-#include "helpers/Math.h"
 #include "open_gl/GpuTimer.h"
 #include "open_gl/WindowManagerGl.h"
 
@@ -69,11 +68,14 @@ void Renderer::SceneRenderer::Render(const Scene& scene, unsigned width, unsigne
     scene.GetLights().front().Draw(CubeRenderers_[Engine::Cube::ALL_SIDES]);
 }
 
-void Renderer::SceneRenderer::RenderScene(const Scene& scene, Shader* shader) {
+void Renderer::SceneRenderer::RenderScene(const Scene& scene, Shader* shaderClosed, Shader* shaderOpen) {
+    if (!shaderOpen) {
+        shaderOpen = shaderClosed;
+    }
     // render all sides first
     glEnable(GL_CULL_FACE);
     if (scene.GetRenderableObjectsData().contains(Engine::Cube::ALL_SIDES)) {
-        CubeRenderers_[Engine::Cube::ALL_SIDES].SetShader(shader);
+        CubeRenderers_[Engine::Cube::ALL_SIDES].SetShader(shaderClosed);
         glBindBuffer(GL_ARRAY_BUFFER, InstanceDataBufferIds_[Engine::Cube::ALL_SIDES]);
         CubeRenderers_[Engine::Cube::ALL_SIDES].DrawCubesBatched(scene.GetSceneSize(Engine::Cube::ALL_SIDES));
     }
@@ -86,7 +88,7 @@ void Renderer::SceneRenderer::RenderScene(const Scene& scene, Shader* shader) {
             continue;
 
         // render all objects at once
-        cubeRenderer.SetShader(shader);
+        cubeRenderer.SetShader(shaderOpen);
         glBindBuffer(GL_ARRAY_BUFFER, InstanceDataBufferIds_[cube]);
         cubeRenderer.DrawCubesBatched(scene.GetSceneSize(cube));
     }
@@ -139,6 +141,8 @@ void Renderer::SceneRenderer::InitShaders(int levels) {
       "light_csm", { { "CASCADE_COUNT", std::to_string(levels) } });
     ShaderDepth_ = ResourceManager::SetShaderMacros(
       "shadow_csm", { { "CASCADE_COUNT", std::to_string(levels) } });
+    ShaderDepthClosed_ = ResourceManager::SetShaderMacros(
+      "shadow_csm_closed", { { "CASCADE_COUNT", std::to_string(levels) } });
 
     // set sprite sheet size for instancing
     ShaderDepth_->SetVector2f("tex_size", ResourceManager::GetSpriteSheetSize(), true);
@@ -165,12 +169,7 @@ void Renderer::SceneRenderer::RenderShadowMap(const Scene& scene) {
     ShadowMapCSM_.BindLightSpaceMatrices(Camera->GetViewMatrix(), scene.GetGlobalLight().Direction, Camera->Zoom);
     ShadowMapCSM_.Bind();
 
-    //OpenGl::GpuTimer timer;
-    //timer.Start();
-
-    RenderScene(scene, ShaderDepth_);
-
-    //std::cout << timer.TimeMs() << '\n';
+    RenderScene(scene, ShaderDepthClosed_, ShaderDepth_);
 
     //ShadowMap_.BindData(*ShaderInstance_);
     ShadowMapCSM_.BindData(*ShaderInstance_);

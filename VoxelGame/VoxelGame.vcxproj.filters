@@ -622,6 +622,9 @@
     <None Include="res\shaders\Shadow_csm.geom" />
     <None Include="res\shaders\Light_csm.vert" />
     <None Include="res\shaders\Light_csm.frag" />
+    <None Include="res\shaders\Empty.frag" />
+    <None Include="res\shaders\Shadow_csm_closed.vert" />
+    <None Include="res\shaders\Shadow_csm_closed.geom" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\vendor\stb_image\stb_image.h">
