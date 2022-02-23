@@ -11,6 +11,12 @@
 Renderer::ShadowMap::ShadowMap(int resolution)
   : Resolution(resolution) {}
 
+Renderer::ShadowMap::~ShadowMap() {
+    glDeleteFramebuffers(1, &FBO_);
+    glDeleteTextures(1, &DepthMapId_);
+    glDeleteBuffers(1, &MatricesUBO_);
+}
+
 void Renderer::ShadowMap::Init(const int levels, float nearPlane, const float farPlane) {
     NearPlane_ = nearPlane;
     FarPlane_ = farPlane;
@@ -45,7 +51,7 @@ void Renderer::ShadowMap::Init(const int levels, float nearPlane, const float fa
     // configure buffer for matrices
     glGenBuffers(1, &MatricesUBO_);
     glBindBuffer(GL_UNIFORM_BUFFER, MatricesUBO_);
-    glBufferData(GL_UNIFORM_BUFFER, sizeof(glm::mat4x4) * 16, nullptr, GL_STATIC_DRAW);
+    glBufferData(GL_UNIFORM_BUFFER, sizeof(glm::mat4x4) * levels, nullptr, GL_STATIC_DRAW);
     glBindBufferBase(GL_UNIFORM_BUFFER, 0, MatricesUBO_);
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
 }
@@ -140,5 +146,5 @@ glm::mat4 Renderer::ShadowMap::LightSpaceMatrix(const glm::mat4& view, const glm
     return Helpers::Math::OrthoLightSpace(
       Helpers::Math::FrustumCornersWordSpace(proj, view),
       lightDir,
-      3.0f);
+      2.5f);
 }

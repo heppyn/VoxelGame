@@ -11,6 +11,12 @@ class ShadowMap {
 
     ShadowMap() = default;
     explicit ShadowMap(int resolution);
+    ShadowMap(const ShadowMap&) = delete;
+    // TODO: enable move semantics
+    ShadowMap(ShadowMap&&) = delete;
+    ShadowMap& operator=(const ShadowMap&) = delete;
+    ShadowMap& operator=(ShadowMap&&) = delete;
+    ~ShadowMap();
 
     void Init(int levels, float nearPlane, float farPlane);
     void Bind() const;
