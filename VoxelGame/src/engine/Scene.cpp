@@ -8,9 +8,9 @@
 #include "ResourceManager.h"
 #include "Components/SpritesheetTex.h"
 #include "game/TerrainGen.h"
-#include "L-systems/LSystemParser.h"
 
 #include "examples/ExampleScene.h"
+#include "open_gl/WindowManagerGl.h"
 
 void Scene::Init(std::shared_ptr<Renderer::Camera> camera) {
     SetCamera(std::move(camera));
@@ -68,8 +68,8 @@ void Scene::Update(bool updateAll /*= false*/) {
             break;
     }
 
-    if (updated)
-        UpdateObjectsData();
+    // Camera might have moved - update renderable objects
+    UpdateObjectsData();
 }
 
 void Scene::SetCamera(std::shared_ptr<Renderer::Camera> camera) {
@@ -86,6 +86,9 @@ const std::map<Engine::Cube::BlockFaces, std::vector<std::shared_ptr<std::vector
 
 size_t Scene::GetSceneSize(const Engine::Cube::BlockFaces& faces) const {
     size_t size = 0;
+    if (!GetRenderableObjectsData().contains(faces))
+        return 0;
+
     for (const auto& chunkObjects : GetRenderableObjectsData().at(faces)) {
         size += chunkObjects->size();
     }
@@ -104,13 +107,14 @@ glm::vec2 Scene::GetCenterChunkPos() const {
 void Scene::UpdateObjectsData() {
     ObjectsDataCache_.clear();
     const auto centerChunkPos = GetCenterChunkPos();
+    const auto viewProj = ViewProjMatrix();
 
     for (auto i = -RenderDistance_; i <= RenderDistance_; ++i) {
         for (auto j = -RenderDistance_; j <= RenderDistance_; ++j) {
             const auto chunkPos = glm::vec2(
               centerChunkPos.x + static_cast<float>(i) * Chunk::ChunkSize,
               centerChunkPos.y + static_cast<float>(j) * Chunk::ChunkSize);
-            if (Chunks_.contains(chunkPos)) {
+            if (IsChunkInView(chunkPos, viewProj) && Chunks_.contains(chunkPos)) {
                 for (const auto& [cube, data] : Chunks_.at(chunkPos).GetInstancesData()) {
                     ObjectsDataCache_[cube].push_back(data);
                 }
@@ -125,13 +129,23 @@ void Scene::UpdateObjectsData() {
             const auto chunkPos = glm::vec2(
               centerChunkPos.x + static_cast<float>(i) * Chunk::ChunkSize,
               centerChunkPos.y + static_cast<float>(j) * Chunk::ChunkSize);
-            if (Chunks_.contains(chunkPos)) {
+            if (IsChunkInView(chunkPos, viewProj) && Chunks_.contains(chunkPos)) {
                 for (const auto& [cube, data] : Chunks_.at(chunkPos).GetInstancesDataTrans()) {
                     ObjectsDataCache_[cube].push_back(data);
                 }
             }
         }
     }
+}
+
+glm::mat4 Scene::ViewProjMatrix() const {
+    const auto view = Camera_->GetViewMatrix();
+    const auto proj = glm::perspective(
+      glm::radians(Camera_->Zoom),
+      static_cast<float>(WindowManagerGl::Width) / static_cast<float>(WindowManagerGl::Height),
+      0.1f,
+      500.0f);
+    return proj * view;
 }
 
 bool Scene::IsInRenderDistance(const Chunk& chunk) const {
@@ -142,4 +156,20 @@ bool Scene::IsInRenderDistance(const Chunk& chunk) const {
            && centerChunkPos.x + distance >= chunk.Position.x
            && centerChunkPos.y - distance <= chunk.Position.y
            && centerChunkPos.y + distance >= chunk.Position.y;
+}
+
+bool Scene::IsChunkInView(const glm::vec2& position, const glm::mat4& viewProj) {
+    // define order of corner checking
+    for (const auto& c :
+      { glm::vec2(0.0f), glm::vec2(1.0f), glm::vec2(1.0f, 0.0f), glm::vec2(0.0f, 1.0f) }) {
+        const auto corner = glm::vec2(position.x + Chunk::ChunkSize * c.x, position.y + Chunk::ChunkSize * c.y);
+
+        auto pt = viewProj * glm::vec4(corner.x, 0.0f, corner.y, 1.0f);
+        pt /= pt.w;
+
+        if (pt.x >= -1.0f && pt.x <= 1.0f && pt.z <= 1.0f)
+            return true;
+    }
+
+    return false;
 }
