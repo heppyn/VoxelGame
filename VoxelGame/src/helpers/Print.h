@@ -18,9 +18,21 @@ inline void Print(const glm::vec4& vec) {
     std::cout << vec.x << ' ' << vec.y << ' ' << vec.z << ' ' << vec.w << '\n';
 }
 
+inline std::string ToString(const glm::vec2& vec) {
+    std::stringstream ss;
+    ss << '(' << vec.x << ", " << vec.y << ')';
+    return ss.str();
+}
+
 inline std::string ToString(const glm::vec3& vec) {
     std::stringstream ss;
     ss << '(' << vec.x << ", " << vec.y << ", " << vec.z << ')';
+    return ss.str();
+}
+
+inline std::string ToString(const glm::vec4& vec) {
+    std::stringstream ss;
+    ss << '(' << vec.x << ", " << vec.y << ", " << vec.z << ", " << vec.w << ')';
     return ss.str();
 }
 
