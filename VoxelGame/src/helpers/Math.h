@@ -22,7 +22,7 @@ namespace Math {
     bool Equal(const glm::vec3& a, const glm::vec3& b);
 
     template<typename T>
-    T ModT(const float& x, int mod) {
+    int ModT(const float& x, int mod) {
         return static_cast<T>(static_cast<int>(x) % mod);
     }
 

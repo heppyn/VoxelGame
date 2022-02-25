@@ -1,8 +1,6 @@
 #include "Chunk.h"
 
 #include <iostream>
-#include <array>
-#include <algorithm>
 
 #include "Components/SpritesheetTex.h"
 #include "Components/Transform.h"
@@ -116,14 +114,8 @@ BlockInfo& Chunk::GetBlockInfo(const glm::vec3& pos) {
 
 glm::vec3 Chunk::PositionInSpace() const {
     assert(!BlockInfos_.empty() && !BlockInfos_.at(0).empty());
-    const auto last = static_cast<size_t>(ChunkSize) - 1;
-    const float minHeight = std::ranges::min(
-      { BlockInfos_[0][0].GetSurfaceHeight(),
-        BlockInfos_[0][last].GetSurfaceHeight(),
-        BlockInfos_[last][0].GetSurfaceHeight(),
-        BlockInfos_[last][last].GetSurfaceHeight() });
 
-    return { Position.x, minHeight, Position.y };
+    return { Position.x, BlockInfos_[0][0].GetSurfaceHeight(), Position.y };
 }
 
 void Chunk::RecalculateBlockHeights() {
