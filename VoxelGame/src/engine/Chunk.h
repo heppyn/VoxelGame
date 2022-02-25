@@ -53,6 +53,8 @@ class Chunk {
     [[nodiscard]] BlockInfo& GetBlockInfo(const glm::vec3& pos);
     [[nodiscard]] const std::vector<std::vector<BlockInfo>>& GetBlockInfos() const { return BlockInfos_; }
 
+    [[nodiscard]] glm::vec3 PositionInSpace() const;
+
   private:
     void RecalculateBlockHeights();
     static void GenerateInstanceData(

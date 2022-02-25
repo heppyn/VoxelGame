@@ -15,16 +15,20 @@ TEST_CASE("scene test", "[engine, Scene]") {
     const auto viewProj = proj * view;
 
     SECTION("Position is in view") {
-        REQUIRE(Scene::IsChunkInView(glm::vec2(0.0f, -16.0f), viewProj));
-        REQUIRE(Scene::IsChunkInView(glm::vec2(0.0f, -32.0f), viewProj));
-        REQUIRE(Scene::IsChunkInView(glm::vec2(0.0f, -48.0f), viewProj));
+        REQUIRE(Scene::IsChunkInView({ 0.0f, 0.0f, -16.0f }, viewProj));
+        REQUIRE(Scene::IsChunkInView({ 0.0f, 0.0f, -32.0f }, viewProj));
+        REQUIRE(Scene::IsChunkInView({ 0.0f, 0.0f, -48.0f }, viewProj));
     }
 
     SECTION("Only one position is in view") {
-        REQUIRE(Scene::IsChunkInView(glm::vec2(0.0f, -32.0f), viewProj));
+        REQUIRE(Scene::IsChunkInView({ 0.0f, 0.0f, -32.0f }, viewProj));
 
-        REQUIRE_FALSE(Scene::IsChunkInView(glm::vec2(0.0f, 32.0f), viewProj));
-        REQUIRE_FALSE(Scene::IsChunkInView(glm::vec2(32.0f, 0.0f), viewProj));
-        REQUIRE_FALSE(Scene::IsChunkInView(glm::vec2(-32.0f, 0.0f), viewProj));
+        REQUIRE_FALSE(Scene::IsChunkInView({ 0.0f, 0.0f, 32.0f }, viewProj));
+        REQUIRE_FALSE(Scene::IsChunkInView({ 32.0f, 0.0f, 0.0f }, viewProj));
+        REQUIRE_FALSE(Scene::IsChunkInView({ -32.0f, 0.0f, 0.0f }, viewProj));
+    }
+
+    SECTION("Position above player is not in view") {
+        REQUIRE_FALSE(Scene::IsChunkInView({ 0.0f, 64.0f, 0.0f }, viewProj));
     }
 }

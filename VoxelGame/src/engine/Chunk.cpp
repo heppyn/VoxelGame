@@ -109,7 +109,13 @@ BlockInfo& Chunk::GetBlockInfo(const glm::vec2& pos) {
 }
 
 BlockInfo& Chunk::GetBlockInfo(const glm::vec3& pos) {
-    return GetBlockInfo({ pos.x, pos.y });
+    return GetBlockInfo({ pos.x, pos.z });
+}
+
+glm::vec3 Chunk::PositionInSpace() const {
+    assert(!BlockInfos_.empty() && !BlockInfos_.at(0).empty());
+
+    return { Position.x, BlockInfos_[0][0].GetSurfaceHeight(), Position.y };
 }
 
 void Chunk::RecalculateBlockHeights() {
