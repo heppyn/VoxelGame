@@ -98,10 +98,8 @@ size_t Scene::GetSceneSize(const Engine::Cube::BlockFaces& faces) const {
 
 glm::vec2 Scene::GetCenterChunkPos() const {
     return glm::vec2(
-      Camera_->Position.x > 0.0f ? floor(Camera_->Position.x / Chunk::ChunkSize) * Chunk::ChunkSize
-                                 : ceil(Camera_->Position.x / Chunk::ChunkSize) * Chunk::ChunkSize,
-      Camera_->Position.z > 0.0f ? floor(Camera_->Position.z / Chunk::ChunkSize) * Chunk::ChunkSize
-                                 : ceil(Camera_->Position.z / Chunk::ChunkSize) * Chunk::ChunkSize);
+      floor(Camera_->Position.x / Chunk::ChunkSize) * Chunk::ChunkSize,
+      floor(Camera_->Position.z / Chunk::ChunkSize) * Chunk::ChunkSize);
 }
 
 void Scene::UpdateObjectsData() {
