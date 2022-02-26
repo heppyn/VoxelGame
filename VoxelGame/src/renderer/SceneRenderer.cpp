@@ -78,6 +78,7 @@ void Renderer::SceneRenderer::RenderScene(const Scene& scene, Shader* shaderClos
         CubeRenderers_[Engine::Cube::ALL_SIDES].SetShader(shaderClosed);
         glBindBuffer(GL_ARRAY_BUFFER, InstanceDataBufferIds_[Engine::Cube::ALL_SIDES]);
         CubeRenderers_[Engine::Cube::ALL_SIDES].DrawCubesBatched(scene.GetSceneSize(Engine::Cube::ALL_SIDES));
+        //std::cout << "Solid objects: " << scene.GetSceneSize(Engine::Cube::ALL_SIDES) << '\n';
     }
 
     // disable face culling - all sides can be seen
@@ -91,6 +92,7 @@ void Renderer::SceneRenderer::RenderScene(const Scene& scene, Shader* shaderClos
         cubeRenderer.SetShader(shaderOpen);
         glBindBuffer(GL_ARRAY_BUFFER, InstanceDataBufferIds_[cube]);
         cubeRenderer.DrawCubesBatched(scene.GetSceneSize(cube));
+        //std::cout << cube.Value << " objects: " << scene.GetSceneSize(cube) << '\n';
     }
 }
 
@@ -137,6 +139,7 @@ void Renderer::SceneRenderer::InitShaders(int levels) {
     ShaderMesh_ = ResourceManager::GetShader("meshShader");
     //ShaderInstance_ = ResourceManager::GetShader("lightBatch");
     //ShaderDepth_ = ResourceManager::GetShader("shadow");
+    // TODO: add closed simple shadow
     ShaderInstance_ = ResourceManager::SetShaderMacros(
       "light_csm", { { "CASCADE_COUNT", std::to_string(levels) } });
     ShaderDepth_ = ResourceManager::SetShaderMacros(

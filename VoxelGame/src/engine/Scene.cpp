@@ -105,8 +105,9 @@ glm::vec2 Scene::GetCenterChunkPos() const {
 void Scene::UpdateObjectsData() {
     ObjectsDataCache_.clear();
     const auto centerChunkPos = GetCenterChunkPos();
-    const auto viewProj = ViewProjMatrix();
+    const auto viewProj = ProjViewMatrix();
 
+    // TODO: do this in one pass
     for (auto i = -RenderDistance_; i <= RenderDistance_; ++i) {
         for (auto j = -RenderDistance_; j <= RenderDistance_; ++j) {
             const auto chunkPos = glm::vec2(
@@ -116,7 +117,8 @@ void Scene::UpdateObjectsData() {
             // TODO: fix bug, where top of the trees disappears
             // always include chunk in which the player is standing
             if (Chunks_.contains(chunkPos)
-                && (IsChunkInView(Chunks_.at(chunkPos).PositionInSpace(), viewProj) || i == 0 && j == 0)) {
+                && (i == 0 && j == 0
+                    || IsChunkInView(Chunks_.at(chunkPos).PositionInSpace(), Camera_->Position, viewProj))) {
                 for (const auto& [cube, data] : Chunks_.at(chunkPos).GetInstancesData()) {
                     ObjectsDataCache_[cube].push_back(data);
                 }
@@ -134,7 +136,8 @@ void Scene::UpdateObjectsData() {
 
             // always include chunk in which the player is standing
             if (Chunks_.contains(chunkPos)
-                && (IsChunkInView(Chunks_.at(chunkPos).PositionInSpace(), viewProj) || i == 0 && j == 0)) {
+                && (i == 0 && j == 0
+                    || IsChunkInView(Chunks_.at(chunkPos).PositionInSpace(), Camera_->Position, viewProj))) {
                 for (const auto& [cube, data] : Chunks_.at(chunkPos).GetInstancesDataTrans()) {
                     ObjectsDataCache_[cube].push_back(data);
                 }
@@ -143,8 +146,17 @@ void Scene::UpdateObjectsData() {
     }
 }
 
-glm::mat4 Scene::ViewProjMatrix() const {
-    const auto view = Camera_->GetViewMatrix();
+glm::mat4 Scene::ProjViewMatrix() const {
+    glm::mat4 view;
+    if (Camera_->Front.y > 0.0f) {
+        const glm::vec3 front = { Camera_->Front.x, 0.0f, Camera_->Front.z };
+        const auto right = glm::cross(front, { 0.0f, 1.0f, 0.0f });
+        const auto up = glm::cross(right, front);
+        view = glm::lookAt(Camera_->Position, Camera_->Position + front, up);
+    }
+    else {
+        view = Camera_->GetViewMatrix();
+    }
     const auto proj = glm::perspective(
       glm::radians(Camera_->Zoom),
       static_cast<float>(WindowManagerGl::Width) / static_cast<float>(WindowManagerGl::Height),
@@ -163,19 +175,43 @@ bool Scene::IsInRenderDistance(const Chunk& chunk) const {
            && centerChunkPos.y + distance >= chunk.Position.y;
 }
 
-bool Scene::IsChunkInView(const glm::vec3& position, const glm::mat4& viewProj) {
+bool Scene::IsChunkInView(const glm::vec3& position, const glm::vec3& observer, const glm::mat4& projView) {
     // define order of corner checking
     for (const auto& c :
       { glm::vec2(0.0f), glm::vec2(1.0f), glm::vec2(1.0f, 0.0f), glm::vec2(0.0f, 1.0f) }) {
         // position is in the center of the block
         const auto corner = glm::vec2(position.x - 0.5f + Chunk::ChunkSize * c.x, position.z - 0.5f + Chunk::ChunkSize * c.y);
 
-        auto pt = viewProj * glm::vec4(corner.x, position.y, corner.y, 1.0f);
-        pt /= pt.w;
-
-        if (pt.x >= -1.0f && pt.x <= 1.0f && pt.z <= 1.0f)
+        if (IsPointInView({ corner.x, position.y, corner.y }, projView))
             return true;
     }
 
+    glm::vec2 visiblePos = { position.x - 0.5f, position.z - 0.5f };
+    auto check = false;
+
+    if (observer.x > visiblePos.x && observer.x < visiblePos.x + Chunk::ChunkSize) {
+        visiblePos.x = observer.x;
+        if (visiblePos.y + Chunk::ChunkSize <= observer.z) {
+            visiblePos.y += Chunk::ChunkSize;
+        }
+        check = true;
+    }
+    else if (observer.z > position.z && observer.z < position.z + Chunk::ChunkSize) {
+        visiblePos.y = observer.z;
+        if (visiblePos.x + Chunk::ChunkSize <= observer.x) {
+            visiblePos.x += Chunk::ChunkSize;
+        }
+        check = true;
+    }
+    if (check)
+        return IsPointInView({ visiblePos.x, position.y, visiblePos.y }, projView);
+
     return false;
+}
+
+bool Scene::IsPointInView(const glm::vec3& position, const glm::mat4& projView) {
+    auto pt = projView * glm::vec4(position, 1.0f);
+    pt /= pt.w;
+
+    return pt.x >= -1.0f && pt.x <= 1.0f && pt.z <= 1.0f;
 }

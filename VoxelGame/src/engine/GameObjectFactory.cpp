@@ -1,6 +1,8 @@
 #include "GameObjectFactory.h"
 GameObjectFactory::GameObjectFactory(const glm::vec3& scale, const glm::vec3& positionOffset)
-  : Scale_(scale), PositionOffset_(positionOffset), OrigPosOffset_(positionOffset) {}
+  : Scale_(scale)
+  , PositionOffset_(positionOffset)
+  , OrigPosOffset_(positionOffset) {}
 
 GameObject GameObjectFactory::CreateObject(const glm::vec3& pos, const glm::vec2& tex) {
     return GameObject(pos, tex);

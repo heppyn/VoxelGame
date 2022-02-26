@@ -49,10 +49,11 @@ class Scene {
     [[nodiscard]] const std::map<Engine::Cube::BlockFaces, std::vector<std::shared_ptr<std::vector<glm::mat4>>>>& GetRenderableObjectsData() const;
     [[nodiscard]] size_t GetSceneSize(const Engine::Cube::BlockFaces& faces) const;
     [[nodiscard]] bool IsInRenderDistance(const Chunk& chunk) const;
-    [[nodiscard]] static bool IsChunkInView(const glm::vec3& position, const glm::mat4& viewProj);
+    [[nodiscard]] static bool IsChunkInView(const glm::vec3& position, const glm::vec3& observer, const glm::mat4& projView);
+    [[nodiscard]] static bool IsPointInView(const glm::vec3& position, const glm::mat4& projView);
 
   private:
     [[nodiscard]] glm::vec2 GetCenterChunkPos() const;
     void UpdateObjectsData();
-    [[nodiscard]] glm::mat4 ViewProjMatrix() const;
+    [[nodiscard]] glm::mat4 ProjViewMatrix() const;
 };
