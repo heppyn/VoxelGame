@@ -1,6 +1,9 @@
 #include "Chunk.h"
 
 #include <iostream>
+#include <array>
+#include <algorithm>
+#include <ranges>
 
 #include "Components/SpritesheetTex.h"
 #include "Components/Transform.h"
@@ -9,12 +12,16 @@
 float Chunk::ChunkSize{ 16.0f };
 
 Chunk::Chunk(const glm::vec2& position)
-  : Position(position), BlockInfos_(static_cast<size_t>(ChunkSize), std::vector(static_cast<size_t>(ChunkSize), BlockInfo())) {
+  : Position(position)
+  , BlockInfos_(static_cast<size_t>(ChunkSize), std::vector(static_cast<size_t>(ChunkSize), BlockInfo()))
+  , PositionInSpace_(position.x, 0.0f, position.y) {
     InstancesData_[DefaultCube_] = std::make_shared<std::vector<glm::mat4>>();
 }
 
 Chunk::Chunk(const glm::vec2& position, std::vector<GameObject>&& objects)
-  : Position(position), BlockInfos_(static_cast<size_t>(ChunkSize), std::vector(static_cast<size_t>(ChunkSize), BlockInfo())) {
+  : Position(position)
+  , BlockInfos_(static_cast<size_t>(ChunkSize), std::vector(static_cast<size_t>(ChunkSize), BlockInfo()))
+  , PositionInSpace_(position.x, 0.0f, position.y) {
     Objects_[DefaultCube_] = std::move(objects);
     InstancesData_[DefaultCube_] = std::make_shared<std::vector<glm::mat4>>();
     GenerateInstanceData();
@@ -28,13 +35,14 @@ void Chunk::GenerateInstanceData() {
 }
 
 void Chunk::FinisChunk() {
-    for (auto& [_, objects] : Objects_) {
+    for (auto& objects : Objects_ | std::views::values) {
         objects.shrink_to_fit();
     }
-    for (auto& [_, objects] : ObjectsTrans_) {
+    for (auto& objects : ObjectsTrans_ | std::views::values) {
         objects.shrink_to_fit();
     }
     GenerateInstanceData();
+    SetPositionInSpace();
 }
 
 // don't make const because data in pointer are changed
@@ -112,12 +120,6 @@ BlockInfo& Chunk::GetBlockInfo(const glm::vec3& pos) {
     return GetBlockInfo({ pos.x, pos.z });
 }
 
-glm::vec3 Chunk::PositionInSpace() const {
-    assert(!BlockInfos_.empty() && !BlockInfos_.at(0).empty());
-
-    return { Position.x, BlockInfos_[0][0].GetSurfaceHeight(), Position.y };
-}
-
 void Chunk::RecalculateBlockHeights() {
     std::cout << "Warning! Using expansive function\n";
 
@@ -154,4 +156,17 @@ void Chunk::GenerateInstanceData(
             buffer[cube]->push_back(model);
         }
     }
+}
+
+void Chunk::SetPositionInSpace() {
+    assert(!BlockInfos_.empty() && !BlockInfos_.at(0).empty());
+
+    const auto last = static_cast<size_t>(ChunkSize) - 1;
+    const float minHeight = std::ranges::min(
+      { BlockInfos_[0][0].GetSurfaceHeight(),
+        BlockInfos_[0][last].GetSurfaceHeight(),
+        BlockInfos_[last][0].GetSurfaceHeight(),
+        BlockInfos_[last][last].GetSurfaceHeight() });
+
+    PositionInSpace_ = { Position.x, minHeight, Position.y };
 }

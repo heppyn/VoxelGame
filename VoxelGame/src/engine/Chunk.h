@@ -14,6 +14,7 @@ class Chunk {
 
     // default cube has six sides
     inline static Engine::Cube::BlockFaces DefaultCube_{ Engine::Cube::BlockFaces::CreateBlockFaces(Engine::Cube::Faces::ALL) };
+
   private:
     std::map<Engine::Cube::BlockFaces, std::vector<GameObject>> Objects_;
     std::map<Engine::Cube::BlockFaces, std::vector<GameObject>> ObjectsTrans_;
@@ -25,6 +26,7 @@ class Chunk {
     // [0, 1], [1, 1]
     // [0, 0], [1, 0]
     std::vector<std::vector<BlockInfo>> BlockInfos_;
+    glm::vec3 PositionInSpace_;
 
   public:
     explicit Chunk(const glm::vec2& position);
@@ -53,11 +55,17 @@ class Chunk {
     [[nodiscard]] BlockInfo& GetBlockInfo(const glm::vec3& pos);
     [[nodiscard]] const std::vector<std::vector<BlockInfo>>& GetBlockInfos() const { return BlockInfos_; }
 
-    [[nodiscard]] glm::vec3 PositionInSpace() const;
+
+    /**
+     * \brief Lowest position in chunk.
+     * \return chunk start position with lowest y position in chunk
+     */
+    [[nodiscard]] glm::vec3 PositionInSpace() const { return PositionInSpace_; }
 
   private:
     void RecalculateBlockHeights();
     static void GenerateInstanceData(
       const std::map<Engine::Cube::BlockFaces, std::vector<GameObject>>& objects,
       std::map<Engine::Cube::BlockFaces, std::shared_ptr<std::vector<glm::mat4>>>& buffer);
+    void SetPositionInSpace();
 };
