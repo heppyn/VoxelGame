@@ -72,10 +72,10 @@ glm::vec2 ResourceManager::GetSpriteSheetSize() {
 
 void ResourceManager::Clear() {
     for (const auto& shader : Shaders | std::views::values) {
-        glDeleteProgram(shader->Id);
+        shader->Delete();
     }
     for (const auto& texture : Textures | std::views::values) {
-        glDeleteTextures(1, &texture->Id);
+        texture->Delete();
     }
 }
 
@@ -127,8 +127,7 @@ Renderer::Texture2D* ResourceManager::LoadTexture2DFromFile(const char* file, bo
     // create texture object
     auto* texture = new Renderer::Texture2D;
     if (alpha) {
-        texture->InternalFormat = GL_RGBA;
-        texture->ImageFormat = GL_RGBA;
+        texture->SetAlpha();
     }
     // load image
     stbi_set_flip_vertically_on_load(true);

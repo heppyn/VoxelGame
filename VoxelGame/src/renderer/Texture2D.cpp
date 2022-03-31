@@ -27,6 +27,16 @@ void Renderer::Texture2D::Bind(unsigned int slot /*= 0 */) const {
     glBindTexture(GL_TEXTURE_2D, Id);
 }
 
+void Renderer::Texture2D::Delete() {
+    glDeleteTextures(1, &Id);
+    Id = 0;
+}
+
+void Renderer::Texture2D::SetAlpha() {
+    InternalFormat = GL_RGBA;
+    ImageFormat = GL_RGBA;
+}
+
 void Renderer::Texture2D::SetTypeDiffuse() {
     Type = "texture_diffuse";
 }

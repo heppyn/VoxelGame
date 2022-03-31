@@ -67,6 +67,11 @@ void Renderer::Shader::CompileWithMacros(std::string&& vertexSource, std::string
       geometrySource.empty() ? nullptr : geometrySource.c_str());
 }
 
+void Renderer::Shader::Delete() {
+    glDeleteProgram(Id);
+    Id = 0;
+}
+
 void Renderer::Shader::SetFloat(const char* name, float value, bool useShader) {
     // when writing new code, use glProgramUniform to set uniforms directly
     // into programs without having to bind or use the program. Only use

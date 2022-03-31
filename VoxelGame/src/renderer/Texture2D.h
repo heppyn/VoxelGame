@@ -25,6 +25,8 @@ class Texture2D {
     Texture2D();
     void Generate(int width, int height, unsigned char* data);
     void Bind(unsigned int slot = 0) const;
+    void Delete();
+    void SetAlpha();
     void SetTypeDiffuse();
     void SetTypeSpecular();
     void SetTypeNormal();
