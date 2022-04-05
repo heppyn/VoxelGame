@@ -116,6 +116,7 @@ glm::vec2 Terrain::GetTextPos(BlockType blockType) {
 }
 
 float Terrain::GetBlockHeight(const glm::vec2& pos) {
+    const auto worldHeight = Detail::WorldHeight(pos);
     constexpr auto freq = 100.0f;
     constexpr auto baseHeight = 40.0f;
 
@@ -128,7 +129,8 @@ float Terrain::GetBlockHeight(const glm::vec2& pos) {
     };
 
     const auto height = std::floor(
-      baseHeight * Engine::Random::Perlin.noise2D_0_1(pos.x / freq, pos.y / freq)
+      worldHeight
+      + baseHeight * Engine::Random::Perlin.noise2D_0_1(pos.x / freq, pos.y / freq)
       + heightVar * Engine::Random::Perlin.normalizedOctaveNoise2D_0_1(perPos.x, perPos.y, 2));
 
     // don't create any block below global water level
@@ -161,4 +163,47 @@ bool Terrain::IsNextToWater(const glm::vec3& pos, const float range) {
 
     // overloaded functions don't work
     return std::ranges::any_of(neigh, [](const glm::vec2& p) { return IsWater(p); });
+}
+
+float Terrain::Detail::WorldHeight(const glm::vec2& pos) {
+    const auto hilliness = Hilliness(pos);
+    if (Helpers::Math::Equal(hilliness, 0.0f))
+        return 0.0f;
+
+    const auto val = Engine::Random::Perlin.noise2D_0_1(pos.x / MOUNTAINS_F, pos.y / MOUNTAINS_F);
+
+    size_t i = 0;
+    for (; i < mountainSplices.size() - 1; ++i) {
+        if (val >= mountainSplices[i].first && val <= mountainSplices[i + 1].first) {
+            break;
+        }
+    }
+
+    const float percent = Helpers::Math::Map(val, mountainSplices[i].first, mountainSplices[i + 1].first, 0.0f, 1.0f);
+    const float height = mountainSplices[i + 1].second - mountainSplices[i].second;
+
+    return hilliness * (mountainSplices[i].second + percent * height - Valley(pos) * 20.f);
+}
+
+float Terrain::Detail::Valley(const glm::vec2& pos) {
+    auto val = Engine::Random::Perlin.noise2D_0_1(pos.x / VALLEY_F, pos.y / VALLEY_F);
+    // shape of \\//
+    val = std::abs(2.0f * val - 1.0f);
+
+    return 1.0f - val;
+}
+
+float Terrain::Detail::Hilliness(const glm::vec2& pos) {
+    const auto val = Engine::Random::Perlin.noise2D_0_1(pos.x / HILLINESS_F, pos.y / HILLINESS_F);
+    constexpr auto start = 0.4f, end = 0.8f;
+
+    if (val < start) {
+        return 0.0f;
+    }
+
+    if (val < end) {
+        return Helpers::Math::Map(val, start, end, 0.0f, 1.0f);
+    }
+
+    return 1.0f;
 }

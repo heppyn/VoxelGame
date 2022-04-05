@@ -29,7 +29,7 @@ namespace Math {
     int Mod(const float& x, int mod);
 
     template<typename T>
-    T Map(T x, T inMin, T inMax, T outMin, T outMax) {
+    [[nodiscard]] T Map(T x, T inMin, T inMax, T outMin, T outMax) {
         return (x - inMin) * (outMax - outMin) / (inMax - inMin) + outMin;
     }
 
