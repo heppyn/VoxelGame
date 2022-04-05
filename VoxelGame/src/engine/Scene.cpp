@@ -23,7 +23,7 @@ void Scene::Init(std::shared_ptr<Renderer::Camera> camera) {
     Update();
 }
 
-void Scene::UpdateOrig(bool updateAll /*= false*/) {
+void Scene::UpdateOrig([[maybe_unused]] bool updateAll /*= false*/) {
     if (Chunks_.empty()) {
         Chunks_.emplace(glm::vec2(0.0f), ExampleScene::Shadow());
 

@@ -34,5 +34,5 @@ long long OpenGl::GpuTimer::Time() {
 float OpenGl::GpuTimer::TimeMs() {
     const auto time = Time();
 
-    return time / 1000000.0;
+    return time / 1000000.0f;
 }
