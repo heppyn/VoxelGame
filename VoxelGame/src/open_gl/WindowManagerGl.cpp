@@ -27,6 +27,7 @@ GLFWwindow* WindowManagerGl::CreateMainWindow(bool debug /*= false*/) {
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 #endif
 
+    glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
     MainWindow = glfwCreateWindow(Width, Height, "Voxel Game", nullptr, nullptr);
     if (MainWindow == nullptr) {
         std::cout << "Failed to create GLFW window" << std::endl;
@@ -34,9 +35,6 @@ GLFWwindow* WindowManagerGl::CreateMainWindow(bool debug /*= false*/) {
         return nullptr;
     }
     glfwMakeContextCurrent(MainWindow);
-
-    // tell GLFW to capture mouse
-    glfwSetInputMode(MainWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
     // glad: load all OpenGL function pointers
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
@@ -57,6 +55,12 @@ GLFWwindow* WindowManagerGl::CreateMainWindow(bool debug /*= false*/) {
         }
     }
 
+    // configure global opengl state
+    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glEnable(GL_CULL_FACE);
+
     return MainWindow;
 }
 
@@ -70,6 +74,11 @@ bool WindowManagerGl::ShouldCloseMainWindow() {
 
 void WindowManagerGl::MaximizeWindow() {
     glfwMaximizeWindow(MainWindow);
+}
+
+void WindowManagerGl::ShowWindow() {
+    glfwSetInputMode(MainWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    glfwShowWindow(MainWindow);
 }
 
 void WindowManagerGl::SetCursorPosCallback(GLFWcursorposfun callback) {

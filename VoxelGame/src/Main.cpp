@@ -19,16 +19,9 @@ float deltaTime = 0.0f; // time between current frame and last frame
 float lastFrame = 0.0f;
 
 int main(const int argc, const char* argv[]) {
-    // enable debug by passing true
     auto* window = WindowManagerGl::CreateMainWindow(true);
     glfwSetFramebufferSizeCallback(window, WindowManagerGl::FramebufferSizeCallback);
 
-    // configure global opengl state
-    // -----------------------------
-    glEnable(GL_DEPTH_TEST);
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glEnable(GL_CULL_FACE);
     game->Init();
     camera = game->GetCamera();
 
@@ -47,6 +40,7 @@ int main(const int argc, const char* argv[]) {
         game->ExportScene();
     }
     else {
+        WindowManagerGl::ShowWindow();
         while (!game->Finished()) {
             const auto currentFrame = static_cast<float>(glfwGetTime());
             deltaTime = currentFrame - lastFrame;

@@ -13,6 +13,7 @@ class WindowManagerGl {
     static void CloseMainWindow();
     static bool ShouldCloseMainWindow();
     static void MaximizeWindow();
+    static void ShowWindow();
     static void SetCursorPosCallback(GLFWcursorposfun callback);
     static void SetScrollCallback(GLFWcursorposfun callback);
     static void SetKeyCallback(GLFWkeyfun callback);
