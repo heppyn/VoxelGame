@@ -215,11 +215,13 @@ std::vector<float> Terrain::TerrainGen::NeighHeightsSmooth(const glm::vec2& pos)
 
 Weather::Humidity Terrain::TerrainGen::GetHumidity(const glm::vec2& pos) {
     // TODO: get humidity from surrounding water
+    // add fuzzy transition
+    const auto shift = static_cast<float>(Engine::Random::GetNoiseLimited(pos, Weather::NOISE));
     return {
         static_cast<unsigned char>(
           Engine::Random::Perlin.noise2D_0_1(
-            pos.x / Chunk::ChunkSize / 10.0f,
-            pos.y / Chunk::ChunkSize / 10.0f)
+            (pos.x + shift) / Chunk::ChunkSize / 10.0f,
+            (pos.y + shift) / Chunk::ChunkSize / 10.0f)
           * static_cast<float>(Weather::Humidity::SIZE - 1))
     };
 }
@@ -228,7 +230,9 @@ Weather::Temperature Terrain::TerrainGen::GetTemperature(const glm::vec3& pos) {
     // size of all temperature bands
     constexpr auto tmpBandSize = 150;
     constexpr auto bandFluctuation = 15.0f;
-    const auto fluctuation = Engine::Random::Perlin.accumulatedOctaveNoise1D_0_1((pos.x + pos.z * 0.5f) * 0.1f, 2) * bandFluctuation;
+    auto fluctuation = Engine::Random::Perlin.accumulatedOctaveNoise1D_0_1((pos.x + pos.z * 0.5f) * 0.1f, 2) * bandFluctuation;
+    // add fuzzy transition
+    fluctuation += static_cast<float>(Engine::Random::GetNoiseLimited(pos, Weather::NOISE));
     const auto dist = Helpers::Math::Mod(std::abs(pos.z) + fluctuation, tmpBandSize);
     Weather::Temperature temp{ 0 };
 

@@ -13,7 +13,7 @@ namespace Terrain {
 class TerrainGen {
   public:
     static ::Chunk GenerateChunk(const glm::vec2& position);
-    inline static const float MAX_BLOCK_HEIGHT{ 255.0f };
+    inline static constexpr float MAX_BLOCK_HEIGHT{ 255.0f };
 
   private:
     // TODO: are all functions const?

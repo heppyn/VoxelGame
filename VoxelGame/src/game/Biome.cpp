@@ -18,11 +18,16 @@ Terrain::BiomeType Terrain::Biome::GetBiome(const glm::vec2& pos, Weather::Humid
     assert(Weather::Humidity::SIZE == BiomeTable_.size());
     assert(Weather::Temperature::SIZE == BiomeTable_[0].size());
 
-    // pick from possible biomes
-    // TODO: prefer biomes that match their neighbors
-    const auto index = static_cast<size_t>(
-      static_cast<float>(BiomeTable_[humidity.Value][temperature.Value].size())
-      * Engine::Random::Perlin.accumulatedOctaveNoise2D_0_1(pos.x / zoneSize, pos.y / zoneSize, 1));
+    auto index = 0;
+    if (BiomeTable_[humidity.Value][temperature.Value].size() != 1) {
+        // pick from possible biomes
+        // TODO: prefer biomes that match their neighbors
+        // add fuzzy transition
+        const auto shift = static_cast<float>(Engine::Random::GetNoiseLimited(pos, 5));
+        index = static_cast<size_t>(
+          static_cast<float>(BiomeTable_[humidity.Value][temperature.Value].size())
+          * Engine::Random::Perlin.noise2D_0_1((pos.x + shift) / zoneSize, (pos.y + shift) / zoneSize));
+    }
     return BiomeTable_[humidity.Value][temperature.Value][index];
 }
 
