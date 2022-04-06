@@ -225,9 +225,10 @@ Weather::Humidity Terrain::TerrainGen::GetHumidity(const glm::vec2& pos) {
 }
 
 Weather::Temperature Terrain::TerrainGen::GetTemperature(const glm::vec3& pos) {
+    // size of all temperature bands
     constexpr auto tmpBandSize = 150;
-    constexpr auto bandFluctuation = 0.1f;
-    const auto fluctuation = Engine::Random::Perlin.accumulatedOctaveNoise1D_0_1(pos.x * 0.1f, 2) * tmpBandSize * bandFluctuation;
+    constexpr auto bandFluctuation = 15.0f;
+    const auto fluctuation = Engine::Random::Perlin.accumulatedOctaveNoise1D_0_1((pos.x + pos.z * 0.5f) * 0.1f, 2) * bandFluctuation;
     const auto dist = Helpers::Math::Mod(std::abs(pos.z) + fluctuation, tmpBandSize);
     Weather::Temperature temp{ 0 };
 
@@ -238,7 +239,8 @@ Weather::Temperature Terrain::TerrainGen::GetTemperature(const glm::vec3& pos) {
         temp = { static_cast<unsigned char>(Helpers::Math::Map(dist, 0, tmpBandSize - 1, 0, Weather::Temperature::SIZE - 1)) };
 
     // take height into account
-    const auto h = Helpers::Math::Map(pos.y, 0.0f, MAX_BLOCK_HEIGHT, 0.0f, 1.0f);
+    const auto heightShift = static_cast<float>(Engine::Random::Get2dNoiseLimited(pos.x, pos.z, 3));
+    const auto h = Helpers::Math::Map(pos.y + heightShift, 0.0f, MAX_BLOCK_HEIGHT, 0.0f, 1.0f);
     temp.Value -= static_cast<unsigned char>(h * static_cast<float>(Weather::Temperature::SIZE) * 0.5f);
 
     // temperature overflowed
