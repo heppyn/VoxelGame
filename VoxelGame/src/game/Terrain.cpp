@@ -186,7 +186,7 @@ float Terrain::Detail::WorldHeight(const glm::vec2& pos) {
 }
 
 float Terrain::Detail::Valley(const glm::vec2& pos) {
-    auto val = Engine::Random::Perlin.noise2D_0_1(pos.x / VALLEY_F, pos.y / VALLEY_F);
+    auto val = Engine::Random::Perlin.accumulatedOctaveNoise2D_0_1(pos.x / VALLEY_F, pos.y / VALLEY_F, 2);
     // shape of \\//
     val = std::abs(2.0f * val - 1.0f);
 
