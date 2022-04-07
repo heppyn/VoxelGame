@@ -270,6 +270,7 @@
     <ClCompile Include="src\vendor\imgui\imgui_impl_opengl3.cpp" />
     <ClCompile Include="src\vendor\imgui\imgui_tables.cpp" />
     <ClCompile Include="src\vendor\imgui\imgui_widgets.cpp" />
+    <ClCompile Include="src\vendor\simplex_noise\SimplexNoise.cpp" />
     <ClCompile Include="src\vendor\stb_image\stb_image.cpp" />
     <ClCompile Include="tests\engine\BlockFacesTest.cpp" />
     <ClCompile Include="tests\engine\BlockInfoTest.cpp" />
@@ -784,6 +785,7 @@
     <ClInclude Include="src\vendor\imgui\imstb_textedit.h" />
     <ClInclude Include="src\vendor\imgui\imstb_truetype.h" />
     <ClInclude Include="src\vendor\perlin_noise\PerlinNoise.hpp" />
+    <ClInclude Include="src\vendor\simplex_noise\SimplexNoise.h" />
     <ClInclude Include="src\vendor\stb_image\stb_image.h" />
     <ClInclude Include="tests\vendor\catch.hpp" />
   </ItemGroup>
@@ -809,6 +811,7 @@
     <Text Include="res\l-systems\plants\Pine.txt" />
     <Text Include="res\l-systems\plants\Shrubs.txt" />
     <Text Include="res\textures\voxel-pack-updated\License.txt" />
+    <Text Include="src\vendor\simplex_noise\LICENSE.txt" />
     <Text Include="tests\engine\L-systems\testData\grammar.txt" />
     <Text Include="tests\engine\L-systems\testData\multipleGrammars.txt" />
   </ItemGroup>

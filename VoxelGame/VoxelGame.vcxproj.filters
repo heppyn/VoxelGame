@@ -195,6 +195,9 @@
     <ClCompile Include="tests\engine\SceneTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\vendor\simplex_noise\SimplexNoise.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\vendor\glm\detail\func_common.inl">
@@ -1650,6 +1653,9 @@
     <ClInclude Include="src\open_gl\GpuTimer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\vendor\simplex_noise\SimplexNoise.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\textures\doge.png">
@@ -1693,5 +1699,6 @@
     <Text Include="res\l-systems\plants\Pine.txt" />
     <Text Include="res\l-systems\plants\JungleTree.txt" />
     <Text Include="res\l-systems\plants\Grass2D.txt" />
+    <Text Include="src\vendor\simplex_noise\LICENSE.txt" />
   </ItemGroup>
 </Project>

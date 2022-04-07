@@ -3,6 +3,7 @@
 #include "helpers/Math.h"
 
 siv::BasicPerlinNoise<float> Engine::Random::Perlin{};
+SimplexNoise Engine::Random::Simplex{};
 unsigned Engine::Random::Seed{ 0 };
 std::random_device Engine::Random::RandomGen{};
 
@@ -13,6 +14,7 @@ void Engine::Random::Init() {
 void Engine::Random::Init(unsigned seed) {
     Seed = seed;
     Perlin.reseed(Seed);
+    Simplex = SimplexNoise(seed);
 }
 
 bool Engine::Random::IsLocalMaxPerlin(const glm::vec2& pos, float freq, int octaves) {

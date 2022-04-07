@@ -3,6 +3,7 @@
 #include <random>
 #include <limits>
 #include <perlin_noise/PerlinNoise.hpp>
+#include <simplex_noise/SimplexNoise.h>
 
 #include "glm/vec2.hpp"
 #include "glm/vec3.hpp"
@@ -11,6 +12,7 @@ namespace Engine {
 class Random {
   public:
     static siv::BasicPerlinNoise<float> Perlin;
+    static SimplexNoise Simplex;
     static unsigned Seed;
     //TODO: get rid of this - not PRNG - too slow
     static std::random_device RandomGen;
@@ -36,8 +38,9 @@ class Random {
     static unsigned int GetNoise(glm::vec2 vec, unsigned int seed = Seed) {
         return GetSquirrel2dNoise(static_cast<int>(vec.x), static_cast<int>(vec.y), seed);
     }
-    // bad statistical properties - use 2D noise
+
     static unsigned int GetNoise(glm::vec3 vec, unsigned int seed = Seed) {
+        // bad statistical properties - use 2D noise
         return GetSquirrel2dNoise(static_cast<int>(vec.x), static_cast<int>(vec.z), seed);
     }
 
