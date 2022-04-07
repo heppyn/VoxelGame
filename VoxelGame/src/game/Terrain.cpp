@@ -149,7 +149,8 @@ bool Terrain::IsNextToWater(const glm::vec3& pos, const float range) {
     assert(range >= 1.0f);
 
     // don't place sand next to water
-    if (pos.y > Detail::WATER_LEVEL + 1.0f && range <= 1.0f) {
+    // sand only until some point in height
+    if (pos.y > Detail::WATER_LEVEL + 1.0f && range <= 1.0f || pos.y > Detail::WATER_LEVEL + 3.0f) {
         return false;
     }
 
