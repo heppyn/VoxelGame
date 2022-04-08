@@ -8,8 +8,8 @@
 namespace Terrain::Vegetation {
 class TreeFactory {
   public:
-    static bool HasTree(const glm::vec3& pos, BiomeType biome);
-    static std::vector<glm::mat4> GenerateTree(const glm::vec3& pos, BiomeType biome);
+    [[nodiscard]] static bool HasTree(const glm::vec3& pos, BiomeType biome);
+    [[nodiscard]] static std::vector<glm::mat4> GenerateTree(const glm::vec3& pos, BiomeType biome);
 
   private:
     constexpr static int DENSITY_DENSE{ 1 };
@@ -21,8 +21,7 @@ class TreeFactory {
     constexpr static float FREQ_SPARSE{ 6.5f };
     constexpr static float FREQ_RARE{ 7.5f };
 
-    static bool HasNeighTree(const glm::vec3& pos, BiomeType biome, int regionSize);
-    static bool CanHaveTree(const glm::vec3& pos, BiomeType biome);
-
+    [[nodiscard]] static bool HasNeighTree(const glm::vec3& pos, BiomeType biome, int regionSize);
+    [[nodiscard]] static bool CanHaveTree(const glm::vec3& pos, BiomeType biome);
 };
 } // namespace Terrain::Vegetation
