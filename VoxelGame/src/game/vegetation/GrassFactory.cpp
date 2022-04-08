@@ -14,22 +14,23 @@ Terrain::Vegetation::GrassFactory::GrassFactory(std::string_view grassFile)
 }
 
 std::vector<GameObject> Terrain::Vegetation::GrassFactory::GenerateGrass(const glm::vec3& pos, BiomeType biome) {
+    const glm::vec3 newPos = { pos.x, pos.y + 1.0f, pos.z };
     constexpr auto scale = 0.5f;
     std::vector<GameObject> res;
-    if (HasGrass(pos, biome)) {
-        const auto r = Engine::Random::Get3dNoise0_1<float>(pos.x, pos.y, pos.z);
+    if (HasGrass(newPos, biome)) {
+        const auto r = Engine::Random::Get3dNoise0_1<float>(newPos.x, newPos.y, newPos.z);
         constexpr auto numGrass = 4.0f;
         if (r < 1.0f / numGrass) {
-            res.emplace_back(BlockFactory_.CreateFromPreset(pos, BlockType::Grass1));
+            res.emplace_back(BlockFactory_.CreateFromPreset(newPos, BlockType::Grass1));
         }
         else if (r < 2.0f / numGrass) {
-            res.emplace_back(BlockFactory_.CreateFromPreset(pos, BlockType::Grass2));
+            res.emplace_back(BlockFactory_.CreateFromPreset(newPos, BlockType::Grass2));
         }
         else if (r < 3.0f / numGrass) {
-            res.emplace_back(BlockFactory_.CreateFromPreset(pos, BlockType::Grass3));
+            res.emplace_back(BlockFactory_.CreateFromPreset(newPos, BlockType::Grass3));
         }
         else {
-            res.emplace_back(BlockFactory_.CreateFromPreset(pos, BlockType::Grass4));
+            res.emplace_back(BlockFactory_.CreateFromPreset(newPos, BlockType::Grass4));
         }
     }
 

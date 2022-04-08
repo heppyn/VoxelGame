@@ -71,7 +71,7 @@ void Terrain::TerrainGen::PlaceVegetation(Chunk& chunk, const glm::vec2& pos, Bi
         chunk.GetBlockInfo(pos).AddTree();
     }
     else {
-        auto grass = Vegetation::GrassFactory::GenerateGrass({ pos.x, h + 1.0f, pos.y }, biome);
+        auto grass = Vegetation::GrassFactory::GenerateGrass({ pos.x, h, pos.y }, biome);
         chunk.AddObjectsTrans(std::move(grass), Vegetation::GrassFactory::GrassCube());
     }
 }

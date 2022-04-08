@@ -18,7 +18,7 @@ Terrain::BiomeType Terrain::Biome::GetBiome(const glm::vec2& pos, Weather::Humid
     assert(Weather::Humidity::SIZE == BiomeTable_.size());
     assert(Weather::Temperature::SIZE == BiomeTable_[0].size());
 
-    auto index = 0;
+    size_t index = 0;
     if (BiomeTable_[humidity.Value][temperature.Value].size() != 1) {
         // pick from possible biomes
         // TODO: prefer biomes that match their neighbors
