@@ -23,7 +23,7 @@ bool Engine::Random::IsLocalMaxPerlin(const glm::vec2& pos, float freq, int octa
     const auto r2 = Perlin.accumulatedOctaveNoise2D_0_1((pos.x - 1) / freq, pos.y / freq, octaves);
     const auto r3 = Perlin.accumulatedOctaveNoise2D_0_1(pos.x / freq, (pos.y + 1) / freq, octaves);
     const auto r4 = Perlin.accumulatedOctaveNoise2D_0_1(pos.x / freq, (pos.y - 1) / freq, octaves);
-                    
+
     const auto r5 = Perlin.accumulatedOctaveNoise2D_0_1((pos.x + 1) / freq, (pos.y + 1) / freq, octaves);
     const auto r6 = Perlin.accumulatedOctaveNoise2D_0_1((pos.x - 1) / freq, (pos.y + 1) / freq, octaves);
     const auto r7 = Perlin.accumulatedOctaveNoise2D_0_1((pos.x + 1) / freq, (pos.y - 1) / freq, octaves);
