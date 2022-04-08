@@ -6,6 +6,9 @@
 #include "engine/Components/SpritesheetTex.h"
 #include "engine/L-systems/LSystemExecutor.h"
 #include "engine/L-systems/LSystemParser.h"
+#include "engine/Random.h"
+#include "game/vegetation/GrassFactory.h"
+#include "game/vegetation/TreeFactory.h"
 
 
 Chunk ExampleScene::EmptySides() {
@@ -98,8 +101,8 @@ Chunk ExampleScene::PhongLight() {
     for (int i = -30; i < 30; ++i) {
         for (int j = -30; j < 30; ++j) {
             chunk.AddObject(GameObjectFactory::CreateObject(
-                { static_cast<float>(i), 0.0f, static_cast<float>(j) },
-                { 0.0f, 5.0f }));
+              { static_cast<float>(i), 0.0f, static_cast<float>(j) },
+              { 0.0f, 5.0f }));
         }
     }
 
@@ -127,6 +130,69 @@ Chunk ExampleScene::Shadow() {
     chunk.AddObject(GameObjectFactory::CreateObject({ 10.0f, 5.0f, 1.0f }, { 2.0f, 2.0f }));
     chunk.AddObject(GameObjectFactory::CreateObject({ 20.0f, 5.0f, 3.0f }, { 2.0f, 2.0f }));
     chunk.AddObject(GameObjectFactory::CreateObject({ 30.0f, 5.0f, 5.0f }, { 2.0f, 2.0f }));
+
+    chunk.FinisChunk();
+    return chunk;
+}
+
+Chunk ExampleScene::RandomNoiseTerrain() {
+    Chunk chunk(glm::vec2(0.0f));
+
+    for (unsigned i = 0; i < 200; ++i) {
+        for (unsigned j = 0; j < 200; ++j) {
+            const auto height = Engine::Random::Get2dNoiseLimited(i, j, 8);
+            for (unsigned h = 0; h < height; ++h) {
+                chunk.AddObject(GameObjectFactory::CreateObject(
+                  { i, h, j },
+                  { 0.0f, 1.0f }));
+            }
+            chunk.AddObject(GameObjectFactory::CreateObject({ i, height, j }, { 1.0f, 1.0f }), Engine::Cube::PIPE);
+            chunk.AddObject(GameObjectFactory::CreateObject({ i, height, j }, { 2.0f, 2.0f }),
+              Engine::Cube::BlockFaces::CreateBlockFaces(Engine::Cube::Faces::TOP));
+        }
+    }
+
+    chunk.FinisChunk();
+    return chunk;
+}
+
+Chunk ExampleScene::PerlinSimplexTerrain() {
+    Chunk chunk(glm::vec2(0.0f));
+    constexpr auto freq = 20.0f;
+
+    for (unsigned i = 0; i < 100; ++i) {
+        for (unsigned j = 0; j < 200; ++j) {
+            const auto heightPer = static_cast<unsigned>(Engine::Random::Perlin.noise2D_0_1(static_cast<float>(i) / freq, static_cast<float>(j) / freq) * 8.0f);
+            const auto heightSim = static_cast<unsigned>(Engine::Random::Simplex.noise0_1(static_cast<float>(i) / freq, static_cast<float>(j) / freq) * 8.0f);
+            for (unsigned h = 0; h < heightPer; ++h) {
+                chunk.AddObject(GameObjectFactory::CreateObject(
+                  { i, h, j },
+                  { 0.0f, 1.0f }));
+            }
+            glm::vec3 pos = { i, heightPer, j };
+            chunk.AddObjectData(Terrain::Vegetation::TreeFactory::GenerateTree(pos, Terrain::BiomeType::Grassland));
+            auto grass = Terrain::Vegetation::GrassFactory::GenerateGrass(pos, Terrain::BiomeType::Grassland);
+            chunk.AddObjectsTrans(std::move(grass), Terrain::Vegetation::GrassFactory::GrassCube());
+
+            chunk.AddObject(GameObjectFactory::CreateObject(pos, { 1.0f, 1.0f }), Engine::Cube::PIPE);
+            chunk.AddObject(GameObjectFactory::CreateObject(pos, { 2.0f, 2.0f }),
+              Engine::Cube::BlockFaces::CreateBlockFaces(Engine::Cube::Faces::TOP));
+
+            for (unsigned h = 0; h < heightSim; ++h) {
+                chunk.AddObject(GameObjectFactory::CreateObject(
+                  { i + 100, h, j },
+                  { 0.0f, 1.0f }));
+            }
+            pos = { i + 100, heightSim, j };
+            chunk.AddObjectData(Terrain::Vegetation::TreeFactory::GenerateTree(pos, Terrain::BiomeType::Grassland));
+            grass = Terrain::Vegetation::GrassFactory::GenerateGrass(pos, Terrain::BiomeType::Grassland);
+            chunk.AddObjectsTrans(std::move(grass), Terrain::Vegetation::GrassFactory::GrassCube());
+
+            chunk.AddObject(GameObjectFactory::CreateObject(pos, { 1.0f, 1.0f }), Engine::Cube::PIPE);
+            chunk.AddObject(GameObjectFactory::CreateObject(pos, { 2.0f, 2.0f }),
+              Engine::Cube::BlockFaces::CreateBlockFaces(Engine::Cube::Faces::TOP));
+        }
+    }
 
     chunk.FinisChunk();
     return chunk;

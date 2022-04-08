@@ -10,4 +10,6 @@ class ExampleScene {
     [[nodiscard]] static Chunk LSystemGrass();
     [[nodiscard]] static Chunk PhongLight();
     [[nodiscard]] static Chunk Shadow();
+    [[nodiscard]] static Chunk RandomNoiseTerrain();
+    [[nodiscard]] static Chunk PerlinSimplexTerrain();
 };
