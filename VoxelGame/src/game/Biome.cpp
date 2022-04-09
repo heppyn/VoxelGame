@@ -2,7 +2,6 @@
 
 #include <cassert>
 
-#include "engine/Chunk.h"
 #include "engine/Random.h"
 
 float Terrain::Biome::Frequency_{ 10.0f };
