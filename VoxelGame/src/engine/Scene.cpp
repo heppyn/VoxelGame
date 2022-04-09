@@ -13,6 +13,7 @@
 #include "open_gl/WindowManagerGl.h"
 
 void Scene::Init(std::shared_ptr<Renderer::Camera> camera) {
+    RenderDistance_ = 8;
     SetCamera(std::move(camera));
 
     // add white light
