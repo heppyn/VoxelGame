@@ -35,7 +35,6 @@ void Scene::UpdateOrig([[maybe_unused]] bool updateAll /*= false*/) {
 void Scene::Update(bool updateAll /*= false*/) {
     const auto startTime = glfwGetTime();
     const auto centerChunkPos = GetCenterChunkPos();
-    auto updated{ false };
 
     // deallocate chunk out of render distance
     for (auto it = Chunks_.begin(), nextIt = it; it != Chunks_.end(); it = nextIt) {
@@ -43,7 +42,6 @@ void Scene::Update(bool updateAll /*= false*/) {
         if (!IsInRenderDistance(it->second)) {
             //std::cout << "Erasing chunk at:" << it->first.x << ", " << it->first.y << '\n';
             Chunks_.erase(it);
-            updated = true;
         }
     }
 
@@ -61,7 +59,6 @@ void Scene::Update(bool updateAll /*= false*/) {
             if (!Chunks_.contains(chunkPos)) {
                 const auto startTimeChunk = glfwGetTime();
                 Chunks_.emplace(chunkPos, Terrain::TerrainGen::GenerateChunk(chunkPos));
-                updated = true;
                 //std::cout << "Chunk generated in " << (glfwGetTime() - startTimeChunk) * 1000.0 << " ms\n";
             }
         }
