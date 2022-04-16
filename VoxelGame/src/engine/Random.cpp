@@ -51,8 +51,8 @@ unsigned Engine::Random::GetSquirrel1dNoise(int x, unsigned seed) {
 }
 
 unsigned Engine::Random::GetSquirrel2dNoise(int x, int y, unsigned seed) {
-    return Get1dNoise(x + PRIME1 * y, seed);
+    return GetSquirrel1dNoise(x + PRIME1 * y, seed);
 }
 unsigned Engine::Random::GetSquirrel3dNoise(int x, int y, int z, unsigned seed) {
-    return Get1dNoise(x + PRIME1 * y + PRIME2 * z, seed);
+    return GetSquirrel1dNoise(x + PRIME1 * y + PRIME2 * z, seed);
 }
