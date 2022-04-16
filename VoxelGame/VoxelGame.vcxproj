@@ -131,7 +131,7 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>src;src\vendor;$(SolutionDir)Dependencies\GLFW\include;$(SolutionDir)Dependencies\GLEW\include;$(SolutionDir)Dependencies\GLAD\include</AdditionalIncludeDirectories>
       <TreatWarningAsError>false</TreatWarningAsError>
-      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
     </ClCompile>
     <Link>
@@ -149,7 +149,7 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>src;src\vendor;$(SolutionDir)Dependencies\GLFW\include;$(SolutionDir)Dependencies\GLEW\include;$(SolutionDir)Dependencies\GLAD\include</AdditionalIncludeDirectories>
       <TreatWarningAsError>false</TreatWarningAsError>
-      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
       <Optimization>MaxSpeed</Optimization>
     </ClCompile>
@@ -170,7 +170,7 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>src;src\vendor;$(SolutionDir)Dependencies\GLFW\include;$(SolutionDir)Dependencies\GLEW\include;$(SolutionDir)Dependencies\GLAD\include</AdditionalIncludeDirectories>
       <TreatWarningAsError>false</TreatWarningAsError>
-      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
     </ClCompile>
     <Link>
@@ -276,6 +276,7 @@
     <ClCompile Include="tests\engine\BlockInfoTest.cpp" />
     <ClCompile Include="tests\engine\Components\TransformTest.cpp" />
     <ClCompile Include="tests\engine\GameObjectFactoryTest.cpp" />
+    <ClCompile Include="tests\engine\GameObjectTest.cpp" />
     <ClCompile Include="tests\engine\L-systems\LSystemExecutorTest.cpp" />
     <ClCompile Include="tests\engine\L-systems\LSystemParserTest.cpp" />
     <ClCompile Include="tests\engine\L-systems\RandomGrammarTest.cpp" />
@@ -283,6 +284,8 @@
     <ClCompile Include="src\game\vegetation\TreeFactory.cpp" />
     <ClCompile Include="tests\engine\RandomTest.cpp" />
     <ClCompile Include="tests\engine\SceneTest.cpp" />
+    <ClCompile Include="tests\helpers\MathTest.cpp" />
+    <ClCompile Include="tests\helpers\PrintTest.cpp" />
     <ClCompile Include="tests\renderer\ShaderTest.cpp" />
   </ItemGroup>
   <ItemGroup>
