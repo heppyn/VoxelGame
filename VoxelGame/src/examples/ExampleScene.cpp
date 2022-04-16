@@ -8,6 +8,7 @@
 #include "engine/L-systems/LSystemParser.h"
 #include "engine/Random.h"
 #include "game/vegetation/GrassFactory.h"
+#include "game/vegetation/Tree.h"
 #include "game/vegetation/TreeFactory.h"
 
 
@@ -191,6 +192,28 @@ Chunk ExampleScene::PerlinSimplexTerrain() {
             chunk.AddObject(GameObjectFactory::CreateObject(pos, { 1.0f, 1.0f }), Engine::Cube::PIPE);
             chunk.AddObject(GameObjectFactory::CreateObject(pos, { 2.0f, 2.0f }),
               Engine::Cube::BlockFaces::CreateBlockFaces(Engine::Cube::Faces::TOP));
+        }
+    }
+
+    chunk.FinisChunk();
+    return chunk;
+}
+
+Chunk ExampleScene::TreeDistribution() {
+    Chunk chunk(glm::vec2(0.0f));
+
+    for (unsigned i = 0; i < 200; ++i) {
+        constexpr auto freq = 5.0f;
+        const auto height = static_cast<unsigned>(Engine::Random::Perlin.noise1D_0_1(static_cast<float>(i) / freq) * 20.0f);
+        for (unsigned h = 0; h <= height; ++h) {
+            chunk.AddObject(GameObjectFactory::CreateObject(
+              { i, h, 0.0f },
+              { 6.0f, 4.0f }));
+        }
+
+        if (height > static_cast<unsigned>(Engine::Random::Perlin.noise1D_0_1(static_cast<float>(i - 1) / freq) * 20.0f)
+            && height > static_cast<unsigned>(Engine::Random::Perlin.noise1D_0_1(static_cast<float>(i + 1) / freq) * 20.0f)) {
+            chunk.AddObjects(Terrain::Vegetation::Tree::SpawnCactus({ i, height, 0.0f }));
         }
     }
 

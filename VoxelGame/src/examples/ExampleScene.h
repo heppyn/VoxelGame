@@ -12,4 +12,5 @@ class ExampleScene {
     [[nodiscard]] static Chunk Shadow();
     [[nodiscard]] static Chunk RandomNoiseTerrain();
     [[nodiscard]] static Chunk PerlinSimplexTerrain();
+    [[nodiscard]] static Chunk TreeDistribution();
 };

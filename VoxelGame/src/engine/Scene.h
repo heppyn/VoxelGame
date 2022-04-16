@@ -26,7 +26,7 @@ class Scene {
   public:
     void Init(std::shared_ptr<Renderer::Camera> camera);
     void Update(bool updateAll = false);
-    // original game scene update, disabled for testing purposes
+    // switch between automatic scene generation and example scenes
     void UpdateOrig(bool updateAll = false);
     void SetCamera(std::shared_ptr<Renderer::Camera> camera);
 
