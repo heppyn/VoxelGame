@@ -58,11 +58,11 @@ std::vector<GameObject> Terrain::Vegetation::GrassFactory::GenerateLSystemGrass(
 bool Terrain::Vegetation::GrassFactory::HasGrass(const glm::vec3& pos, BiomeType biome) {
     switch (GetGrassDensity(biome)) {
         case GrassDensity::Dense:
-            return Engine::Random::Get3dNoise0_1<float>(pos.x, pos.y, pos.z) > 0.2f;
+            return Engine::Random::GetNoise0_1<float>(pos) > 0.2f;
         case GrassDensity::Normal:
-            return Engine::Random::Get3dNoise0_1<float>(pos.x, pos.y, pos.z) > 0.5f;
+            return Engine::Random::GetNoise0_1<float>(pos) > 0.5f;
         case GrassDensity::Sparse:
-            return Engine::Random::Get3dNoise0_1<float>(pos.x, pos.y, pos.z) > 0.8f;
+            return Engine::Random::GetNoise0_1<float>(pos) > 0.8f;
         case GrassDensity::None:
             return false;
     }
