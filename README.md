@@ -1,4 +1,16 @@
-# Voxel Game engine using OpenGL
+# Voxel Game rendering engine using OpenGL
+![valleys](VoxelGame/res/textures/valleys.PNG)
+
+## Controls
+  - Fly around the world using WSAD and your mouse.
+  - Zoom in by scrolling the mouse wheel.
+  - Maximize the window by pressing F.
+  - Pause the camera movement by pressing P.
+
+You can export the scene by passing `-e` (`--export`) to the executable.
+
+## Project structure
+
 This is Visual studio project running on Windows.
 
 Includes for extra dependencies `/Dependencies`
@@ -8,9 +20,9 @@ Includes for extra dependencies `/Dependencies`
 Dependencies wich are compiled are placed in `/VoxelGame/src/vendor`
   - glad
   - glm
-  - imgui
   - stb_image
   - perlin_noise
+  - simplex_noise
   
 Game engine resources are placed in `/VoxelGame/res`
   - textures
