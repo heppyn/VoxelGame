@@ -35,10 +35,10 @@ void Chunk::GenerateInstanceData() {
 }
 
 void Chunk::FinisChunk() {
-    for (auto& objects : Objects_ | std::views::values) {
+    for (auto& [_, objects] : Objects_) {
         objects.shrink_to_fit();
     }
-    for (auto& objects : ObjectsTrans_ | std::views::values) {
+    for (auto& [_, objects] : ObjectsTrans_) {
         objects.shrink_to_fit();
     }
     GenerateInstanceData();

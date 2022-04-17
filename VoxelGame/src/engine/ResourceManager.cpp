@@ -71,10 +71,10 @@ glm::vec2 ResourceManager::GetSpriteSheetSize() {
 }
 
 void ResourceManager::Clear() {
-    for (const auto& shader : Shaders | std::views::values) {
+    for (const auto& [_, shader] : Shaders) {
         shader->Delete();
     }
-    for (const auto& texture : Textures | std::views::values) {
+    for (const auto& [_, texture] : Textures) {
         texture->Delete();
     }
 }
