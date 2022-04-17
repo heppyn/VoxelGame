@@ -29,7 +29,12 @@ int main(const int argc, const char* argv[]) {
     // add -s to see successful runs
     //const auto params = { "main", "-b" };
 
-    constexpr auto testOnly = false;
+    #ifdef TEST_ONLY
+        constexpr auto testOnly = true;
+    #else
+        constexpr auto testOnly = false;
+    #endif
+
     if (const int result = Catch::Session().run(); result || testOnly) {
         std::cin.ignore();
         return result;
