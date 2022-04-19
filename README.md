@@ -2,10 +2,11 @@
 ![valleys](VoxelGame/res/textures/valleys.PNG)
 
 ## Controls
-  - Fly around the world using WSAD and your mouse.
+  - Fly around the world using `WSAD` and your mouse.
   - Zoom in by scrolling the mouse wheel.
-  - Maximize the window by pressing F.
-  - Pause the camera movement by pressing P.
+  - Maximize the window by pressing `F`.
+  - Pause the camera movement by pressing `P`.
+  - Exit the game by pressing `ESC`.
 
 You can export the scene by passing `-e` (`--export`) to the executable.
 
