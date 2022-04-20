@@ -4,18 +4,6 @@
 #include "engine/Random.h"
 #include "helpers/Math.h"
 
-namespace Terrain::Detail {
-constexpr float WATER_LEVEL{ 18.0f };
-// prime number to eliminate periodicity
-constexpr float BASE_F{ 149.0f };
-constexpr float DETAIL_F{ 53.0f };
-constexpr float MOUNTAINS_F{ 199.0f };
-constexpr float VALLEY_F{ 31.0f };
-constexpr float HILLINESS_F{ 701.0f };
-
-inline std::vector<std::pair<float, float>> mountainSplices = { { 0.0f, 0.0f }, { 0.1f, 1.0f }, { 0.5f, 20.f }, { 0.65f, 60.0f }, { 1.0f, 70.0f }, { 1.1f, 70.0f } };
-} // namespace Terrain::Detail
-
 
 glm::vec2 Terrain::GetTextPos(BlockType blockType) {
     switch (blockType) {
@@ -129,13 +117,21 @@ glm::vec2 Terrain::GetTextPos(BlockType blockType) {
 
 float Terrain::GetBlockHeight(const glm::vec2& pos) {
     const auto worldHeight = Detail::WorldHeight(pos);
-    constexpr auto baseHeight = 50.0f;
+    constexpr auto freq = 100.0f;
+    constexpr auto baseHeight = 40.0f;
+
+    // TODO: Redo terrain variation
     constexpr auto heightVar = 10.0f;
+    constexpr auto freq2 = 2.5f;
+    const glm::vec2 perPos = {
+        pos.x / Chunk::ChunkSize / freq2,
+        pos.y / Chunk::ChunkSize / freq2
+    };
 
     const auto height = std::floor(
       worldHeight
-      + baseHeight * Engine::Random::Perlin.noise2D_0_1(pos.x / Detail::BASE_F, pos.y / Detail::BASE_F)
-      + heightVar * Engine::Random::Simplex.fractal0_1(2, pos.x / Detail::DETAIL_F, pos.y / Detail::DETAIL_F));
+      + baseHeight * Engine::Random::Perlin.noise2D_0_1(pos.x / freq, pos.y / freq)
+      + heightVar * Engine::Random::Perlin.normalizedOctaveNoise2D_0_1(perPos.x, perPos.y, 2));
 
     // don't create any block below global water level
     return height >= Detail::WATER_LEVEL ? height : Detail::WATER_LEVEL;
@@ -175,7 +171,7 @@ float Terrain::Detail::WorldHeight(const glm::vec2& pos) {
     if (Helpers::Math::Equal(hilliness, 0.0f))
         return 0.0f;
 
-    const auto val = Engine::Random::Simplex.noise0_1(pos.x / MOUNTAINS_F, pos.y / MOUNTAINS_F);
+    const auto val = Engine::Random::Perlin.noise2D_0_1(pos.x / MOUNTAINS_F, pos.y / MOUNTAINS_F);
 
     size_t i = 0;
     for (; i < mountainSplices.size() - 1; ++i) {
@@ -187,11 +183,11 @@ float Terrain::Detail::WorldHeight(const glm::vec2& pos) {
     const float percent = Helpers::Math::Map(val, mountainSplices[i].first, mountainSplices[i + 1].first, 0.0f, 1.0f);
     const float height = mountainSplices[i + 1].second - mountainSplices[i].second;
 
-    return hilliness * (mountainSplices[i].second + percent * height - Valley(pos) * val * 15.f);
+    return hilliness * (mountainSplices[i].second + percent * height - Valley(pos) * 20.f);
 }
 
 float Terrain::Detail::Valley(const glm::vec2& pos) {
-    auto val = Engine::Random::Simplex.fractal0_1(2, pos.x / VALLEY_F, pos.y / VALLEY_F);
+    auto val = Engine::Random::Perlin.accumulatedOctaveNoise2D_0_1(pos.x / VALLEY_F, pos.y / VALLEY_F, 2);
     // shape of \\//
     val = std::abs(2.0f * val - 1.0f);
 
@@ -199,7 +195,7 @@ float Terrain::Detail::Valley(const glm::vec2& pos) {
 }
 
 float Terrain::Detail::Hilliness(const glm::vec2& pos) {
-    const auto val = Engine::Random::Simplex.noise0_1(pos.x / HILLINESS_F, pos.y / HILLINESS_F);
+    const auto val = Engine::Random::Perlin.noise2D_0_1(pos.x / HILLINESS_F, pos.y / HILLINESS_F);
     constexpr auto start = 0.4f, end = 0.8f;
 
     if (val < start) {
