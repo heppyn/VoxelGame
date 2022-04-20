@@ -120,6 +120,19 @@ BlockInfo& Chunk::GetBlockInfo(const glm::vec3& pos) {
     return GetBlockInfo({ pos.x, pos.z });
 }
 
+size_t Chunk::GenNumberOfObjects() const {
+    size_t size = 0;
+
+    for (const auto& [_, objects] : InstancesData_) {
+        size += objects->size();
+    }
+    for (const auto& [_, objects] : InstancesDataTrans_) {
+        size += objects->size();
+    }
+
+    return size;
+}
+
 void Chunk::RecalculateBlockHeights() {
     std::cout << "Warning! Using expansive function\n";
 

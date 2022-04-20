@@ -33,6 +33,10 @@ class Chunk {
     Chunk(const glm::vec2& position, std::vector<GameObject>&& objects);
 
     void GenerateInstanceData();
+    /**
+     * Call after all objects are added.
+     * Shrinks objects buffers and generates objects data.
+     */
     void FinisChunk();
 
     void AddObjectData(std::vector<glm::mat4>&& objects);
@@ -61,6 +65,7 @@ class Chunk {
      * \return chunk start position with lowest y position in chunk
      */
     [[nodiscard]] glm::vec3 PositionInSpace() const { return PositionInSpace_; }
+    [[nodiscard]] size_t GenNumberOfObjects() const;
 
   private:
     void RecalculateBlockHeights();

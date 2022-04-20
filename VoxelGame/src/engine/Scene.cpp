@@ -94,6 +94,16 @@ size_t Scene::GetSceneSize(const Engine::Cube::BlockFaces& faces) const {
     return size;
 }
 
+size_t Scene::GetNumberOfObjects() const {
+    size_t size = 0;
+
+    for (const auto& [_, chunk] : Chunks_) {
+        size += chunk.GenNumberOfObjects();
+    }
+
+    return size;
+}
+
 glm::vec2 Scene::GetCenterChunkPos() const {
     return glm::vec2(
       floor(Camera_->Position.x / Chunk::ChunkSize) * Chunk::ChunkSize,
