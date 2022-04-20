@@ -182,29 +182,30 @@ std::vector<float> Terrain::TerrainGen::NeighHeights(const glm::vec2& pos) {
 
 Weather::Humidity Terrain::TerrainGen::GetHumidity(const glm::vec2& pos) {
     // TODO: get humidity from surrounding water
+    constexpr auto freq = 300.0f;
     // add fuzzy transition
     const auto shift = static_cast<float>(Engine::Random::GetNoiseLimited(pos, Weather::NOISE));
     return {
         static_cast<unsigned char>(
-          Engine::Random::Perlin.noise2D_0_1(
-            (pos.x + shift) / Chunk::ChunkSize / 10.0f,
-            (pos.y + shift) / Chunk::ChunkSize / 10.0f)
+          Engine::Random::Simplex.noise0_1(
+            (pos.x + shift) / freq,
+            (pos.y + shift) / freq)
           * static_cast<float>(Weather::Humidity::SIZE - 1))
     };
 }
 
 Weather::Temperature Terrain::TerrainGen::GetTemperature(const glm::vec3& pos) {
     // size of all temperature bands
-    constexpr auto tmpBandSize = 150;
-    constexpr auto bandFluctuation = 15.0f;
-    auto fluctuation = Engine::Random::Perlin.accumulatedOctaveNoise1D_0_1((pos.x + pos.z * 0.5f) * 0.1f, 2) * bandFluctuation;
+    constexpr auto tmpBandSize = 200;
+    constexpr auto bandFluctuation = 10.0f;
+    auto fluctuation = Engine::Random::Simplex.fractal0_1(2, (pos.x + pos.z * 0.5f) * 0.1f) * bandFluctuation;
     // add fuzzy transition
     fluctuation += static_cast<float>(Engine::Random::GetNoiseLimited(pos, Weather::NOISE));
     const auto dist = Helpers::Math::Mod(std::abs(pos.z) + fluctuation, tmpBandSize);
     Weather::Temperature temp{ 0 };
 
     // bands are repeating infinitely - determine if temperature should be rising or falling
-    if ((static_cast<int>(std::abs(pos.z) + fluctuation) / tmpBandSize) % 2 == 0)
+    if (((static_cast<int>(std::abs(pos.z) + fluctuation) / tmpBandSize) & 1) == 0)
         temp = { static_cast<unsigned char>(Helpers::Math::Map(dist, 0, tmpBandSize - 1, Weather::Temperature::SIZE - 1, 0)) };
     else
         temp = { static_cast<unsigned char>(Helpers::Math::Map(dist, 0, tmpBandSize - 1, 0, Weather::Temperature::SIZE - 1)) };
@@ -214,7 +215,7 @@ Weather::Temperature Terrain::TerrainGen::GetTemperature(const glm::vec3& pos) {
     const auto h = Helpers::Math::Map(pos.y + heightShift, 0.0f, MAX_BLOCK_HEIGHT, 0.0f, 1.0f);
     temp.Value -= static_cast<unsigned char>(h * static_cast<float>(Weather::Temperature::SIZE) * 0.5f);
 
-    // temperature overflowed
+    // temperature under flowed
     if (temp.Value >= Weather::Temperature::SIZE) {
         temp.Value = 0;
     }

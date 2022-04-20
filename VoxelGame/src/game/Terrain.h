@@ -1,6 +1,4 @@
 #pragma once
-#include <vector>
-
 #include "glm/vec2.hpp"
 #include "glm/vec3.hpp"
 
@@ -67,13 +65,6 @@ bool IsWater(const glm::vec2& pos);
 bool IsNextToWater(const glm::vec3& pos, float range);
 
 namespace Detail {
-    constexpr float WATER_LEVEL{ 15.0f };
-    constexpr float MOUNTAINS_F{ 200.0f };
-    constexpr float VALLEY_F{ 20.0f };
-    constexpr float HILLINESS_F{ 300.0f };
-
-    inline std::vector<std::pair<float, float>> mountainSplices = { { 0.0f, 0.0f }, { 0.1f, 1.0f }, { 0.5f, 20.f }, { 0.6f, 60.0f }, { 1.0f, 70.0f }, { 1.1f, 70.0f } };
-
     float WorldHeight(const glm::vec2& pos);
     float Valley(const glm::vec2& pos);
     float Hilliness(const glm::vec2& pos);
