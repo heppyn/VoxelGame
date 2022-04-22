@@ -20,8 +20,9 @@ void Scene::Init(std::shared_ptr<Renderer::Camera> camera) {
     Lights_.emplace_back(glm::vec3(100.0f, 30.0f, 0.0f), ResourceManager::GetTexture2D("white"));
     Lights_.front().Scale(glm::vec3(0.25f));
 
-    // generate first chunks around the camera
-    Update();
+    // generate first chunk around the camera
+    const auto chunkPos = GetCenterChunkPos();
+    Chunks_.emplace(chunkPos, Terrain::TerrainGen::GenerateChunk(chunkPos));
 }
 
 void Scene::UpdateOrig([[maybe_unused]] bool updateAll /*= false*/) {
@@ -222,4 +223,21 @@ bool Scene::IsPointInView(const glm::vec3& position, const glm::mat4& projView) 
     pt /= pt.w;
 
     return pt.x >= -1.0f && pt.x <= 1.0f && pt.z <= 1.0f;
+}
+
+float Scene::GetTerrainHeight(const glm::vec2& pos) const {
+    const auto chunkPos = glm::vec2(
+      floor(pos.x / Chunk::ChunkSize) * Chunk::ChunkSize,
+      floor(pos.y / Chunk::ChunkSize) * Chunk::ChunkSize);
+
+    assert(Chunks_.contains(chunkPos) && "Chunk is not loaded");
+
+    if (Chunks_.contains(chunkPos)) {
+        return Chunks_.at(chunkPos).GetBlockInfo(pos).GetSurfaceHeight();
+    }
+    return 0.0f;
+}
+
+float Scene::GetTerrainHeight(const glm::vec3& pos) const {
+    return GetTerrainHeight({ pos.x, pos.z });
 }

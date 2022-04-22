@@ -57,6 +57,8 @@ class Chunk {
 
     [[nodiscard]] BlockInfo& GetBlockInfo(const glm::vec2& pos);
     [[nodiscard]] BlockInfo& GetBlockInfo(const glm::vec3& pos);
+    [[nodiscard]] const BlockInfo& GetBlockInfo(const glm::vec2& pos) const;
+    [[nodiscard]] const BlockInfo& GetBlockInfo(const glm::vec3& pos) const;
     [[nodiscard]] const std::vector<std::vector<BlockInfo>>& GetBlockInfos() const { return BlockInfos_; }
 
 

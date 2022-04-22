@@ -34,10 +34,13 @@ void Game::Init() {
     Engine::Random::Init(111);
     Terrain::Vegetation::LSystemsManager::Init();
 
-    Camera = std::make_shared<Renderer::Camera>(glm::vec3(0.0f, 30.0f, 0.0f));
+    Camera = std::make_shared<Renderer::Camera>(glm::vec3(0.0f, 15.0f, 0.0f));
     Renderer = std::make_unique<Renderer::SceneRenderer>(Camera.get());
 
     InitScene();
+    // move camera above terrain
+    Camera->Position += glm::vec3(0.0f, Scene_.GetTerrainHeight(Camera->Position), 0.0f);
+
     Scene_.SetGlobalLight({ glm::vec3(-0.2f, -1.0f, -0.3f), glm::vec3(0.7f) });
     InputHandler->Init(Camera.get());
     Renderer->Init();

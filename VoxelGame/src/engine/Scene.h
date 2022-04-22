@@ -53,6 +53,9 @@ class Scene {
     [[nodiscard]] static bool IsChunkInView(const glm::vec3& position, const glm::vec3& observer, const glm::mat4& projView);
     [[nodiscard]] static bool IsPointInView(const glm::vec3& position, const glm::mat4& projView);
 
+    [[nodiscard]] float GetTerrainHeight(const glm::vec2& pos) const;
+    [[nodiscard]] float GetTerrainHeight(const glm::vec3& pos) const;
+
   private:
     [[nodiscard]] glm::vec2 GetCenterChunkPos() const;
     void UpdateObjectsData();

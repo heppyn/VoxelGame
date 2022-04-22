@@ -111,12 +111,20 @@ std::map<Engine::Cube::BlockFaces, std::vector<GameObject>>& Chunk::GetObjectsTr
 }
 
 BlockInfo& Chunk::GetBlockInfo(const glm::vec2& pos) {
+    return const_cast<BlockInfo&>(std::as_const(*this).GetBlockInfo(pos));
+}
+
+BlockInfo& Chunk::GetBlockInfo(const glm::vec3& pos) {
+    return const_cast<BlockInfo&>(std::as_const(*this).GetBlockInfo(pos));
+}
+
+const BlockInfo& Chunk::GetBlockInfo(const glm::vec2& pos) const {
     const auto x = static_cast<unsigned>(pos.x - Position.x);
     const auto y = static_cast<unsigned>(pos.y - Position.y);
     return BlockInfos_[y][x];
 }
 
-BlockInfo& Chunk::GetBlockInfo(const glm::vec3& pos) {
+const BlockInfo& Chunk::GetBlockInfo(const glm::vec3& pos) const {
     return GetBlockInfo({ pos.x, pos.z });
 }
 
