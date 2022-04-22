@@ -34,7 +34,7 @@ void Renderer::SceneRenderer::Render(const Scene& scene, unsigned width, unsigne
           glm::radians(Camera->Zoom),
           static_cast<float>(width) / static_cast<float>(height),
           0.1f,
-          150.0f);
+          200.0f);
         shader->SetMatrix4("projection", projection);
     }
 
