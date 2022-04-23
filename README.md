@@ -8,17 +8,16 @@
   - Pause the camera movement by pressing `P`.
   - Exit the game by pressing `ESC`.
 
-You can export the scene by passing `-e` (`--export`) to the executable.
+You can export the scene by passing `-e` (`--export`) as an argument to the executable.
 
 ## Project structure
 
-This is Visual studio project running on Windows.
-
-Includes for extra dependencies `/Dependencies`
+Includes for already compiled dependencies `/Dependencies`
   - GLAD
   - GLFW
+  - GLFW_x64
   
-Dependencies wich are compiled are placed in `/VoxelGame/src/vendor`
+Dependencies which are compiled are placed in `/VoxelGame/src/vendor`
   - glad
   - glm
   - stb_image
@@ -30,4 +29,10 @@ Game engine resources are placed in `/VoxelGame/res`
   - shaders
 
 ## Building the app
-Engine supports only x86 architecture and uses features from C++20. If you are using Visual studio, please update to version 16.7+.
+Engine uses features from C++20. If you are using Visual studio, please update to version 16.7+.
+
+For Visual studio there are prepared configurations for building the app:
+  - Release x86 and x64. The prefered configuration for fast chunk generation.
+  - Debug x86 and x64. 
+  - Export x86. Just passes `--export` as an argument.
+  - Test x86. Runs only tests.
