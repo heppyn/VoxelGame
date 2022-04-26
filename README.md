@@ -17,7 +17,7 @@ Includes for already compiled dependencies `/Dependencies`
   - GLFW
   - GLFW_x64
   
-Dependencies which are compiled are placed in `/VoxelGame/src/vendor`
+Dependencies that are compiled are placed in `/VoxelGame/src/vendor`
   - glad
   - glm
   - stb_image
@@ -29,10 +29,10 @@ Game engine resources are placed in `/VoxelGame/res`
   - shaders
 
 ## Building the app
-Engine uses features from C++20. If you are using Visual studio, please update to version 16.7+.
+The engine uses features from C++20. If you are using Visual studio, please update to version 16.7+.
 
 For Visual studio there are prepared configurations for building the app:
-  - Release x86 and x64. The prefered configuration for fast chunk generation.
+  - Release x86 and x64. The preferred configuration for fast chunk generation.
   - Debug x86 and x64. 
   - Export x86. Just passes `--export` as an argument.
   - Test x86. Runs only tests.
