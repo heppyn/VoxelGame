@@ -6,6 +6,7 @@
 #include "GameObject.h"
 #include "renderer/Camera.h"
 #include "helpers/Math.h"
+#include "helpers/Constants.h"
 
 struct GlobalLight {
     glm::vec3 Direction;
@@ -19,7 +20,7 @@ class Scene {
     std::vector<GameObject> Lights_{};
     std::map<glm::vec2, Chunk, Helpers::CmpGlmVec<glm::vec2>> Chunks_{};
     std::shared_ptr<Renderer::Camera> Camera_{ nullptr };
-    int RenderDistance_{ 8 };
+    int RenderDistance_{ Constants::RENDERED_CHUNKS };
 
     std::map<Engine::Cube::BlockFaces, std::vector<std::shared_ptr<std::vector<glm::mat4>>>> ObjectsDataCache_{};
 

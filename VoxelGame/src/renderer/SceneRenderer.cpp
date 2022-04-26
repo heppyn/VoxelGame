@@ -6,19 +6,18 @@
 #include "engine/Components/Mesh.h"
 #include "open_gl/GpuTimer.h"
 #include "open_gl/WindowManagerGl.h"
+#include "helpers/Constants.h"
 
 Renderer::SceneRenderer::SceneRenderer(Renderer::Camera* camera)
   : Camera(camera) {}
 
 void Renderer::SceneRenderer::Init() {
     // set up renderer with all sides, otherwise scene containing only light would crash
-    constexpr int levels = 3;
     CubeRenderers_[Engine::Cube::ALL_SIDES] = {};
     CubeRenderers_[Engine::Cube::ALL_SIDES].Init();
-    InitShaders(levels);
+    InitShaders(Constants::SHADOW_LEVELS);
     ShadowMap_.Init();
-    // TODO: define near and far in variables
-    ShadowMapCSM_.Init(levels, 0.1f, 150.0f);
+    ShadowMapCSM_.Init(Constants::SHADOW_LEVELS, 0.1f, Constants::SHADOW_DISTANCE);
 }
 
 void Renderer::SceneRenderer::Render(const Scene& scene, unsigned width, unsigned height) {
@@ -34,7 +33,7 @@ void Renderer::SceneRenderer::Render(const Scene& scene, unsigned width, unsigne
           glm::radians(Camera->Zoom),
           static_cast<float>(width) / static_cast<float>(height),
           0.1f,
-          200.0f);
+          Constants::RENDER_DISTANCE);
         shader->SetMatrix4("projection", projection);
     }
 
