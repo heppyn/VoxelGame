@@ -1,12 +1,17 @@
 #include "Camera.h"
 
 #include <iostream>
+#include <algorithm>
 
 #include "helpers/Print.h"
 
 
 Renderer::Camera::Camera(glm::vec3 position /*= glm::vec3(0.0f, 0.0f, 0.0f)*/, glm::vec3 up /*= glm::vec3(0.0f, 1.0f, 0.0f)*/, float yaw /*= YAW*/, float pitch /*= PITCH*/)
-  : Position(position), Front(glm::vec3(0.0f, 0.0f, -1.0f)), WorldUp(up), Yaw(yaw), Pitch(pitch) {
+  : Position(position)
+  , Front(glm::vec3(0.0f, 0.0f, -1.0f))
+  , WorldUp(up)
+  , Yaw(yaw)
+  , Pitch(pitch) {
     UpdateCameraVectors();
 }
 
@@ -64,11 +69,7 @@ void Renderer::Camera::ProcessMouseScroll(float yOffset) {
     if (Stopped_)
         return;
 
-    Zoom -= yOffset;
-    if (Zoom < 1.0f)
-        Zoom = 1.0f;
-    if (Zoom > 45.0f)
-        Zoom = 45.0f;
+    Zoom = std::clamp(Zoom - yOffset, 1.0f, 45.0f);
 }
 
 void Renderer::Camera::Move(float delta, float x, float y) {
