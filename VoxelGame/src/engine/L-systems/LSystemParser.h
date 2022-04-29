@@ -1,17 +1,19 @@
 #pragma once
 #include <vector>
 #include <string_view>
-#include <fstream>
+#include <sstream>
 
 #include "LSystem.h"
 
 namespace LSystems {
 class LSystemParser {
-public:
+  public:
     [[nodiscard]] static std::vector<LSystem> LoadLSystemFromFile(const std::string_view file);
+    [[nodiscard]] static std::vector<LSystem> LoadLSystem(std::string&& lSystems);
+    [[nodiscard]] static std::vector<LSystem> LoadLSystem(std::stringstream& stream);
 
-private:
-    [[nodiscard]] static bool CheckIfProduction(std::ifstream& stream);
-    static void SkipIfComment(std::ifstream& stream);
+  private:
+    [[nodiscard]] static bool CheckIfProduction(std::stringstream& stream);
+    static void SkipIfComment(std::stringstream& stream);
 };
 } // namespace LSystems
