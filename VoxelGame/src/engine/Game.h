@@ -21,8 +21,6 @@ class Game {
     void ExportScene();
 
     [[nodiscard]] bool IsRunning() const;
-    [[nodiscard]] unsigned int Width() const;
-    [[nodiscard]] unsigned int Height() const;
     [[nodiscard]] Renderer::Camera* GetCamera() const { return Camera.get(); }
 
   private:

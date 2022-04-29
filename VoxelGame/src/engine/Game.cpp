@@ -55,7 +55,7 @@ void Game::Update([[maybe_unused]] float delta) {
 }
 
 void Game::Render() const {
-    Renderer->Render(Scene_, Width(), Height());
+    Renderer->Render(Scene_, WindowManagerGl::Width, WindowManagerGl::Height);
     WindowManagerGl::EndFrame();
 }
 
@@ -67,14 +67,6 @@ void Game::ExportScene() {
 
 bool Game::IsRunning() const {
     return !WindowManagerGl::ShouldCloseMainWindow();
-}
-
-unsigned Game::Width() const {
-    return WindowManagerGl::Width;
-}
-
-unsigned Game::Height() const {
-    return WindowManagerGl::Height;
 }
 
 void Game::InitScene() {
