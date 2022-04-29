@@ -7,7 +7,7 @@ std::vector<LSystems::LSystem> LSystems::LSystemParser::LoadLSystemFromFile(cons
     try {
         std::ifstream lSystemFile(file.data());
         if (!lSystemFile.is_open()) {
-            std::cout << "ERROR: File [" << file << "] could not be opened";
+            std::cout << "ERROR: File [" << file << "] could not be opened\n";
             return {};
         }
 
@@ -45,7 +45,7 @@ std::vector<LSystems::LSystem> LSystems::LSystemParser::LoadLSystemFromFile(cons
     }
 
     if (res.empty()) {
-        std::cout << "WARNING: L-system not loaded\n";
+        std::cout << "WARNING: No L-system loaded from file [" << file << "]\n";
     }
 
     return res;
