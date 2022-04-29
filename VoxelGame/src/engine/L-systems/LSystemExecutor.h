@@ -6,6 +6,9 @@
 #include "Turtle.h"
 
 namespace LSystems {
+/**
+ * \brief Generates objects from L-system
+ */
 class LSystemExecutor {
   public:
     LSystemExecutor() = default;
@@ -29,6 +32,5 @@ class LSystemExecutor {
     void ExecuteLetter(char letter, const LSystem& lSystem, std::vector<std::vector<GameObject>>& objects, Detail::Turtle& turtle, unsigned salt);
     void UpdateTurtleScale(Detail::Turtle& turtle, float newScale) const;
     [[nodiscard]] std::vector<std::vector<GameObject>> OptimizeModel(std::vector<std::vector<GameObject>>&& model) const;
-
 };
 } // namespace LSystems

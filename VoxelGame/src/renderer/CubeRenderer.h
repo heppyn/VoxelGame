@@ -9,6 +9,9 @@
 class GameObject;
 
 namespace Renderer {
+/**
+ * \brief Specializes in rendering cube and it's parts
+ */
 class CubeRenderer {
   public:
     CubeRenderer() = default;

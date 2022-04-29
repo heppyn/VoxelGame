@@ -13,6 +13,10 @@ struct GlobalLight {
     glm::vec3 Color;
 };
 
+/**
+ * \brief Holds all the scene data.
+ * Generate new chunks and release the old ones.
+ */
 class Scene {
   private:
     // default is light off

@@ -13,6 +13,10 @@ enum class Faces {
     RIGHT
 };
 
+/**
+ * \brief Represents faces of a cube
+ * is created by it's factory method
+ */
 class BlockFaces {
   public:
     const uint8_t Value;
@@ -25,8 +29,9 @@ class BlockFaces {
     }
 
     [[nodiscard]] bool HasFace(Faces face) const;
-    
+
     auto operator<=>(const BlockFaces& other) const = default;
+
   private:
     // can be only created from factory method
     explicit BlockFaces(uint8_t value);

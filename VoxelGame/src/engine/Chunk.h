@@ -6,6 +6,10 @@
 #include "BlockInfo.h"
 #include "BlockFaces.h"
 
+/**
+ * \brief Represents part of a map
+ * saves game objects and its data
+ */
 class Chunk {
   public:
     static float ChunkSize;

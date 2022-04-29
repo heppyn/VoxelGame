@@ -3,6 +3,10 @@
 #include <GLFW/glfw3.h>
 
 
+/**
+ * \brief Manages game windows.
+ * Creates windows and sets callbacks.
+ */
 class WindowManagerGl {
   public:
     static GLFWwindow* MainWindow;

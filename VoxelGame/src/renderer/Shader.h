@@ -8,6 +8,11 @@
 
 
 namespace Renderer {
+/**
+ * \brief Abstracts from OpenGL shader program.
+ * Provides methods for passing data to the GPU.
+ * Compiles shader from source.
+ */
 class Shader {
   private:
     using Macros_t = std::vector<std::pair<std::string, std::string>>;

@@ -5,7 +5,12 @@
 #include "engine/Random.h"
 
 namespace LSystems::Detail {
-// http://algorithmicbotany.org/papers/abop/abop-ch1.pdf page 4
+/**
+ * \brief Represents stochastic L-system
+ * can be have multiple same productions
+ * which are chosen randomly while derivating
+ * http://algorithmicbotany.org/papers/abop/abop-ch1.pdf page 4
+ */
 class RandomGrammar {
   public:
     explicit RandomGrammar(std::string axiom, std::map<char, std::vector<std::string>>&& productions = {});
@@ -20,6 +25,5 @@ class RandomGrammar {
     std::map<char, std::vector<std::string>> Productions_;
 
     [[nodiscard]] std::string Derivate(const std::string& word, unsigned salt) const;
-
 };
 } // namespace LSystems::Detail

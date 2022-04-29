@@ -9,6 +9,9 @@
 #include "glm/vec3.hpp"
 
 namespace Engine {
+/**
+ * \brief Random noise functions, Perlin and Simplex noise
+ */
 class Random {
   public:
     static siv::BasicPerlinNoise<float> Perlin;

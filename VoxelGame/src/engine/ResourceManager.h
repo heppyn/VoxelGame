@@ -11,6 +11,10 @@
 #include "renderer/Texture2D.h"
 #include "renderer/SpriteSheet.h"
 
+/**
+ * \brief Holds game resources
+ * shaders, textures, spritesheet
+ */
 class ResourceManager {
   private:
     using ShaderMacros_t = std::vector<std::pair<std::string, std::string>>;

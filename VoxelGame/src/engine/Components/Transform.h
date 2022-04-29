@@ -6,6 +6,9 @@
 #include "glm/gtx/transform.hpp"
 
 namespace Components {
+/**
+ * \brief Holds object's transformations
+ */
 class Transform : public Component {
   public:
     // center of the object
@@ -14,7 +17,8 @@ class Transform : public Component {
     glm::vec3 Scale{ 1 };
 
     Transform() = default;
-    Transform(glm::vec3 pos) : Position(pos) {}
+    Transform(glm::vec3 pos)
+      : Position(pos) {}
     ~Transform() override = default;
     Transform(const Transform&) = default;
     Transform& operator=(const Transform&) = default;

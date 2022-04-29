@@ -5,6 +5,9 @@
 #include "game/Terrain.h"
 
 namespace Terrain::Vegetation {
+/**
+ * \brief Generates all available trees
+ */
 class Tree {
   public:
     static std::vector<GameObject> SpawnNormalTree(const glm::vec3& pos);

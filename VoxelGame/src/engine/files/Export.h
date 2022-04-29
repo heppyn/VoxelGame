@@ -5,6 +5,9 @@
 #include "engine/Scene.h"
 
 namespace Engine::Files {
+/**
+ * \brief Export scene to file in JSON format
+ */
 class Export {
   public:
     // export scene in JSON format

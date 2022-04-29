@@ -5,6 +5,9 @@
 #include <glm/vec3.hpp>
 
 namespace Helpers {
+/**
+ * \brief Provides useful mathematical operations
+ */
 namespace Math {
     namespace Detail {
         constexpr float EPSILON_F{ 0.001f };

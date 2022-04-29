@@ -6,6 +6,9 @@
 
 
 namespace Terrain {
+/**
+ * \brief Enhances GameObjectFactory with specific block types instead of texture positions
+ */
 class BlockFactory {
   public:
     BlockFactory() = default;
@@ -20,6 +23,6 @@ class BlockFactory {
     BlockFactory& PositionOffset(const glm::vec3& positionOffset);
 
   private:
-    GameObjectFactory GOFactory_{glm::vec3(1.0f), glm::vec3(0.0f)};
+    GameObjectFactory GOFactory_{ glm::vec3(1.0f), glm::vec3(0.0f) };
 };
 } // namespace Terrain

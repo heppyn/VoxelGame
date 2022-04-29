@@ -19,6 +19,9 @@ namespace Detail {
         [[nodiscard]] size_t Size() const;
     };
 } // namespace Detail
+/**
+ * \brief Factory for plants generated from L-system
+ */
 class LSystemsManager {
   public:
     // generate model matrices

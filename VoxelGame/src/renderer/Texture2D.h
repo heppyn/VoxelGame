@@ -5,6 +5,10 @@
 
 
 namespace Renderer {
+/**
+ * \brief Represents JPEG or PNG texture.
+ * Binds to specified texture type.
+ */
 class Texture2D {
   public:
     unsigned int Id{ 0 };

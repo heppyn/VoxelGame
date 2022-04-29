@@ -4,12 +4,16 @@
 #include "glm/vec2.hpp"
 
 namespace Components {
+/**
+ * \brief Represents object's texture
+ */
 class SpritesheetTex : public Components::Component {
   private:
     glm::vec2 TexPos_;
 
   public:
-    explicit SpritesheetTex(const glm::vec2& texPos) : TexPos_(0) {
+    explicit SpritesheetTex(const glm::vec2& texPos)
+      : TexPos_(0) {
         const auto& texSize = ResourceManager::GetSpriteSheetSize();
         TexPos_ = { texPos.x, texSize.y - 1 - texPos.y };
     }

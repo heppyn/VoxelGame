@@ -1,6 +1,9 @@
 #pragma once
 
 namespace OpenGl {
+/**
+ * \brief Measure time elapsed on GPU
+ */
 class GpuTimer {
   public:
     GpuTimer();

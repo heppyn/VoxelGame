@@ -7,6 +7,9 @@
 
 namespace Input {
 namespace Keys {
+    /**
+     * \brief All available keys which can have bindings
+     */
     enum Keys {
         W,
         S,
@@ -15,14 +18,18 @@ namespace Keys {
         P,
         Count
     };
-}
+} // namespace Keys
 
+/**
+ * \brief Abstract class for processing input
+ * key actions can be changed by providing new Command
+ */
 class InputHandler {
   protected:
     std::array<std::unique_ptr<Commands::Command>, Keys::Count> Commands;
     std::unique_ptr<Commands::MouseCommand> MouseCommand;
 
-public:
+  public:
     InputHandler();
     virtual ~InputHandler() = default;
 

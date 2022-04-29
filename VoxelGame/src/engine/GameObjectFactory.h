@@ -2,6 +2,10 @@
 #include "GameObject.h"
 #include "glm/vec3.hpp"
 
+/**
+ * \brief Factory for creating game objects
+ * can save internal state for creating multiple objects
+ */
 class GameObjectFactory {
   public:
     GameObjectFactory() = default;

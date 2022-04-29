@@ -3,6 +3,9 @@
 #include "glm/vec3.hpp"
 
 namespace Terrain {
+/**
+ * \brief Contains all available block types
+ */
 enum class BlockType {
     CactusInside,
     CactusSide,

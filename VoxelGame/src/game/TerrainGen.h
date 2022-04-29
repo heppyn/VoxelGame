@@ -10,6 +10,9 @@
 
 
 namespace Terrain {
+/**
+ * \brief Generates new Chunks of terrain
+ */
 class TerrainGen {
   public:
     static ::Chunk GenerateChunk(const glm::vec2& position);

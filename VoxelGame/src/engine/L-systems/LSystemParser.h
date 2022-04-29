@@ -6,6 +6,9 @@
 #include "LSystem.h"
 
 namespace LSystems {
+/**
+ * \brief Loads L-system from file/string
+ */
 class LSystemParser {
   public:
     [[nodiscard]] static std::vector<LSystem> LoadLSystemFromFile(const std::string_view file);

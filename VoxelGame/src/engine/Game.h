@@ -7,6 +7,9 @@
 #include "open_gl/InputHandlerGl.h"
 #include "Scene.h"
 
+/**
+ * \brief Main class responsible for systems initiation
+ */
 class Game {
   public:
     Game() = default;

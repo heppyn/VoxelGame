@@ -6,6 +6,11 @@
 
 
 namespace Terrain::Vegetation {
+/**
+ * \brief Factory for tree generation.
+ * Chooses which tree to generate based on biome.
+ * Specify tree densities.
+ */
 class TreeFactory {
   public:
     [[nodiscard]] static bool HasTree(const glm::vec3& pos, BiomeType biome);

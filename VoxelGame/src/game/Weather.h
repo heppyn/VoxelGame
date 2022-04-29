@@ -1,5 +1,8 @@
 #pragma once
 
+/**
+ * \brief Represents humidity and temperature as discrete values
+ */
 namespace Weather {
 static constexpr unsigned NOISE{ 5 };
 

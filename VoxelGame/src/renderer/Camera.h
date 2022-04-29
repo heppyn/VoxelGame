@@ -22,6 +22,9 @@ const float ZOOM = 45.0f;
 
 
 // An abstract camera class that processes input and calculates the corresponding Euler Angles, Vectors and Matrices for use in OpenGL
+/**
+ * \brief Represent player that can fly around the scene.
+ */
 class Camera {
   public:
     // camera Attributes

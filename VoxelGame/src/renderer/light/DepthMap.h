@@ -4,7 +4,10 @@
 #include "renderer/Texture2D.h"
 
 namespace Renderer {
-// framebuffer with attached dept component
+/**
+ * \brief Single shadow map used for basic scene shading.
+ * Framebuffer with attached depth component.
+ */
 class DepthMap {
   public:
     const int Resolution{ 4096 };

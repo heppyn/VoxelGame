@@ -40,6 +40,7 @@ void Terrain::Biome::Clear() {
 
 
 void Terrain::Biome::InitBiomeTable() {
+    // represents Whittaker biome system
     // Table[humidity][temperature][biome number]
     using enum BiomeType;
     BiomeTable_ = {

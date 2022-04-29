@@ -10,6 +10,9 @@
 
 
 namespace Renderer {
+/**
+ * \brief Hold vertex data passed to GPU
+ */
 struct Vertex {
     glm::vec3 Position;
     glm::vec3 Normal;
@@ -18,6 +21,9 @@ struct Vertex {
     Vertex(float px, float py, float pz, float nx, float ny, float nz, float tx, float ty);
 };
 
+/**
+ * \brief Represents structure of a renderable object
+ */
 class Mesh {
   public:
     std::vector<Vertex> Vertices{};

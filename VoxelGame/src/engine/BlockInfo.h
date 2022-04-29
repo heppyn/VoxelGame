@@ -1,6 +1,9 @@
 #pragma once
 #include <cstdint>
 
+/**
+ * \brief Saves info about block
+ */
 class BlockInfo {
   private:
     /* from the most significant to the least significant
@@ -30,8 +33,8 @@ class BlockInfo {
     [[nodiscard]] float GetSurfaceHeight() const { return static_cast<float>(Info_ & 0xFF); }
     [[nodiscard]] bool HasTree() const { return Info_ & 0x800000; }
     [[nodiscard]] unsigned GetBiome() const { return (Info_ >> 8) & 0xF; }
-    [[nodiscard]] unsigned GetHumidity() const { return ( Info_ >> 16 ) & 0xF; }
-    [[nodiscard]] unsigned GetTemperature() const { return ( Info_ >> 12 ) & 0xF; }
+    [[nodiscard]] unsigned GetHumidity() const { return (Info_ >> 16) & 0xF; }
+    [[nodiscard]] unsigned GetTemperature() const { return (Info_ >> 12) & 0xF; }
 
     void SetSurfaceHeight(float height);
     void SetSurfaceHeight(int height);

@@ -6,6 +6,9 @@
 
 #include "engine/BlockInfo.h"
 
+/**
+ * \brief Provides string operations
+ */
 namespace Helpers {
 inline void PrintMat4(const glm::mat4& mat) {
     std::cout << mat[0].x << ' ' << mat[0].y << ' ' << mat[0].z << ' ' << mat[0].w << '\n';

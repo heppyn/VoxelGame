@@ -8,6 +8,9 @@
 #include "light/ShadowMap.h"
 
 namespace Renderer {
+/**
+ * \brief Renders scene with specified shaders.
+ */
 class SceneRenderer {
   private:
     Camera* Camera;
@@ -15,8 +18,8 @@ class SceneRenderer {
     std::map<Engine::Cube::BlockFaces, unsigned> InstanceDataBufferIds_{};
     std::map<Engine::Cube::BlockFaces, size_t> BufferSizes_{};
 
-    Shader* ShaderInstance_{nullptr};
-    Shader* ShaderMesh_{nullptr};
+    Shader* ShaderInstance_{ nullptr };
+    Shader* ShaderMesh_{ nullptr };
     Shader* ShaderDepth_{ nullptr };
     Shader* ShaderDepthClosed_{ nullptr };
 

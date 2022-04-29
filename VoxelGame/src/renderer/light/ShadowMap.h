@@ -5,6 +5,9 @@
 #include "renderer/Shader.h"
 
 namespace Renderer {
+/**
+ * \brief Cascaded shadow map used for advanced scene shading.
+ */
 class ShadowMap {
   public:
     const int Resolution{ 1024 };

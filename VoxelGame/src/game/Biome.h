@@ -5,6 +5,9 @@
 #include "Weather.h"
 
 namespace Terrain {
+/**
+ * \brief All supported biomes
+ */
 enum class BiomeType {
     Ice,
     Tundra,
@@ -23,10 +26,13 @@ enum class BiomeType {
     Water,
 };
 
+/**
+ * \brief Chooses biome based on humidity and temperature
+ */
 class Biome {
   public:
     static BiomeType GetBiome(const glm::vec2& pos, Weather::Humidity humidity, Weather::Temperature temperature);
-    
+
     static void Init();
     static void Clear();
 

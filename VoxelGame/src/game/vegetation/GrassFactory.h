@@ -14,6 +14,9 @@ enum class GrassDensity {
     None,
 };
 
+/**
+ * \brief Factory for creating grass
+ */
 class GrassFactory {
   public:
     explicit GrassFactory(std::string_view grassFile);

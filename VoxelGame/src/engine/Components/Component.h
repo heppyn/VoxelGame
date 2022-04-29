@@ -4,6 +4,10 @@
 class GameObject;
 
 namespace Components {
+/**
+ * \brief Abstract component class.
+ * Derived classes hold object attributes.
+ */
 class Component {
   public:
     GameObject* Owner{ nullptr };

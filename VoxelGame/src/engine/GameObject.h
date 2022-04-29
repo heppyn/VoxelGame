@@ -8,6 +8,9 @@
 #include "renderer/Texture2D.h"
 #include "Components/Component.h"
 
+/**
+ * \brief Container for holding components
+ */
 class GameObject {
   private:
     std::vector<std::unique_ptr<Components::Component>> Components_{};

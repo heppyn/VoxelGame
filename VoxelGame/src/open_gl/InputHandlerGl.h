@@ -4,6 +4,9 @@
 
 
 namespace Input {
+/**
+ * \brief Implements input handling specific for OpenGL
+ */
 class InputHandlerGl : public InputHandler {
   public:
     // process state of input as it is

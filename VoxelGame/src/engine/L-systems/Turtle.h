@@ -3,9 +3,12 @@
 
 
 namespace LSystems::Detail {
-// turtle has a position and orientation
-// http://algorithmicbotany.org/papers/abop/abop-ch1.pdf
-// Chapter 1.5 modeling in three dimensions
+/**
+ * \brief Moves thru space and can be used to place blocks
+ * turtle has a position and orientation
+ * http://algorithmicbotany.org/papers/abop/abop-ch1.pdf
+ * Chapter 1.5 modeling in three dimensions
+ */
 class Turtle {
   public:
     explicit Turtle(const glm::vec3& position);
