@@ -8,8 +8,8 @@ const std::string SPRITE_SHEET_SPEC = "sh_s";
 const std::string VOXEL_PACK_PATH_SH = "./res/textures/voxel-pack-updated/Spritesheets/";
 constexpr auto FRAME_LEN = 1.0 / 60.0;
 
-// render distance in chunks
-constexpr int RENDERED_CHUNKS = 8;
+// scene size in chunks
+constexpr int SCENE_SIZE_CHUNKS = 8;
 // far plane of the frustum
 constexpr float RENDER_DISTANCE = 200;
 // far plane of the shadow frustum

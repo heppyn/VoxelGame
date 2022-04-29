@@ -24,7 +24,7 @@ class Scene {
     std::vector<GameObject> Lights_{};
     std::map<glm::vec2, Chunk, Helpers::CmpGlmVec<glm::vec2>> Chunks_{};
     std::shared_ptr<Renderer::Camera> Camera_{ nullptr };
-    int RenderDistance_{ Constants::RENDERED_CHUNKS };
+    int RenderDistance_{ Constants::SCENE_SIZE_CHUNKS };
 
     std::map<Engine::Cube::BlockFaces, std::vector<std::shared_ptr<std::vector<glm::mat4>>>> ObjectsDataCache_{};
 
