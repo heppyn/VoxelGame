@@ -18,6 +18,8 @@ Chunk ExampleScene::EmptySides() {
     chunk.AddObject(GameObjectFactory::CreateObject({ 1.0f, 0.0f, 0.0f }, { 1.0f, 1.0f }), Engine::Cube::PIPE);
     chunk.AddObject(GameObjectFactory::CreateObject({ 1.0f, 0.0f, 0.0f }, { 2.0f, 2.0f }),
       Engine::Cube::BlockFaces::CreateBlockFaces(Engine::Cube::Faces::TOP));
+    chunk.AddObject(GameObjectFactory::CreateObject({ 1.0f, 0.0f, 0.0f }, { 0.0f, 1.0f }),
+      Engine::Cube::BlockFaces::CreateBlockFaces(Engine::Cube::Faces::BOTTOM));
 
     chunk.AddObject(GameObjectFactory::CreateObject({ -0.5f, 0.0f, 0.0f }, { 1.0f, 1.0f }), Engine::Cube::PIPE);
 
@@ -104,12 +106,17 @@ Chunk ExampleScene::LSystemGrass() {
 Chunk ExampleScene::LSystemTrees() {
     Chunk chunk(glm::vec2(0.0f));
 
+    // you can generate L-systems from string
+    // but generation from file is preferred
     std::stringstream def;
+    // yaw pitch shrink ratio
     def << "22.5 15.0 0.8\n"
-        << "UES1u\n"
+        // axiom
+        << "UES1u\n" // use 1 to switch output buffer
         << "U > uU\n"
-        << "E > [B][++++B][----B][++++++++B]+uxUE\n"
-        << "# branch expansion\n"
+        // letter > production
+        << "E > [B][++++B][----B][++++++++B]+uxUE\n" // save and load state of the turtle with [ and ]
+        << "# branch expansion\n" // comments start with #
         << "F > f[-xB]+[+xB]xF\n"
         << "F > f[+xB]-[-xB]xF\n"
         << "F > f[+xB][-xB]xF\n"
@@ -121,8 +128,11 @@ Chunk ExampleScene::LSystemTrees() {
         << "B > ^^xxfF1Sxf\n"
         << "B > ^^xxfF1SXf\n";
 
+    // load L-system from string stream
     const auto lSystems = LSystems::LSystemParser::LoadLSystem(def);
+    // set random angle to 50 %
     LSystems::LSystemExecutor ge(0.5f);
+    // add random derivations and scale down smaller plants
     ge.ScaleDerivations(4, 0.7f, 1.0f);
     auto pos = glm::vec3(40.0f, 0.0f, 0.0f);
 
@@ -277,9 +287,10 @@ Chunk ExampleScene::TreeDistribution() {
               { 6.0f, 4.0f }));
         }
 
-        // place cactus only in local maximum of the function
-        if (height > static_cast<unsigned>(Engine::Random::Perlin.noise1D_0_1(static_cast<float>(i - 1) / freq) * 20.0f)
-            && height > static_cast<unsigned>(Engine::Random::Perlin.noise1D_0_1(static_cast<float>(i + 1) / freq) * 20.0f)) {
+        // place cactus only in sharp local maximum of the function
+        const auto left = static_cast<unsigned>(Engine::Random::Perlin.noise1D_0_1(static_cast<float>(i - 1) / freq) * 20.0f);
+        const auto right = static_cast<unsigned>(Engine::Random::Perlin.noise1D_0_1(static_cast<float>(i + 1) / freq) * 20.0f);
+        if (height > left && height > right) {
             chunk.AddObjects(Terrain::Vegetation::Tree::SpawnCactus({ i, height, 0.0f }));
         }
     }
