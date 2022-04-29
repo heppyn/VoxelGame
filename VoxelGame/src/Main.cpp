@@ -20,6 +20,10 @@ float lastFrame = 0.0f;
 
 int main(const int argc, const char* argv[]) {
     auto* window = WindowManagerGl::CreateMainWindow(true);
+    if (!window) {
+        std::cout << "Window was not created\n";
+        return 1;
+    }
     glfwSetFramebufferSizeCallback(window, WindowManagerGl::FramebufferSizeCallback);
 
     game->Init();
@@ -27,13 +31,13 @@ int main(const int argc, const char* argv[]) {
 
     // first initialize game to use resource manager etc.
     // add -s to see successful runs
-    //const auto params = { "main", "-b" };
+    //const char* params[] = { "main", "-s" };
 
-    #ifdef TEST_ONLY
-        constexpr auto testOnly = true;
-    #else
-        constexpr auto testOnly = false;
-    #endif
+#ifdef TEST_ONLY
+    constexpr auto testOnly = true;
+#else
+    constexpr auto testOnly = false;
+#endif
 
     if (const int result = Catch::Session().run(); result || testOnly) {
         std::cin.ignore();
