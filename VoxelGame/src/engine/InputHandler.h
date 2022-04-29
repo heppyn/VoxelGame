@@ -35,5 +35,6 @@ class InputHandler {
 
     virtual void Init(Renderer::Camera* actor);
     virtual void ProcessInput(float delta) const = 0;
+    void UpdateCommand(Keys::Keys key, std::unique_ptr<Commands::Command>&& command);
 };
 } // namespace Input
