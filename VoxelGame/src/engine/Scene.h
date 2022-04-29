@@ -27,8 +27,6 @@ class Scene {
   public:
     void Init(std::shared_ptr<Renderer::Camera> camera);
     void Update(bool updateAll = false);
-    // switch between automatic scene generation and example scenes
-    void UpdateOrig(bool updateAll = false);
     void SetCamera(std::shared_ptr<Renderer::Camera> camera);
 
     [[nodiscard]] std::vector<GameObject>& GetLights() {

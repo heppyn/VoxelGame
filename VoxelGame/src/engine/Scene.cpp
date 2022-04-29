@@ -9,8 +9,11 @@
 #include "Components/SpritesheetTex.h"
 #include "game/TerrainGen.h"
 
-#include "examples/ExampleScene.h"
+#include "ExampleScene.h"
 #include "open_gl/WindowManagerGl.h"
+
+// switch between terrain generation and example scenes
+#define USE_TERRAIN_GEN
 
 void Scene::Init(std::shared_ptr<Renderer::Camera> camera) {
     SetCamera(std::move(camera));
@@ -19,19 +22,16 @@ void Scene::Init(std::shared_ptr<Renderer::Camera> camera) {
     Lights_.emplace_back(glm::vec3(100.0f, 30.0f, 0.0f), ResourceManager::GetTexture2D("white"));
     Lights_.front().Scale(glm::vec3(0.25f));
 
+#ifdef USE_TERRAIN_GEN
     // generate first chunk around the camera
     const auto chunkPos = GetCenterChunkPos();
     Chunks_.emplace(chunkPos, Terrain::TerrainGen::GenerateChunk(chunkPos));
+#else
+    Update();
+#endif
 }
 
-void Scene::UpdateOrig([[maybe_unused]] bool updateAll /*= false*/) {
-    if (Chunks_.empty()) {
-        Chunks_.emplace(glm::vec2(0.0f), ExampleScene::Shadow());
-
-        UpdateObjectsData();
-    }
-}
-
+#ifdef USE_TERRAIN_GEN
 void Scene::Update(bool updateAll /*= false*/) {
     const auto startTime = glfwGetTime();
     const auto centerChunkPos = GetCenterChunkPos();
@@ -69,6 +69,15 @@ void Scene::Update(bool updateAll /*= false*/) {
     // Camera might have moved - update renderable objects
     UpdateObjectsData();
 }
+#else
+void Scene::Update([[maybe_unused]] bool updateAll /*= false*/) {
+    if (Chunks_.empty()) {
+        Chunks_.emplace(glm::vec2(0.0f), ExampleScene::LSystemTrees());
+
+        UpdateObjectsData();
+    }
+}
+#endif
 
 void Scene::SetCamera(std::shared_ptr<Renderer::Camera> camera) {
     Camera_ = std::move(camera);
