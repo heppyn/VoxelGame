@@ -177,7 +177,7 @@
     <ClCompile Include="tests\engine\BlockFacesTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\examples\ExampleScene.cpp">
+    <ClCompile Include="examples\ExampleScene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\renderer\light\DepthMap.cpp">
@@ -1650,7 +1650,7 @@
     <ClInclude Include="src\engine\BlockFaces.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\examples\ExampleScene.h">
+    <ClInclude Include="examples\ExampleScene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\renderer\light\DepthMap.h">
@@ -1697,7 +1697,7 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="res\textures\voxel-pack-updated\License.txt" />
-    <Text Include="res\l-systems\plants\Grass.txt" />
+    <Text Include="res\l-systems\plants\Grass2.txt" />
     <Text Include="res\l-systems\Format.txt" />
     <Text Include="tests\engine\L-systems\testData\grammar.txt" />
     <Text Include="tests\engine\L-systems\testData\multipleGrammars.txt" />
@@ -1709,5 +1709,6 @@
     <Text Include="res\l-systems\plants\JungleTree.txt" />
     <Text Include="res\l-systems\plants\Grass2D.txt" />
     <Text Include="src\vendor\simplex_noise\LICENSE.txt" />
+    <Text Include="res\l-systems\plants\Grass.txt" />
   </ItemGroup>
 </Project>

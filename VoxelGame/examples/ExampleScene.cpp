@@ -72,14 +72,19 @@ Chunk ExampleScene::AlphaBlendingGrass() {
 Chunk ExampleScene::LSystemGrass() {
     LSystems::LSystemExecutor ge(0, 0.0f);
     Chunk chunk(glm::vec2(0.0f));
+    // load L-systems from file
     const auto lSystems = LSystems::LSystemParser::LoadLSystemFromFile("./res/l-systems/plants/Grass2D.txt");
     if (!lSystems.empty()) {
         auto pos = glm::vec3(0.0f);
         for (const auto& lSystem : lSystems) {
+            // generate grass based on loaded L-systems
             auto objects = ge.GenerateBasedOn(pos, lSystem, 0.3f, 5, Engine::Random::GetNoise(pos));
+            // add texture to the grass
+            // grass L-system only contains one type of object - stem (leaves)
             for (auto& o : objects[0]) {
                 o.AddComponent<Components::SpritesheetTex>(glm::vec2(1.0f, 0.0f));
             }
+            // move object to chunk data
             chunk.GetObjects()[Chunk::DefaultCube_].insert(
               chunk.GetObjects()[Chunk::DefaultCube_].end(),
               std::make_move_iterator(objects[0].begin()),
@@ -93,6 +98,60 @@ Chunk ExampleScene::LSystemGrass() {
         std::cout << "Failed to load L-system\n";
     }
 
+    return chunk;
+}
+
+Chunk ExampleScene::LSystemTrees() {
+    Chunk chunk(glm::vec2(0.0f));
+
+    std::stringstream def;
+    def << "22.5 15.0 0.8\n"
+        << "UES1u\n"
+        << "U > uU\n"
+        << "E > [B][++++B][----B][++++++++B]+uxUE\n"
+        << "# branch expansion\n"
+        << "F > f[-xB]+[+xB]xF\n"
+        << "F > f[+xB]-[-xB]xF\n"
+        << "F > f[+xB][-xB]xF\n"
+        << "# branches\n"
+        << "B > ^xxfF1Sf\n"
+        << "B > ^xxfF1Sxf\n"
+        << "B > ^xxfF1SXf\n"
+        << "B > ^^xxfF1Sf\n"
+        << "B > ^^xxfF1Sxf\n"
+        << "B > ^^xxfF1SXf\n";
+
+    const auto lSystems = LSystems::LSystemParser::LoadLSystem(def);
+    LSystems::LSystemExecutor ge(0.5f);
+    ge.ScaleDerivations(4, 0.7f, 1.0f);
+    auto pos = glm::vec3(40.0f, 0.0f, 0.0f);
+
+    for (int i = 0; i < 8; ++i) {
+        // generate tree based on definition above
+        auto objects = ge.GenerateBasedOn(pos, lSystems[0], 1.0f, 4, Engine::Random::GetNoise(pos));
+        // add bark texture
+        for (auto& o : objects[0]) {
+            o.AddComponent<Components::SpritesheetTex>(glm::vec2(6.0f, 5.0f));
+        }
+        // add leaves texture
+        for (auto& o : objects[1]) {
+            o.AddComponent<Components::SpritesheetTex>(glm::vec2(4.0f, 3.0f));
+        }
+        // move object to chunk data
+        chunk.GetObjects()[Chunk::DefaultCube_].insert(
+          chunk.GetObjects()[Chunk::DefaultCube_].end(),
+          std::make_move_iterator(objects[0].begin()),
+          std::make_move_iterator(objects[0].end()));
+
+        chunk.GetObjects()[Chunk::DefaultCube_].insert(
+          chunk.GetObjects()[Chunk::DefaultCube_].end(),
+          std::make_move_iterator(objects[1].begin()),
+          std::make_move_iterator(objects[1].end()));
+
+        pos += glm::vec3(12.0f, 0.0f, 0.0f);
+    }
+
+    chunk.FinisChunk();
     return chunk;
 }
 
@@ -163,6 +222,7 @@ Chunk ExampleScene::PerlinSimplexTerrain() {
 
     for (unsigned i = 0; i < 100; ++i) {
         for (unsigned j = 0; j < 200; ++j) {
+            // get block height from Perlin/Simplex noise
             const auto heightPer = static_cast<unsigned>(Engine::Random::Perlin.noise2D_0_1(static_cast<float>(i) / freq, static_cast<float>(j) / freq) * 8.0f);
             const auto heightSim = static_cast<unsigned>(Engine::Random::Simplex.noise0_1(static_cast<float>(i) / freq, static_cast<float>(j) / freq) * 8.0f);
             for (unsigned h = 0; h < heightPer; ++h) {
@@ -171,14 +231,19 @@ Chunk ExampleScene::PerlinSimplexTerrain() {
                   { 0.0f, 1.0f }));
             }
             glm::vec3 pos = { i, heightPer, j };
+            // generate grassland tree
+            // biome determines density, type, ...
             chunk.AddObjectData(Terrain::Vegetation::TreeFactory::GenerateTree(pos, Terrain::BiomeType::Grassland));
+            // generate grassland grass
             auto grass = Terrain::Vegetation::GrassFactory::GenerateGrass(pos, Terrain::BiomeType::Grassland);
             chunk.AddObjectsTrans(std::move(grass), Terrain::Vegetation::GrassFactory::GrassCube());
 
+            // generate grass block with different top and sides
             chunk.AddObject(GameObjectFactory::CreateObject(pos, { 1.0f, 1.0f }), Engine::Cube::PIPE);
             chunk.AddObject(GameObjectFactory::CreateObject(pos, { 2.0f, 2.0f }),
               Engine::Cube::BlockFaces::CreateBlockFaces(Engine::Cube::Faces::TOP));
 
+            // do the same for Simplex terrain
             for (unsigned h = 0; h < heightSim; ++h) {
                 chunk.AddObject(GameObjectFactory::CreateObject(
                   { i + 100, h, j },
@@ -200,6 +265,7 @@ Chunk ExampleScene::PerlinSimplexTerrain() {
 }
 
 Chunk ExampleScene::TreeDistribution() {
+    // visualize distribution of trees using Perlin noise
     Chunk chunk(glm::vec2(0.0f));
 
     for (unsigned i = 0; i < 200; ++i) {
@@ -211,6 +277,7 @@ Chunk ExampleScene::TreeDistribution() {
               { 6.0f, 4.0f }));
         }
 
+        // place cactus only in local maximum of the function
         if (height > static_cast<unsigned>(Engine::Random::Perlin.noise1D_0_1(static_cast<float>(i - 1) / freq) * 20.0f)
             && height > static_cast<unsigned>(Engine::Random::Perlin.noise1D_0_1(static_cast<float>(i + 1) / freq) * 20.0f)) {
             chunk.AddObjects(Terrain::Vegetation::Tree::SpawnCactus({ i, height, 0.0f }));
