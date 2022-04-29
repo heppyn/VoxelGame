@@ -50,7 +50,7 @@ int main(const int argc, const char* argv[]) {
     }
     else {
         WindowManagerGl::ShowWindow();
-        while (!game->Finished()) {
+        while (game->IsRunning()) {
             const auto currentFrame = static_cast<float>(glfwGetTime());
             deltaTime = currentFrame - lastFrame;
             lastFrame = currentFrame;

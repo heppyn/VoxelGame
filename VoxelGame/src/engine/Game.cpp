@@ -65,8 +65,8 @@ void Game::ExportScene() {
     Engine::Files::Export::ExportScene(Scene_, "./export.json");
 }
 
-bool Game::Finished() const {
-    return WindowManagerGl::ShouldCloseMainWindow();
+bool Game::IsRunning() const {
+    return !WindowManagerGl::ShouldCloseMainWindow();
 }
 
 unsigned Game::Width() const {
