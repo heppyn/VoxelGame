@@ -36,3 +36,7 @@ For Visual studio there are prepared configurations for building the app:
   - Debug x86 and x64. 
   - Export x86. Just passes `--export` as an argument.
   - Test x86. Runs only tests.
+
+## Issues
+If you are running into issues with L-system parsing make sure you are using the proper file endings for your system.
+Not using `CRLF` could cause problems on Windows. 
