@@ -36,3 +36,6 @@ For Visual studio there are prepared configurations for building the app:
   - Debug x86 and x64. 
   - Export x86. Just passes `--export` as an argument.
   - Test x86. Runs only tests.
+
+## Issues
+If you are running the engine on Windows make sure that L-systems files have `CRLF` line endings.
