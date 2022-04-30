@@ -38,4 +38,5 @@ For Visual studio there are prepared configurations for building the app:
   - Test x86. Runs only tests.
 
 ## Issues
-If you are running the engine on Windows make sure that L-systems files have `CRLF` line endings.
+If you are running into issues with L-system parsing make sure you are using the proper file endings for your system.
+Not using `CRLF` could cause problems on Windows. 
