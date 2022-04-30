@@ -32,3 +32,8 @@ class Game {
 
     void InitScene();
 };
+
+namespace Engine {
+// to be defined in the client
+Game* CreateGame();
+} // namespace Engine

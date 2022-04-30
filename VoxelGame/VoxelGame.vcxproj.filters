@@ -1563,13 +1563,13 @@
     <ClInclude Include="src\engine\Scene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\Components\Component.h">
+    <ClInclude Include="src\engine\components\Component.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\Components\Transform.h">
+    <ClInclude Include="src\engine\components\Transform.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\Components\Mesh.h">
+    <ClInclude Include="src\engine\components\Mesh.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\helpers\Constants.h">
@@ -1596,7 +1596,7 @@
     <ClInclude Include="src\game\Terrain.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\Components\SpritesheetTex.h">
+    <ClInclude Include="src\engine\components\SpritesheetTex.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\game\Biome.h">
@@ -1663,6 +1663,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\vendor\simplex_noise\SimplexNoise.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\EntryPoint.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
