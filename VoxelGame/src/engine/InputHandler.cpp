@@ -17,6 +17,6 @@ void Input::InputHandler::Init(Renderer::Camera* actor) {
     Commands[Keys::P] = std::make_unique<Commands::SwitchPauseCommand>(actor);
 }
 
-void Input::InputHandler::UpdateCommand(Keys::Keys key, std::unique_ptr<Commands::Command>&& command) {
+void Input::InputHandler::UpdateCommandBinding(Keys::Keys key, std::unique_ptr<Commands::Command>&& command) {
     Commands[key] = std::move(command);
 }
