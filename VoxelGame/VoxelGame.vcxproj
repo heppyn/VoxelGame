@@ -393,7 +393,7 @@
     <None Include="res\shaders\Shadow_csm_closed.vert" />
     <None Include="res\shaders\Texture.fs" />
     <None Include="res\shaders\Texture.vs" />
-    <None Include="res\textures\voxel-pack-updated\Spritesheets\make_spritesheet.py" />
+    <None Include="res\textures\make_spritesheet.py" />
     <None Include="src\vendor\glm\detail\func_common.inl" />
     <None Include="src\vendor\glm\detail\func_common_simd.inl" />
     <None Include="src\vendor\glm\detail\func_exponential.inl" />

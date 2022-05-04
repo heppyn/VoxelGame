@@ -630,7 +630,7 @@
     <None Include="res\shaders\LightBatch.vert" />
     <None Include="src\vendor\perlin_noise\LICENSE" />
     <None Include="res\shaders\Color.frag" />
-    <None Include="res\textures\voxel-pack-updated\Spritesheets\make_spritesheet.py" />
+    <None Include="res\textures\make_spritesheet.py" />
     <None Include="res\shaders\Shadow.vert" />
     <None Include="res\shaders\Shadow.frag" />
     <None Include="res\shaders\Shadow_csm.vert" />
