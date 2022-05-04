@@ -28,7 +28,7 @@ Game engine resources are placed in `/VoxelGame/res`
   - textures
   - shaders
 
-## Building the app
+## Building on Windows
 The engine uses features from C++20. If you are using Visual studio, please update to version 16.7+.
 
 For Visual studio there are prepared configurations for building the app:
@@ -36,7 +36,16 @@ For Visual studio there are prepared configurations for building the app:
   - Debug x86 and x64. 
   - Export x86. Just passes `--export` as an argument.
   - Test x86. Runs only tests.
-  
+
+## Building on Linux
+If you are using linux you have to compile GLFW by yourself as the pre-compiled binaries are not available.
+You can find the source to GLFW [here](https://www.glfw.org/download.html). If you are compiling with gcc and running into problems
+these command line options might help `-lglfw3 -lGL -lX11 -lpthread -lXrandr -lXi -ldl`
+
+If you compiled and replaced GLFW you can use CMake to build the project like:
+`cmake --build "build"`
+
+## First app  
 For creating your first app see [getting started](GettingStarted.md).
 
 ## Issues
