@@ -1,0 +1,40 @@
+# high one with branch off
+22.5 5.0 0.5
+XXT1E
+# variable trunk length
+T > uU
+T > uT
+T > uuT
+U > ++++uuU
+U > --uuU
+U > ++++++BU
+U > ---B-----BU
+
+E > [1[uu][f++++fL]++++[f++++fL]++++[f++++fL]++++[f++++fL]]
+# expand E without rounding immediately
+B > [^^xffff&uu[1[uu][ff]++++[ff]++++[ff]++++[ff]]]
+B > [^^xfff&uu[1[uu][ff]++++[ff]++++[ff]++++[ff]]]
+
+L > xF++++F++++F++++F
+
+# baobab
+# reqiures min 3 derivations to produce leaves
+22.5 5.0 0.5
+XXU[T]uxRL
+U > uU
+U > U
+
+R > +
+R > -
+# no rotation
+R > r
+
+T > [B]+++++R[B]+++++R[B]
+T > [B]+++++R[B]+++++R[B]
+# more branches are rarer
+T > [B]++++R[B]++++R[B]++++R[B]
+
+B > [^^xffff&uuL]
+B > [^^xfff&uuL]
+
+L > [1[uu][ff]++++[ff]++++[ff]++++[ff]]

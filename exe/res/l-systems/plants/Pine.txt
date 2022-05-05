@@ -1,0 +1,21 @@
+# derivation variation = 3
+# random angle = 50%
+# pine tree
+22.5 15.0 0.8
+UES1u
+U > uU
+E > [B][++++B][----B][++++++++B]+uxUE
+
+# branch expansion
+F > f[-xB]+[+xB]xF
+F > f[+xB]-[-xB]xF
+F > f[+xB][-xB]xF
+
+# branches
+B > ^xxfF1Sf
+B > ^xxfF1Sxf
+B > ^xxfF1SXf
+
+B > ^^xxfF1Sf
+B > ^^xxfF1Sxf
+B > ^^xxfF1SXf
