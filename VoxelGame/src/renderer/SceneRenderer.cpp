@@ -40,23 +40,23 @@ void Renderer::SceneRenderer::Render(const Scene& scene, unsigned width, unsigne
     ShaderInstance_->SetVector3f("light.position", scene.GetLights().front().Position());
     ShaderInstance_->SetVector3f("view_pos", Camera->Position);
 
-    //OpenGl::GpuTimer timer;
-    //timer.Start();
+    // OpenGl::GpuTimer timer;
+    // timer.Start();
 
     RenderShadowMap(scene);
 
-    //std::cout << timer.TimeMs() << '\n';
+    // std::cout << timer.TimeMs() << '\n';
 
     glViewport(0, 0, static_cast<GLsizei>(width), static_cast<GLsizei>(height));
     glClearColor(103 / 255.0f, 157 / 255.0f, 245 / 255.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    //OpenGl::GpuTimer timer;
-    //timer.Start();
+    // OpenGl::GpuTimer timer;
+    // timer.Start();
 
     RenderScene(scene, ShaderInstance_);
 
-    //std::cout << timer.TimeMs() << '\n';
+    // std::cout << timer.TimeMs() << '\n';
 
     // draw light separately
     // render with all sides
@@ -75,7 +75,7 @@ void Renderer::SceneRenderer::RenderScene(const Scene& scene, Shader* shaderClos
         CubeRenderers_[Engine::Cube::ALL_SIDES].SetShader(shaderClosed);
         glBindBuffer(GL_ARRAY_BUFFER, InstanceDataBufferIds_[Engine::Cube::ALL_SIDES]);
         CubeRenderers_[Engine::Cube::ALL_SIDES].DrawCubesBatched(scene.GetSceneSize(Engine::Cube::ALL_SIDES));
-        //std::cout << "Solid objects: " << scene.GetSceneSize(Engine::Cube::ALL_SIDES) << '\n';
+        // std::cout << "Solid objects: " << scene.GetSceneSize(Engine::Cube::ALL_SIDES) << '\n';
     }
 
     // disable face culling - all sides can be seen
@@ -89,7 +89,7 @@ void Renderer::SceneRenderer::RenderScene(const Scene& scene, Shader* shaderClos
         cubeRenderer.SetShader(shaderOpen);
         glBindBuffer(GL_ARRAY_BUFFER, InstanceDataBufferIds_[cube]);
         cubeRenderer.DrawCubesBatched(scene.GetSceneSize(cube));
-        //std::cout << cube.Value << " objects: " << scene.GetSceneSize(cube) << '\n';
+        // std::cout << cube.Value << " objects: " << scene.GetSceneSize(cube) << '\n';
     }
 }
 
@@ -125,7 +125,7 @@ void Renderer::SceneRenderer::BindInstancesData(const Scene& scene) {
         unsigned offset = 0;
         for (const auto& chunk : instancesData) {
             glBufferSubData(GL_ARRAY_BUFFER, offset * sizeof(glm::mat4), chunk->size() * sizeof(glm::mat4), chunk->data());
-            offset += chunk->size();
+            offset += static_cast<unsigned>(chunk->size());
         }
 
         CubeRenderers_[cube].GetDefaultMesh().BindBatchAttribPtrs();
@@ -134,9 +134,9 @@ void Renderer::SceneRenderer::BindInstancesData(const Scene& scene) {
 
 void Renderer::SceneRenderer::InitShaders(int levels) {
     ShaderMesh_ = ResourceManager::GetShader("meshShader");
-    //ShaderInstance_ = ResourceManager::GetShader("lightBatch");
-    //ShaderDepth_ = ResourceManager::GetShader("shadow");
-    // TODO: add closed simple shadow
+    // ShaderInstance_ = ResourceManager::GetShader("lightBatch");
+    // ShaderDepth_ = ResourceManager::GetShader("shadow");
+    //  TODO: add closed simple shadow
     ShaderInstance_ = ResourceManager::SetShaderMacros(
       "light_csm", { { "CASCADE_COUNT", std::to_string(levels) } });
     ShaderDepth_ = ResourceManager::SetShaderMacros(
@@ -159,19 +159,19 @@ void Renderer::SceneRenderer::InitShaders(int levels) {
 }
 
 void Renderer::SceneRenderer::RenderShadowMap(const Scene& scene) {
-    //ShadowMap_.Bind();
-    //const auto lightSpaceMatrix = ShadowMap_.LightSpaceMatrix(
-    //  Camera->GetViewMatrix(), scene.GetGlobalLight().Direction, Camera->Zoom);
+    // ShadowMap_.Bind();
+    // const auto lightSpaceMatrix = ShadowMap_.LightSpaceMatrix(
+    // Camera->GetViewMatrix(), scene.GetGlobalLight().Direction, Camera->Zoom);
 
-    //ShaderDepth_->SetMatrix4("lightSpaceMatrix", lightSpaceMatrix);
-    //ShaderInstance_->SetMatrix4("lightSpaceMatrix", lightSpaceMatrix);
+    // ShaderDepth_->SetMatrix4("lightSpaceMatrix", lightSpaceMatrix);
+    // ShaderInstance_->SetMatrix4("lightSpaceMatrix", lightSpaceMatrix);
 
     ShadowMapCSM_.BindLightSpaceMatrices(Camera->GetViewMatrix(), scene.GetGlobalLight().Direction, Camera->Zoom);
     ShadowMapCSM_.Bind();
 
     RenderScene(scene, ShaderDepthClosed_, ShaderDepth_);
 
-    //ShadowMap_.BindData(*ShaderInstance_);
+    // ShadowMap_.BindData(*ShaderInstance_);
     ShadowMapCSM_.BindData(*ShaderInstance_);
 
     // bind default framebuffer

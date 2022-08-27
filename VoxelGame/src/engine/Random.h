@@ -62,26 +62,28 @@ class Random {
 
     // use for random index
     // [0, upperLimit)
-    template<typename T>
-    static unsigned Get1dNoiseLimited(T x, unsigned upperLimit, unsigned int seed = Seed) {
+    template<typename T, std::convertible_to<unsigned> U>
+    static unsigned Get1dNoiseLimited(T x, U upperLimit, unsigned int seed = Seed) {
         return static_cast<unsigned>(Get1dNoise0_1<float>(x, seed) * upperLimit);
     }
-    template<typename T>
+    template<typename T, std::convertible_to<unsigned> U>
     // [0, upperLimit)
-    static unsigned Get2dNoiseLimited(T x, T y, unsigned upperLimit, unsigned int seed = Seed) {
+    static unsigned Get2dNoiseLimited(T x, T y, U upperLimit, unsigned int seed = Seed) {
         return static_cast<unsigned>(Get2dNoise0_1<float>(x, y, seed) * upperLimit);
     }
-    template<typename T>
+    template<typename T, std::convertible_to<unsigned> U>
     // [0, upperLimit)
-    static unsigned Get3dNoiseLimited(T x, T y, T z, unsigned upperLimit, unsigned int seed = Seed) {
+    static unsigned Get3dNoiseLimited(T x, T y, T z, U upperLimit, unsigned int seed = Seed) {
         return static_cast<unsigned>(Get3dNoise0_1<float>(x, y, z, seed) * upperLimit);
     }
 
-    static unsigned GetNoiseLimited(glm::vec2 vec, unsigned upperLimit, unsigned int seed = Seed) {
+    template<std::convertible_to<unsigned> U>
+    static unsigned GetNoiseLimited(glm::vec2 vec, U upperLimit, unsigned int seed = Seed) {
         return static_cast<unsigned>(GetNoise0_1<float>(vec, seed) * static_cast<float>(upperLimit));
     }
     // bad statistical properties - use 2D noise
-    static unsigned GetNoiseLimited(glm::vec3 vec, unsigned upperLimit, unsigned int seed = Seed) {
+    template<std::convertible_to<unsigned> U>
+    static unsigned GetNoiseLimited(glm::vec3 vec, U upperLimit, unsigned int seed = Seed) {
         return static_cast<unsigned>(Get2dNoise0_1<float>(vec.x, vec.z, seed) * static_cast<float>(upperLimit));
     }
 

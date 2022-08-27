@@ -16,7 +16,7 @@ class Command {
       : Actor(actor) {}
     virtual ~Command() = default;
 
-    virtual void Execute(float delta) = 0;
+    virtual void Execute([[maybe_unused]] float delta) = 0;
 };
 
 class NullCommand : public Command {

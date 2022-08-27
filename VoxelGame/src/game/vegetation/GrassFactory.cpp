@@ -13,7 +13,6 @@ Terrain::Vegetation::GrassFactory::GrassFactory(std::string_view grassFile)
 
 std::vector<GameObject> Terrain::Vegetation::GrassFactory::GenerateGrass(const glm::vec3& pos, BiomeType biome) {
     const glm::vec3 newPos = { pos.x, pos.y + 1.0f, pos.z };
-    constexpr auto scale = 0.5f;
     std::vector<GameObject> res;
     if (HasGrass(newPos, biome)) {
         const auto r = Engine::Random::Get3dNoise0_1<float>(newPos.x, newPos.y, newPos.z);

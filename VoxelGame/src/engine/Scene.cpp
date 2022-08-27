@@ -39,7 +39,7 @@ void Scene::Update(bool updateAll /*= false*/) {
     for (auto it = Chunks_.begin(), nextIt = it; it != Chunks_.end(); it = nextIt) {
         ++nextIt;
         if (!IsInRenderDistance(it->second)) {
-            //LOG_ENGINE_INFO("Erasing chunk at: {}, {}", it->first.x, it->first.y);
+            // LOG_ENGINE_INFO("Erasing chunk at: {}, {}", it->first.x, it->first.y);
             Chunks_.erase(it);
         }
     }
@@ -56,9 +56,9 @@ void Scene::Update(bool updateAll /*= false*/) {
               centerChunkPos.x + static_cast<float>(i) * Chunk::ChunkSize,
               centerChunkPos.y + static_cast<float>(j) * Chunk::ChunkSize);
             if (!Chunks_.contains(chunkPos)) {
-                const auto startTimeChunk = glfwGetTime();
+                // const auto startTimeChunk = glfwGetTime();
                 Chunks_.emplace(chunkPos, Terrain::TerrainGen::GenerateChunk(chunkPos));
-                //LOG_ENGINE_INFO("Chunk generated in {} ms", (glfwGetTime() - startTimeChunk) * 1000.0);
+                // LOG_ENGINE_INFO("Chunk generated in {} ms", (glfwGetTime() - startTimeChunk) * 1000.0);
             }
         }
         if (overFrame && !updateAll)

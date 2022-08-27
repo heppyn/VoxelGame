@@ -1,22 +1,22 @@
 #include "Commands.h"
 
-void Commands::MoveForwardCommand::Execute(float delta) {
+void Commands::MoveForwardCommand::Execute([[maybe_unused]] float delta) {
     Actor->Move(delta, 0.0, 1.0);
 }
 
-void Commands::MoveBackCommand::Execute(float delta) {
+void Commands::MoveBackCommand::Execute([[maybe_unused]] float delta) {
     Actor->Move(delta, 0.0, -1.0);
 }
 
-void Commands::MoveLeftCommand::Execute(float delta) {
+void Commands::MoveLeftCommand::Execute([[maybe_unused]] float delta) {
     Actor->Move(delta, -1.0);
 }
 
-void Commands::MoveRightCommand::Execute(float delta) {
+void Commands::MoveRightCommand::Execute([[maybe_unused]] float delta) {
     Actor->Move(delta, 1.0);
 }
 
-void Commands::SwitchPauseCommand::Execute(float delta) {
+void Commands::SwitchPauseCommand::Execute([[maybe_unused]] float delta) {
     Actor->SwitchStopState();
 }
 

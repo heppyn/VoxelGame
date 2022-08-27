@@ -7,47 +7,47 @@
 
 
 Renderer::Vertex::Vertex(float px, float py, float pz, float nx, float ny, float nz, float tx, float ty)
-  : Position(px, py, pz),
-    Normal(nx, ny, nz),
-    TexCoords(tx, ty) {
+  : Position(px, py, pz)
+  , Normal(nx, ny, nz)
+  , TexCoords(tx, ty) {
 }
 
-//Renderer::Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned> indices, std::vector<Texture2D> textures, bool batched /*= false*/)
-//  : Vertices(std::move(vertices)),
-//    Indices(std::move(indices)),
-//    Textures(std::move(textures)) {
-//    SetupMesh(batched);
-//}
+// Renderer::Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned> indices, std::vector<Texture2D> textures, bool batched /*= false*/)
+//   : Vertices(std::move(vertices)),
+//     Indices(std::move(indices)),
+//     Textures(std::move(textures)) {
+//     SetupMesh(batched);
+// }
 
 Renderer::Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned> indices, const glm::vec2& texPos, bool batched)
-  : Vertices(std::move(vertices)),
-    Indices(std::move(indices)),
-    TexPos_(texPos) {
+  : Vertices(std::move(vertices))
+  , Indices(std::move(indices))
+  , TexPos_(texPos) {
     SetupMesh(batched);
 }
 
-//Renderer::Mesh::Mesh(const Mesh& other)
-//  : Vertices(other.Vertices), Indices(other.Indices), Textures(other.Textures), Vao(other.Vao), Vbo(other.Vbo), Ebo(other.Ebo) {
-//}
+// Renderer::Mesh::Mesh(const Mesh& other)
+//   : Vertices(other.Vertices), Indices(other.Indices), Textures(other.Textures), Vao(other.Vao), Vbo(other.Vbo), Ebo(other.Ebo) {
+// }
 //
-//Renderer::Mesh& Renderer::Mesh::operator=(const Mesh& other) {
-//    if (this != &other) {
-//        Vertices = other.Vertices;
-//        Indices = other.Indices;
-//        Textures = other.Textures;
-//    }
+// Renderer::Mesh& Renderer::Mesh::operator=(const Mesh& other) {
+//     if (this != &other) {
+//         Vertices = other.Vertices;
+//         Indices = other.Indices;
+//         Textures = other.Textures;
+//     }
 //
-//    return *this;
-//}
+//     return *this;
+// }
 
 Renderer::Mesh::Mesh(Mesh&& other) noexcept
-  : Vertices(std::move(other.Vertices)),
-    Indices(std::move(other.Indices)),
-    Textures(std::move(other.Textures)),
-    Vao(other.Vao),
-    Vbo(other.Vbo),
-    Ebo(other.Ebo),
-    TexPos_(other.TexPos_) {
+  : Vertices(std::move(other.Vertices))
+  , Indices(std::move(other.Indices))
+  , Textures(std::move(other.Textures))
+  , Vao(other.Vao)
+  , Vbo(other.Vbo)
+  , Ebo(other.Ebo)
+  , TexPos_(other.TexPos_) {
 }
 
 Renderer::Mesh& Renderer::Mesh::operator=(Mesh&& other) noexcept {
@@ -71,7 +71,7 @@ void Renderer::Mesh::Draw(Shader& shader) const {
 
     // draw mesh
     glBindVertexArray(Vao);
-    glDrawElements(GL_TRIANGLES, Indices.size(), GL_UNSIGNED_INT, 0);
+    glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(Indices.size()), GL_UNSIGNED_INT, 0);
     glBindVertexArray(0);
 
     // set to default
@@ -84,7 +84,7 @@ void Renderer::Mesh::DrawBatched(Shader& shader, unsigned amount) const {
     BindSpriteSheets(shader);
 
     glBindVertexArray(Vao);
-    glDrawElementsInstanced(GL_TRIANGLES, Indices.size(), GL_UNSIGNED_INT, 0, amount);
+    glDrawElementsInstanced(GL_TRIANGLES, static_cast<GLsizei>(Indices.size()), GL_UNSIGNED_INT, 0, amount);
     glBindVertexArray(0);
 
     // set to default
