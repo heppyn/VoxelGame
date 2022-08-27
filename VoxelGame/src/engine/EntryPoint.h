@@ -2,11 +2,11 @@
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-#include <iostream>
 
 #include "renderer/Camera.h"
 #include "engine/Game.h"
 #include "open_gl/WindowManagerGl.h"
+#include "engine/Log.h"
 
 #define CATCH_CONFIG_RUNNER
 #include "vendor/catch.hpp"
@@ -23,9 +23,10 @@ float deltaTime = 0.0f; // time between current frame and last frame
 float lastFrame = 0.0f;
 
 int main(const int argc, const char* argv[]) {
+    Engine::Log::Init();
     auto* window = WindowManagerGl::CreateMainWindow(true);
     if (!window) {
-        std::cout << "Window was not created\n";
+        LOG_ENGINE_CRITICAL("Window was not created");
         return 1;
     }
     glfwSetFramebufferSizeCallback(window, WindowManagerGl::FramebufferSizeCallback);
@@ -35,7 +36,7 @@ int main(const int argc, const char* argv[]) {
 
     // first initialize game to use resource manager etc.
     // add -s to see successful runs
-    //const char* params[] = { "main", "-s" };
+    // const char* params[] = { "main", "-s" };
 
 #ifdef TEST_ONLY
     constexpr auto testOnly = true;
@@ -58,7 +59,7 @@ int main(const int argc, const char* argv[]) {
             const auto currentFrame = static_cast<float>(glfwGetTime());
             deltaTime = currentFrame - lastFrame;
             lastFrame = currentFrame;
-            //std::cout << "FPS: " << 1.0f / deltaTime << '\n';
+            // LOG_ENGINE_INFO("FPS: {}", 1.0f / deltaTime);
 
             game->ProcessInput(deltaTime);
             game->Update(deltaTime);

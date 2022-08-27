@@ -1,7 +1,5 @@
 #include "SceneRenderer.h"
 
-#include <iostream>
-
 #include "engine/ResourceManager.h"
 #include "engine/Components/Mesh.h"
 #include "open_gl/GpuTimer.h"

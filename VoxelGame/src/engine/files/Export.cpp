@@ -1,14 +1,13 @@
 #include "Export.h"
 
-#include <iostream>
-
 #include "helpers/Print.h"
+#include "engine/Log.h"
 
 void Engine::Files::Export::ExportScene(const Scene& scene, const std::string& fileName) {
     std::ofstream fs(fileName);
 
     if (!fs.is_open()) {
-        std::cout << "Can't open output file " << fileName << '\n';
+        LOG_ENGINE_ERROR("Can't open output file {}", fileName);
         return;
     }
 

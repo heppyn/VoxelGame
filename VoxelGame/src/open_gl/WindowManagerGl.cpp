@@ -1,8 +1,7 @@
 #include "WindowManagerGl.h"
 
-#include <iostream>
-
 #include "renderer/Debug.h"
+#include "engine/Log.h"
 
 
 GLFWwindow* WindowManagerGl::MainWindow = nullptr;
@@ -10,7 +9,8 @@ unsigned int WindowManagerGl::Width = 1500;
 unsigned int WindowManagerGl::Height = 800;
 
 void ErrorCallback(int, const char* error) {
-    std::cout << "GLFW Error: " << error << std::endl;
+    // maybe use GLFW logger?
+    LOG_ENGINE_ERROR("GLFW Error: {}", error);
 }
 
 GLFWwindow* WindowManagerGl::CreateMainWindow(bool debug /*= false*/) {
@@ -30,7 +30,7 @@ GLFWwindow* WindowManagerGl::CreateMainWindow(bool debug /*= false*/) {
     glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
     MainWindow = glfwCreateWindow(Width, Height, "Voxel Game", nullptr, nullptr);
     if (MainWindow == nullptr) {
-        std::cout << "Failed to create GLFW window" << std::endl;
+        LOG_ENGINE_CRITICAL("Failed to create GLFW window");
         glfwTerminate();
         return nullptr;
     }
@@ -38,7 +38,7 @@ GLFWwindow* WindowManagerGl::CreateMainWindow(bool debug /*= false*/) {
 
     // glad: load all OpenGL function pointers
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
-        std::cout << "Failed to initialize GLAD" << std::endl;
+        LOG_ENGINE_CRITICAL("Failed to initialize GLAD");
         return nullptr;
     }
 
@@ -51,7 +51,7 @@ GLFWwindow* WindowManagerGl::CreateMainWindow(bool debug /*= false*/) {
             glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
             glDebugMessageCallback(GlDebugOutput, nullptr);
             glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, nullptr, GL_TRUE);
-            std::cout << "Debug initialized\n";
+            LOG_ENGINE_INFO("Debug initialized");
         }
     }
 

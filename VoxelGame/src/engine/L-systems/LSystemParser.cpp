@@ -1,14 +1,15 @@
 #include "LSystemParser.h"
 
-#include <iostream>
 #include <fstream>
+
+#include "engine/Log.h"
 
 std::vector<LSystems::LSystem> LSystems::LSystemParser::LoadLSystemFromFile(const std::string_view file) {
     std::vector<LSystem> res;
     try {
         std::ifstream lSystemFile(file.data());
         if (!lSystemFile.is_open()) {
-            std::cout << "ERROR: File [" << file << "] could not be opened\n";
+            LOG_ENGINE_ERROR("File [{}] could not be opened", file);
             return {};
         }
 
@@ -20,12 +21,12 @@ std::vector<LSystems::LSystem> LSystems::LSystemParser::LoadLSystemFromFile(cons
         res = LoadLSystem(stream);
     }
     catch (std::exception&) {
-        std::cout << "ERROR: Failed to load L-system from [" << file << "]\n";
+        LOG_ENGINE_ERROR("Failed to load L-system from [{}]", file);
         return {};
     }
 
     if (res.empty()) {
-        std::cout << "WARNING: No L-system loaded from file [" << file << "]\n";
+        LOG_ENGINE_WARN("No L-system loaded from file [{}]", file);
     }
 
     return res;

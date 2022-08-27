@@ -1,9 +1,9 @@
 #include "Camera.h"
 
-#include <iostream>
 #include <algorithm>
 
 #include "helpers/Print.h"
+#include "engine/Log.h"
 
 
 Renderer::Camera::Camera(glm::vec3 position /*= glm::vec3(0.0f, 0.0f, 0.0f)*/, glm::vec3 up /*= glm::vec3(0.0f, 1.0f, 0.0f)*/, float yaw /*= YAW*/, float pitch /*= PITCH*/)
@@ -93,7 +93,7 @@ void Renderer::Camera::Move(float delta, float x, float y) {
 void Renderer::Camera::SwitchStopState() {
     Stopped_ = !Stopped_;
 
-    std::cout << Helpers::ToString(Position) << ", " << Yaw << ", " << Pitch << '\n';
+    LOG_ENGINE_DEBUG("Camera info: {}, {}, {}", Helpers::ToString(Position), Yaw, Pitch);
 }
 
 void Renderer::Camera::UpdateCameraVectors() {

@@ -6,6 +6,7 @@
 #include "../helpers/Constants.h"
 #include "Random.h"
 #include "engine/files/Export.h"
+#include "Log.h"
 
 
 Game::~Game() {
@@ -27,10 +28,10 @@ void Game::Init() {
     ResourceManager::LoadTexture2D("./res/textures/white.png", true, "white");
     ResourceManager::LoadTexture2D(Constants::VOXEL_PACK_PATH_SH + "sprite_sheet.png", true, Constants::SPRITE_SHEET);
     ResourceManager::LoadTexture2D(Constants::VOXEL_PACK_PATH_SH + "sprite_sheet.png", true, Constants::SPRITE_SHEET_SPEC)->SetTypeSpecular();
-    //ResourceManager::LoadTexture2D("./res/textures/atlas.jpg", false, Constants::SPRITE_SHEET);
-    //ResourceManager::LoadTexture2D("./res/textures/atlas_specular.png", true, Constants::SPRITE_SHEET_SPEC)->SetTypeSpecular();
+    // ResourceManager::LoadTexture2D("./res/textures/atlas.jpg", false, Constants::SPRITE_SHEET);
+    // ResourceManager::LoadTexture2D("./res/textures/atlas_specular.png", true, Constants::SPRITE_SHEET_SPEC)->SetTypeSpecular();
     ResourceManager::SpriteSheet = { 128.0f, 128.0f, Constants::SPRITE_SHEET };
-    //ResourceManager::SpriteSheet = { 500.0f, 500.0f, Constants::SPRITE_SHEET };
+    // ResourceManager::SpriteSheet = { 500.0f, 500.0f, Constants::SPRITE_SHEET };
     Engine::Random::Init(111);
     Terrain::Vegetation::LSystemsManager::Init();
 

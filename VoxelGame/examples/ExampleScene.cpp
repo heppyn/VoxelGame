@@ -1,7 +1,5 @@
 #include "ExampleScene.h"
 
-#include <iostream>
-
 #include "engine/GameObjectFactory.h"
 #include "engine/Components/SpritesheetTex.h"
 #include "engine/L-systems/LSystemExecutor.h"
@@ -10,6 +8,7 @@
 #include "game/vegetation/GrassFactory.h"
 #include "game/vegetation/Tree.h"
 #include "game/vegetation/TreeFactory.h"
+#include "engine/Log.h"
 
 
 Chunk ExampleScene::EmptySides() {
@@ -97,7 +96,7 @@ Chunk ExampleScene::LSystemGrass() {
         chunk.FinisChunk();
     }
     else {
-        std::cout << "Failed to load L-system\n";
+        LOG_APP_ERROR("Failed to load L-system");
     }
 
     return chunk;

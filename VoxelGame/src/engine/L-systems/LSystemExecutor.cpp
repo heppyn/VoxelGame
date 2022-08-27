@@ -1,7 +1,5 @@
 #include "LSystemExecutor.h"
 
-#include <iostream>
-
 #include "engine/GameObjectFactory.h"
 #include "engine/Components/Transform.h"
 
@@ -29,8 +27,6 @@ std::vector<std::vector<GameObject>> LSystems::LSystemExecutor::GenerateBasedOn(
     LastMove_ = { 0.0f, 0.0f };
     // anchor the starting block to the bottom of the block
     Detail::Turtle turtle({ pos.x, pos.y - ((1.0f - Scale_) / 2.0f), pos.z }, Scale_);
-
-    //std::cout << lSystem.Grammar.Derivate(numDerivations, salt) << "\n\n";
 
     for (const auto production = lSystem.Grammar.Derivate(numDerivations, salt); const auto letter : production) {
         ExecuteLetter(letter, lSystem, objects, turtle, salt);

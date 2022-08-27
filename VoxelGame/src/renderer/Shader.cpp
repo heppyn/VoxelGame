@@ -1,10 +1,11 @@
 #include "Shader.h"
 
-#include <iostream>
 #include <sstream>
 
 #include <glad/glad.h>
 #include <glm/gtc/type_ptr.hpp>
+
+#include "engine/Log.h"
 
 Renderer::Shader& Renderer::Shader::Use() {
     glUseProgram(Id);
@@ -58,7 +59,7 @@ void Renderer::Shader::CompileWithMacros(std::string&& vertexSource, std::string
     foundMacro |= ReplaceMacros(geometrySource, macros);
 
     if (!foundMacro) {
-        std::cout << "WARNING::SHADER marco not found in shader\n";
+        LOG_ENGINE_WARN("SHADER: marco not found in shader");
     }
 
     Compile(
@@ -131,18 +132,16 @@ void Renderer::Shader::CheckCompileErrors(unsigned int object, const std::string
         glGetShaderiv(object, GL_COMPILE_STATUS, &success);
         if (!success) {
             glGetShaderInfoLog(object, 1024, NULL, infoLog);
-            std::cout << "| ERROR::SHADER: Compile-time error: Type: " << type << "\n"
-                      << infoLog << "\n -- --------------------------------------------------- -- "
-                      << std::endl;
+            LOG_ENGINE_ERROR(
+              "SHADER: Compile-time error: Type: {} {} ", type, infoLog);
         }
     }
     else {
         glGetProgramiv(object, GL_LINK_STATUS, &success);
         if (!success) {
             glGetProgramInfoLog(object, 1024, NULL, infoLog);
-            std::cout << "| ERROR::Shader: Link-time error: Type: " << type << "\n"
-                      << infoLog << "\n -- --------------------------------------------------- -- "
-                      << std::endl;
+            LOG_ENGINE_ERROR(
+              "SHADER: Link-time error: Type: {} {}", type, infoLog);
         }
     }
 }

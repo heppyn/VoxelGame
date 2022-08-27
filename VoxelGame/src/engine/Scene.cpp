@@ -1,6 +1,5 @@
 #include "Scene.h"
 
-#include <iostream>
 #include <utility>
 #include <GLFW/glfw3.h>
 
@@ -8,9 +7,9 @@
 #include "ResourceManager.h"
 #include "Components/SpritesheetTex.h"
 #include "game/TerrainGen.h"
-
 #include "ExampleScene.h"
 #include "open_gl/WindowManagerGl.h"
+#include "engine/Log.h"
 
 // switch between terrain generation and example scenes
 #define USE_TERRAIN_GEN
@@ -40,7 +39,7 @@ void Scene::Update(bool updateAll /*= false*/) {
     for (auto it = Chunks_.begin(), nextIt = it; it != Chunks_.end(); it = nextIt) {
         ++nextIt;
         if (!IsInRenderDistance(it->second)) {
-            //std::cout << "Erasing chunk at:" << it->first.x << ", " << it->first.y << '\n';
+            //LOG_ENGINE_INFO("Erasing chunk at: {}, {}", it->first.x, it->first.y);
             Chunks_.erase(it);
         }
     }
@@ -59,7 +58,7 @@ void Scene::Update(bool updateAll /*= false*/) {
             if (!Chunks_.contains(chunkPos)) {
                 const auto startTimeChunk = glfwGetTime();
                 Chunks_.emplace(chunkPos, Terrain::TerrainGen::GenerateChunk(chunkPos));
-                //std::cout << "Chunk generated in " << (glfwGetTime() - startTimeChunk) * 1000.0 << " ms\n";
+                //LOG_ENGINE_INFO("Chunk generated in {} ms", (glfwGetTime() - startTimeChunk) * 1000.0);
             }
         }
         if (overFrame && !updateAll)

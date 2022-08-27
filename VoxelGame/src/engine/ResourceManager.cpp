@@ -1,12 +1,12 @@
 #include "ResourceManager.h"
 
 #include <fstream>
-#include <iostream>
 #include <ranges>
 #include <sstream>
 
 #include "stb_image/stb_image.h"
 #include "../helpers/Constants.h"
+#include "engine/Log.h"
 
 std::map<std::string, std::unique_ptr<Renderer::Shader>> ResourceManager::Shaders;
 std::map<std::string, std::unique_ptr<Renderer::Texture2D>> ResourceManager::Textures;
@@ -117,7 +117,7 @@ std::string ResourceManager::LoadShaderCodeFromFile(const char* shaderFile) {
     }
     catch (std::exception&) {
         // TODO: handle failed load
-        std::cout << "ERROR::SHADER: Failed to read shader file " << shaderFile << std::endl;
+        LOG_ENGINE_ERROR("SHADER: Failed to read shader file {}", shaderFile);
     }
 
     return code;
@@ -139,7 +139,7 @@ Renderer::Texture2D* ResourceManager::LoadTexture2DFromFile(const char* file, bo
     }
     else {
         // TODO: handle texture not loaded
-        std::cout << "Failed to load texture" << std::endl;
+        LOG_ENGINE_ERROR("Failed to load texture from {}", file);
     }
     // and finally free image data
     stbi_image_free(data);

@@ -1,6 +1,5 @@
 #include "Chunk.h"
 
-#include <iostream>
 #include <array>
 #include <algorithm>
 #include <ranges>
@@ -8,6 +7,7 @@
 #include "Components/SpritesheetTex.h"
 #include "Components/Transform.h"
 #include "helpers/Math.h"
+#include "Log.h"
 
 float Chunk::ChunkSize{ 16.0f };
 
@@ -142,7 +142,7 @@ size_t Chunk::GenNumberOfObjects() const {
 }
 
 void Chunk::RecalculateBlockHeights() {
-    std::cout << "Warning! Using expansive function\n";
+    LOG_ENGINE_WARN("Using expansive function");
 
     for (auto& vec : BlockInfos_) {
         for (auto& info : vec) {

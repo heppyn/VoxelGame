@@ -1,11 +1,11 @@
 #include "ShadowMap.h"
 
-#include <iostream>
 #include <glad/glad.h>
 
 #include "glm/ext/matrix_clip_space.hpp"
 #include "open_gl/WindowManagerGl.h"
 #include "helpers/Math.h"
+#include "engine/Log.h"
 
 
 Renderer::ShadowMap::ShadowMap(int resolution)
@@ -43,7 +43,7 @@ void Renderer::ShadowMap::Init(const int levels, float nearPlane, const float fa
     glReadBuffer(GL_NONE);
 
     if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
-        std::cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!";
+        LOG_ENGINE_ERROR("FRAMEBUFFER: Framebuffer is not complete!");
     }
 
     glBindFramebuffer(GL_FRAMEBUFFER, 0);

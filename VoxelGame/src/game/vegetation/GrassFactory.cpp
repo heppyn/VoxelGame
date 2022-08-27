@@ -1,7 +1,5 @@
 #include "GrassFactory.h"
 
-#include <iostream>
-
 #include "engine/Random.h"
 #include "engine/L-systems/LSystemParser.h"
 #include "helpers/Print.h"
@@ -44,7 +42,6 @@ std::vector<GameObject> Terrain::Vegetation::GrassFactory::GenerateLSystemGrass(
             pos.y,
             pos.z + (Engine::Random::Get2dNoise0_1<float>(pos.x, pos.z) - 0.5f)
         };
-        std::cout << Helpers::ToString(newPos) << '\n';
         return std::move(LExecutor_.GenerateBasedOn(
           newPos,
           LSystems_[Engine::Random::GetNoiseLimited(pos, LSystems_.size())],
