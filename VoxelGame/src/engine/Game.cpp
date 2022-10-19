@@ -9,6 +9,11 @@
 #include "Log.h"
 
 
+Game::Game() {
+    // init main engine systems
+    Engine::Log::Init();
+}
+
 Game::~Game() {
     ResourceManager::Clear();
     Terrain::Vegetation::LSystemsManager::Clear();

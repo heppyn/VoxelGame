@@ -12,7 +12,7 @@
  */
 class Game {
   public:
-    Game() = default;
+    Game();
     ~Game();
     void Init();
     void ProcessInput(float delta) const;

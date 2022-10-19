@@ -23,7 +23,6 @@ float deltaTime = 0.0f; // time between current frame and last frame
 float lastFrame = 0.0f;
 
 int main(const int argc, const char* argv[]) {
-    Engine::Log::Init();
     auto* window = WindowManagerGl::CreateMainWindow(true);
     if (!window) {
         LOG_ENGINE_CRITICAL("Window was not created");
