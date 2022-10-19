@@ -13,24 +13,26 @@
 class Game {
   public:
     Game();
-    ~Game();
-    void Init();
+    virtual ~Game();
+    virtual void Init();
+    void InitScene();
     void ProcessInput(float delta) const;
-    void Update(float delta);
+    virtual void Update(float delta);
     void Render() const;
     void ExportScene();
 
     [[nodiscard]] bool IsRunning() const;
     [[nodiscard]] Renderer::Camera* GetCamera() const { return Camera.get(); }
 
-  private:
+  protected:
+    // TODO: rename to Camera_
     std::shared_ptr<Renderer::Camera> Camera{ nullptr };
-    std::unique_ptr<Renderer::SceneRenderer> Renderer{ nullptr };
     Scene Scene_;
 
-    std::unique_ptr<Input::InputHandler> InputHandler{ new Input::InputHandlerGl };
 
-    void InitScene();
+  private:
+    std::unique_ptr<Renderer::SceneRenderer> Renderer{ nullptr };
+    std::unique_ptr<Input::InputHandler> InputHandler{ new Input::InputHandlerGl };
 };
 
 namespace Engine {

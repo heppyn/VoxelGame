@@ -1,0 +1,23 @@
+# symetrical straight grass
+45.0 25.7 0.7
+E
+E > U[&xE][^xE]xUE
+E > U[&+xE][^+xE]xUE
+E > U[&-xE][^-xE]xUE
+U > UU
+
+# split - grow - double split
+45.0 20.0 0.7
+E
+U > UU
+E > U[^xE]U[&xE]^E
+E > U[+^xE]U[-&xE]-^E
+E > U[-^xE]U[+&xE]+^E
+
+
+45.0 22.5 0.7
+E
+U > UU
+E > U&[[xE]^xE]^U[^xUE]&xE
+E > U+&[[xE]^xE]^U[-^xUE]&xE
+E > U-&[[xE]^xE]^U[+^xUE]&xE

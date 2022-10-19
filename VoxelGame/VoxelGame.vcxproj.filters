@@ -84,9 +84,6 @@
     <ClCompile Include="src\open_gl\InputHandlerGl.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\game\TerrainGen.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\renderer\Debug.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -102,31 +99,13 @@
     <ClCompile Include="src\engine\Chunk.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\game\BlockFactory.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\game\Terrain.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\game\Biome.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\engine\Random.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\game\vegetation\Tree.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\engine\BlockInfo.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="tests\engine\BlockInfoTest.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\game\vegetation\TreeFactory.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\game\vegetation\GrassFactory.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\engine\L-systems\Turtle.cpp">
@@ -156,9 +135,6 @@
     <ClCompile Include="tests\engine\GameObjectFactoryTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\game\vegetation\LSystemsManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="tests\engine\RandomTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -175,9 +151,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="tests\engine\BlockFacesTest.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="examples\ExampleScene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\renderer\light\DepthMap.cpp">
@@ -208,6 +181,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\engine\Log.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="examples\ExampleScene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -1554,9 +1530,6 @@
     <ClInclude Include="src\open_gl\InputHandlerGl.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\game\TerrainGen.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\renderer\Debug.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -1593,34 +1566,13 @@
     <ClInclude Include="src\renderer\SpriteSheet.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\game\BlockFactory.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\game\Terrain.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\engine\components\SpritesheetTex.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\game\Biome.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\engine\Random.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\game\vegetation\Tree.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\game\Weather.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\engine\BlockInfo.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\game\vegetation\TreeFactory.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\game\vegetation\GrassFactory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\engine\L-systems\Turtle.h">
@@ -1644,16 +1596,10 @@
     <ClInclude Include="src\engine\L-systems\LSystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\game\vegetation\LSystemsManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\engine\files\Export.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\engine\BlockFaces.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="examples\ExampleScene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\renderer\light\DepthMap.h">
@@ -1672,6 +1618,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\engine\Log.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="examples\ExampleScene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

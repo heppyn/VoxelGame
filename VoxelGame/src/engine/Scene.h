@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include <map>
+#include <functional>
 
 #include "Chunk.h"
 #include "GameObject.h"
@@ -27,6 +28,7 @@ class Scene {
     int RenderDistance_{ Constants::SCENE_SIZE_CHUNKS };
 
     std::map<Engine::Cube::BlockFaces, std::vector<std::shared_ptr<std::vector<glm::mat4>>>> ObjectsDataCache_{};
+    std::function<Chunk(const glm::vec2&)> UpdateFunction_;
 
   public:
     void Init(std::shared_ptr<Renderer::Camera> camera);
@@ -44,6 +46,9 @@ class Scene {
     }
     void SetGlobalLight(const GlobalLight& light) {
         GlobalLight_ = light;
+    }
+    void SetUpdateFunction(std::function<Chunk(const glm::vec2&)> func) {
+        UpdateFunction_ = std::move(func);
     }
 
     void SetRenderDistance(int distance) { RenderDistance_ = distance; }

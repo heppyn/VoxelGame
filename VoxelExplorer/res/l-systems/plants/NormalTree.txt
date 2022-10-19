@@ -1,0 +1,13 @@
+# oak or birch tree
+22.5 5.0 0.85
+U1E
+# variable trunk length
+U > uU
+U > uU
+U > U
+F > fF
+
+E > [-B][+++B][-----B][+++++++B]+uxE
+
+B > ^f[++xB][--xB]B
+B > &f[++xB][--xB]B

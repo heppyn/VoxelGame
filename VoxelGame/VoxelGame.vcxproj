@@ -43,28 +43,28 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
     <EnableASAN>false</EnableASAN>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Test|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
     <EnableASAN>false</EnableASAN>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Export|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
     <EnableASAN>false</EnableASAN>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -72,25 +72,25 @@
     <EnableASAN>false</EnableASAN>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Test|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Export|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -131,24 +131,28 @@
     <IncludePath>$(IncludePath);$(VCInstallDir)UnitTest\include</IncludePath>
     <LibraryPath>$(VCInstallDir)UnitTest\lib;$(LibraryPath)</LibraryPath>
     <ExternalIncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)VoxelGame\src\vendor</ExternalIncludePath>
+    <TargetExt>.lib</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Test|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>$(IncludePath);$(VCInstallDir)UnitTest\include</IncludePath>
     <LibraryPath>$(VCInstallDir)UnitTest\lib;$(LibraryPath)</LibraryPath>
     <ExternalIncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)VoxelGame\src\vendor</ExternalIncludePath>
+    <TargetExt>.lib</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Export|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>$(IncludePath);$(VCInstallDir)UnitTest\include</IncludePath>
     <LibraryPath>$(VCInstallDir)UnitTest\lib;$(LibraryPath)</LibraryPath>
     <ExternalIncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)VoxelGame\src\vendor</ExternalIncludePath>
+    <TargetExt>.lib</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>$(IncludePath);$(VCInstallDir)UnitTest\include</IncludePath>
     <LibraryPath>$(VCInstallDir)UnitTest\lib;$(LibraryPath)</LibraryPath>
     <ExternalIncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)VoxelGame\src\vendor</ExternalIncludePath>
+    <TargetExt>.lib</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -157,14 +161,17 @@
     <LibraryPath>$(VCInstallDir)UnitTest\lib;$(LibraryPath)</LibraryPath>
     <IncludePath>$(IncludePath);$(VCInstallDir)UnitTest\include</IncludePath>
     <ExternalIncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)VoxelGame\src\vendor</ExternalIncludePath>
+    <TargetExt>.lib</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Test|x64'">
     <LinkIncremental>true</LinkIncremental>
     <ExternalIncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)VoxelGame\src\vendor</ExternalIncludePath>
+    <TargetExt>.lib</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Export|x64'">
     <LinkIncremental>true</LinkIncremental>
     <ExternalIncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)VoxelGame\src\vendor</ExternalIncludePath>
+    <TargetExt>.lib</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -173,6 +180,7 @@
     <IncludePath>$(IncludePath);$(VCInstallDir)UnitTest\include</IncludePath>
     <LibraryPath>$(VCInstallDir)UnitTest\lib;$(LibraryPath)</LibraryPath>
     <ExternalIncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)VoxelGame\src\vendor</ExternalIncludePath>
+    <TargetExt>.lib</TargetExt>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -180,7 +188,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>GLEW_STATIC;WIN32;GLM_FORCE_SILENT_WARNINGS;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>src;src\vendor;tests;examples;$(SolutionDir)Dependencies\GLFW_x64\include;$(SolutionDir)Dependencies\GLEW\include;$(SolutionDir)Dependencies\GLAD\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;src\vendor;tests;$(SolutionDir)Dependencies\GLFW_x64\include;$(SolutionDir)Dependencies\GLEW\include;$(SolutionDir)Dependencies\GLAD\include</AdditionalIncludeDirectories>
       <TreatWarningAsError>false</TreatWarningAsError>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
@@ -201,7 +209,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>GLEW_STATIC;WIN32;GLM_FORCE_SILENT_WARNINGS;_DEBUG;_CONSOLE;TEST_ONLY;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>src;src\vendor;tests;examples;$(SolutionDir)Dependencies\GLFW_x64\include;$(SolutionDir)Dependencies\GLEW\include;$(SolutionDir)Dependencies\GLAD\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;src\vendor;tests;$(SolutionDir)Dependencies\GLFW_x64\include;$(SolutionDir)Dependencies\GLEW\include;$(SolutionDir)Dependencies\GLAD\include</AdditionalIncludeDirectories>
       <TreatWarningAsError>false</TreatWarningAsError>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
@@ -222,7 +230,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>GLEW_STATIC;WIN32;GLM_FORCE_SILENT_WARNINGS;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>src;src\vendor;tests;examples;$(SolutionDir)Dependencies\GLFW_x64\include;$(SolutionDir)Dependencies\GLEW\include;$(SolutionDir)Dependencies\GLAD\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;src\vendor;tests;$(SolutionDir)Dependencies\GLFW_x64\include;$(SolutionDir)Dependencies\GLEW\include;$(SolutionDir)Dependencies\GLAD\include</AdditionalIncludeDirectories>
       <TreatWarningAsError>false</TreatWarningAsError>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
@@ -246,7 +254,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>GLEW_STATIC;WIN32;GLM_FORCE_SILENT_WARNINGS;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>src;src\vendor;tests;examples;$(SolutionDir)Dependencies\GLFW_x64\include;$(SolutionDir)Dependencies\GLEW\include;$(SolutionDir)Dependencies\GLAD\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;src\vendor;tests;$(SolutionDir)Dependencies\GLFW_x64\include;$(SolutionDir)Dependencies\GLEW\include;$(SolutionDir)Dependencies\GLAD\include</AdditionalIncludeDirectories>
       <TreatWarningAsError>false</TreatWarningAsError>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
@@ -270,7 +278,7 @@
       <PreprocessorDefinitions>GLEW_STATIC;WIN32;GLM_FORCE_SILENT_WARNINGS;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>src;src\vendor;examples;tests;$(SolutionDir)Dependencies\GLFW_x64\include;$(SolutionDir)Dependencies\GLEW\include;$(SolutionDir)Dependencies\GLAD\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;src\vendor;tests;$(SolutionDir)Dependencies\GLFW_x64\include;$(SolutionDir)Dependencies\GLEW\include;$(SolutionDir)Dependencies\GLAD\include</AdditionalIncludeDirectories>
       <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
       <TreatAngleIncludeAsExternal>true</TreatAngleIncludeAsExternal>
       <ExternalTemplatesDiagnostics>false</ExternalTemplatesDiagnostics>
@@ -288,7 +296,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>src;src\vendor;examples;tests;$(SolutionDir)Dependencies\GLFW_x64\include;$(SolutionDir)Dependencies\GLEW\include;$(SolutionDir)Dependencies\GLAD\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;src\vendor;tests;$(SolutionDir)Dependencies\GLFW_x64\include;$(SolutionDir)Dependencies\GLEW\include;$(SolutionDir)Dependencies\GLAD\include</AdditionalIncludeDirectories>
       <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
       <TreatAngleIncludeAsExternal>true</TreatAngleIncludeAsExternal>
       <ExternalTemplatesDiagnostics>false</ExternalTemplatesDiagnostics>
@@ -305,7 +313,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>src;src\vendor;examples;tests;$(SolutionDir)Dependencies\GLFW_x64\include;$(SolutionDir)Dependencies\GLEW\include;$(SolutionDir)Dependencies\GLAD\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;src\vendor;tests;$(SolutionDir)Dependencies\GLFW_x64\include;$(SolutionDir)Dependencies\GLEW\include;$(SolutionDir)Dependencies\GLAD\include</AdditionalIncludeDirectories>
       <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
       <TreatAngleIncludeAsExternal>true</TreatAngleIncludeAsExternal>
       <ExternalTemplatesDiagnostics>false</ExternalTemplatesDiagnostics>
@@ -325,7 +333,7 @@
       <PreprocessorDefinitions>GLEW_STATIC;WIN32;GLM_FORCE_SILENT_WARNINGS;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>src;src\vendor;examples;tests;$(SolutionDir)Dependencies\GLFW_x64\include;$(SolutionDir)Dependencies\GLEW\include;$(SolutionDir)Dependencies\GLAD\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;src\vendor;tests;$(SolutionDir)Dependencies\GLFW_x64\include;$(SolutionDir)Dependencies\GLEW\include;$(SolutionDir)Dependencies\GLAD\include</AdditionalIncludeDirectories>
       <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
       <TreatAngleIncludeAsExternal>true</TreatAngleIncludeAsExternal>
       <ExternalTemplatesDiagnostics>false</ExternalTemplatesDiagnostics>
@@ -354,14 +362,6 @@
     <ClCompile Include="src\engine\Log.cpp" />
     <ClCompile Include="src\engine\Random.cpp" />
     <ClCompile Include="src\engine\Scene.cpp" />
-    <ClCompile Include="examples\ExampleScene.cpp" />
-    <ClCompile Include="src\game\Biome.cpp" />
-    <ClCompile Include="src\game\BlockFactory.cpp" />
-    <ClCompile Include="src\game\Terrain.cpp" />
-    <ClCompile Include="src\game\TerrainGen.cpp" />
-    <ClCompile Include="src\game\vegetation\GrassFactory.cpp" />
-    <ClCompile Include="src\game\vegetation\LSystemsManager.cpp" />
-    <ClCompile Include="src\game\vegetation\Tree.cpp" />
     <ClCompile Include="src\helpers\Math.cpp" />
     <ClCompile Include="src\open_gl\GpuTimer.cpp" />
     <ClCompile Include="src\open_gl\InputHandlerGl.cpp" />
@@ -399,7 +399,6 @@
     <ClCompile Include="tests\engine\L-systems\LSystemParserTest.cpp" />
     <ClCompile Include="tests\engine\L-systems\RandomGrammarTest.cpp" />
     <ClCompile Include="tests\engine\L-systems\TurtleTest.cpp" />
-    <ClCompile Include="src\game\vegetation\TreeFactory.cpp" />
     <ClCompile Include="tests\engine\RandomTest.cpp" />
     <ClCompile Include="tests\engine\SceneTest.cpp" />
     <ClCompile Include="tests\helpers\MathTest.cpp" />
@@ -408,27 +407,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include=".clang-format" />
-    <None Include="res\shaders\BatchTexture.frag" />
-    <None Include="res\shaders\BatchTexture.vert" />
-    <None Include="res\shaders\Color.frag" />
-    <None Include="res\shaders\Empty.frag" />
-    <None Include="res\shaders\Light_csm.frag" />
-    <None Include="res\shaders\Light_csm.vert" />
-    <None Include="res\shaders\Shadow.frag" />
-    <None Include="res\shaders\Light.frag" />
-    <None Include="res\shaders\Light.vert" />
-    <None Include="res\shaders\LightBatch.vert" />
-    <None Include="res\shaders\Mesh.frag" />
-    <None Include="res\shaders\Mesh.vert" />
-    <None Include="res\shaders\MeshBatch.vert" />
-    <None Include="res\shaders\Shadow.vert" />
-    <None Include="res\shaders\Shadow_csm.geom" />
-    <None Include="res\shaders\Shadow_csm.vert" />
-    <None Include="res\shaders\Shadow_csm_closed.geom" />
-    <None Include="res\shaders\Shadow_csm_closed.vert" />
-    <None Include="res\shaders\Texture.fs" />
-    <None Include="res\shaders\Texture.vs" />
-    <None Include="res\textures\make_spritesheet.py" />
     <None Include="src\vendor\glm\detail\func_common.inl" />
     <None Include="src\vendor\glm\detail\func_common_simd.inl" />
     <None Include="src\vendor\glm\detail\func_exponential.inl" />
@@ -587,17 +565,7 @@
     <ClInclude Include="src\engine\Log.h" />
     <ClInclude Include="src\engine\Random.h" />
     <ClInclude Include="src\engine\Scene.h" />
-    <ClInclude Include="examples\ExampleScene.h" />
     <ClInclude Include="src\engine\EntryPoint.h" />
-    <ClInclude Include="src\game\Biome.h" />
-    <ClInclude Include="src\game\BlockFactory.h" />
-    <ClInclude Include="src\game\Terrain.h" />
-    <ClInclude Include="src\game\TerrainGen.h" />
-    <ClInclude Include="src\game\vegetation\GrassFactory.h" />
-    <ClInclude Include="src\game\vegetation\LSystemsManager.h" />
-    <ClInclude Include="src\game\vegetation\Tree.h" />
-    <ClInclude Include="src\game\vegetation\TreeFactory.h" />
-    <ClInclude Include="src\game\Weather.h" />
     <ClInclude Include="src\helpers\Constants.h" />
     <ClInclude Include="src\helpers\Math.h" />
     <ClInclude Include="src\helpers\Print.h" />
@@ -913,28 +881,6 @@
     <ClInclude Include="tests\vendor\catch.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="res\textures\atlas.jpg" />
-    <Image Include="res\textures\atlas_specular.png" />
-    <Image Include="res\textures\box.png" />
-    <Image Include="res\textures\box_specular.png" />
-    <Image Include="res\textures\concrete.png" />
-    <Image Include="res\textures\doge.png" />
-    <Image Include="res\textures\voxel-pack-updated\Spritesheets\spritesheet_tiles.png" />
-    <Image Include="res\textures\voxel-pack-updated\Spritesheets\sprite_sheet.png" />
-    <Image Include="res\textures\white.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="res\l-systems\Format.txt" />
-    <Text Include="res\l-systems\Koch.txt" />
-    <Text Include="res\l-systems\plants\Acacia.txt" />
-    <Text Include="res\l-systems\plants\Grass.txt" />
-    <Text Include="res\l-systems\plants\Grass2.txt" />
-    <Text Include="res\l-systems\plants\Grass2D.txt" />
-    <Text Include="res\l-systems\plants\JungleTree.txt" />
-    <Text Include="res\l-systems\plants\NormalTree.txt" />
-    <Text Include="res\l-systems\plants\Pine.txt" />
-    <Text Include="res\l-systems\plants\Shrubs.txt" />
-    <Text Include="res\textures\voxel-pack-updated\License.txt" />
     <Text Include="src\vendor\simplex_noise\LICENSE.txt" />
     <Text Include="tests\engine\L-systems\testData\grammar.txt" />
     <Text Include="tests\engine\L-systems\testData\multipleGrammars.txt" />

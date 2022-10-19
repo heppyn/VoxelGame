@@ -6,8 +6,6 @@
 #include "helpers/Constants.h"
 #include "ResourceManager.h"
 #include "Components/SpritesheetTex.h"
-#include "game/TerrainGen.h"
-#include "ExampleScene.h"
 #include "open_gl/WindowManagerGl.h"
 #include "engine/Log.h"
 
@@ -24,7 +22,7 @@ void Scene::Init(std::shared_ptr<Renderer::Camera> camera) {
 #ifdef USE_TERRAIN_GEN
     // generate first chunk around the camera
     const auto chunkPos = GetCenterChunkPos();
-    Chunks_.emplace(chunkPos, Terrain::TerrainGen::GenerateChunk(chunkPos));
+    Chunks_.emplace(chunkPos, UpdateFunction_(chunkPos));
 #else
     Update();
 #endif
@@ -57,7 +55,7 @@ void Scene::Update(bool updateAll /*= false*/) {
               centerChunkPos.y + static_cast<float>(j) * Chunk::ChunkSize);
             if (!Chunks_.contains(chunkPos)) {
                 // const auto startTimeChunk = glfwGetTime();
-                Chunks_.emplace(chunkPos, Terrain::TerrainGen::GenerateChunk(chunkPos));
+                Chunks_.emplace(chunkPos, UpdateFunction_(chunkPos));
                 // LOG_ENGINE_INFO("Chunk generated in {} ms", (glfwGetTime() - startTimeChunk) * 1000.0);
             }
         }
@@ -71,7 +69,7 @@ void Scene::Update(bool updateAll /*= false*/) {
 #else
 void Scene::Update([[maybe_unused]] bool updateAll /*= false*/) {
     if (Chunks_.empty()) {
-        Chunks_.emplace(glm::vec2(0.0f), ExampleScene::LSystemTrees());
+        Chunks_.emplace(glm::vec2(0.0f), UpdateFunction_(glm::vec2(0.0f)));
 
         UpdateObjectsData();
     }

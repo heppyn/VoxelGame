@@ -1,0 +1,60 @@
+# taken from http://algorithmicbotany.org/papers/abop/abop-ch1.pdf  
+# E = expand symbol, is not interpreted by the turtle
+
+# 25/d
+# split - grow - double split
+45.0 20.0 0.7
+E
+U > UU
+E > U[^xE1SXu]xU[&xE1SXXu]^E
+E > U[+^xE1Su]xU[-&xE1SXu]-^E
+E > U[-^xE1SXu]xU[+&xE1Su]+^E
+
+# 25/d
+# split - grow - double split
+# split starts from the ground
+45.0 20.0 0.7
+A
+U > UU
+A > [^xE]xU[&xE]^E
+A > [+^xE]xU[-&xE]-^E
+A > [-^xE]xU[+&xE]+^E
+E > U[^xE1SXXu]xU[&xE1Su]^E
+E > U[+^xE1Su]xU[-&xE1SXu]-^E
+E > U[-^xE1SXu]xU[+&xE1SXXu]+^E
+
+# 25/d
+# split - grow - double split
+# multiple splits from the ground
+45.0 20.0 0.7
+A
+U > UU
+A > [^xE][+++^xE]xU[&xE]^xE
+A > [+^xE][--^xE]xU[-&xE]-^xE
+A > [-^xE][++^xE]xU[+&xE]+^xE
+E > U[^xE1SXu]xU[&xE1Su]^xE
+E > U[+^xE1Su]xU[-&xE1SXu]-^xE
+E > U[-^xE1SXXu]xU[+&xE1Su]+^xE
+
+# 25/f
+# too large - doesn't look like a shrub
+# 45.0 22.5 0.7
+# E
+# U > UU
+# E > U&[[xE1SXu]^xE]^U[^xUE1SXXu]&xE
+# E > U+&[[xE1Su]^xE1Su]^U[-^xUE1SXu]&xE
+# E > U-&[[xE1SXu]^xE1SXXu]^U[+^xUE]&xE
+
+# 25/f
+# same as the previous one, but splits from the ground
+45.0 22.5 0.7
+A
+U > UU
+A > &[[xE]+^xE]^U[++^xUE]&xE
+A > +&[[--xE]++^xE]^U[-^xUE]&xE
+A > ++&[[--xE]+^xE]^U[--^xUE]&xE
+A > -&[[+xE]--^xE]^U[+^xUE]&xE
+E > U&[[xE1SXXu]^-xE1Su]^U[^++xUE1SXu]
+E > U&[[xE1SXu]^-xE1SXXu]^U[^--xUE1Su]&xE
+E > U+&[[--xE1Su]+^xE1SXu]^U[-^xUE1SXXu]
+E > U-&[[+xE1SXu]-^xE1Su]^U[+^xUE1SXXu]&xE

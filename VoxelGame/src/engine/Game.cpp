@@ -1,7 +1,6 @@
 #include "Game.h"
 
 #include "ResourceManager.h"
-#include "game/vegetation/LSystemsManager.h"
 #include "../open_gl/WindowManagerGl.h"
 #include "../helpers/Constants.h"
 #include "Random.h"
@@ -16,7 +15,6 @@ Game::Game() {
 
 Game::~Game() {
     ResourceManager::Clear();
-    Terrain::Vegetation::LSystemsManager::Clear();
 }
 
 void Game::Init() {
@@ -38,16 +36,10 @@ void Game::Init() {
     ResourceManager::SpriteSheet = { 128.0f, 128.0f, Constants::SPRITE_SHEET };
     // ResourceManager::SpriteSheet = { 500.0f, 500.0f, Constants::SPRITE_SHEET };
     Engine::Random::Init(111);
-    Terrain::Vegetation::LSystemsManager::Init();
 
     Camera = std::make_shared<Renderer::Camera>(glm::vec3(0.0f, 15.0f, 0.0f));
     Renderer = std::make_unique<Renderer::SceneRenderer>(Camera.get());
 
-    InitScene();
-    // move camera above terrain
-    Camera->Position += glm::vec3(0.0f, Scene_.GetTerrainHeight(Camera->Position), 0.0f);
-
-    Scene_.SetGlobalLight({ glm::vec3(-0.2f, -1.0f, -0.3f), glm::vec3(0.7f) });
     InputHandler->Init(Camera.get());
     Renderer->Init();
 }

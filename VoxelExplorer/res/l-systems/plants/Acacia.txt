@@ -1,0 +1,15 @@
+45.0 45.0 0.8
+# make sure the plant has splits
+# random lenght stem - then split
+^uA1S&F+F+F+F
+U > uU
+A > +uuE
+A > -uE
+A > +uE
+A > -E
+A > uuE
+A > uE
+# top of the plant
+E > x[++++UE1S&F+F+F+F]+UE
+E > x[++++++UE1S&F+F+F+F]++UE
+E > x[++UE1S&F+F+F+F]-UE
