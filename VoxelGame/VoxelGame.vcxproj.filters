@@ -183,9 +183,6 @@
     <ClCompile Include="src\engine\Log.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="examples\ExampleScene.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\vendor\glm\detail\func_common.inl">
@@ -597,28 +594,7 @@
       <Filter>Header Files</Filter>
     </None>
     <None Include=".clang-format" />
-    <None Include="res\shaders\Texture.vs" />
-    <None Include="res\shaders\Texture.fs" />
-    <None Include="res\shaders\BatchTexture.vert" />
-    <None Include="res\shaders\BatchTexture.frag" />
-    <None Include="res\shaders\Mesh.vert" />
-    <None Include="res\shaders\Mesh.frag" />
-    <None Include="res\shaders\MeshBatch.vert" />
-    <None Include="res\shaders\Light.vert" />
-    <None Include="res\shaders\Light.frag" />
-    <None Include="res\shaders\LightBatch.vert" />
     <None Include="src\vendor\perlin_noise\LICENSE" />
-    <None Include="res\shaders\Color.frag" />
-    <None Include="res\textures\make_spritesheet.py" />
-    <None Include="res\shaders\Shadow.vert" />
-    <None Include="res\shaders\Shadow.frag" />
-    <None Include="res\shaders\Shadow_csm.vert" />
-    <None Include="res\shaders\Shadow_csm.geom" />
-    <None Include="res\shaders\Light_csm.vert" />
-    <None Include="res\shaders\Light_csm.frag" />
-    <None Include="res\shaders\Empty.frag" />
-    <None Include="res\shaders\Shadow_csm_closed.vert" />
-    <None Include="res\shaders\Shadow_csm_closed.geom" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\vendor\stb_image\stb_image.h">
@@ -1620,53 +1596,10 @@
     <ClInclude Include="src\engine\Log.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="examples\ExampleScene.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="res\textures\doge.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\textures\box.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\textures\white.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\textures\box_specular.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\textures\concrete.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\textures\atlas.jpg">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\textures\atlas_specular.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\textures\voxel-pack-updated\Spritesheets\spritesheet_tiles.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\textures\voxel-pack-updated\Spritesheets\sprite_sheet.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="res\textures\voxel-pack-updated\License.txt" />
-    <Text Include="res\l-systems\plants\Grass2.txt" />
-    <Text Include="res\l-systems\Format.txt" />
     <Text Include="tests\engine\L-systems\testData\grammar.txt" />
     <Text Include="tests\engine\L-systems\testData\multipleGrammars.txt" />
-    <Text Include="res\l-systems\Koch.txt" />
-    <Text Include="res\l-systems\plants\Shrubs.txt" />
-    <Text Include="res\l-systems\plants\Acacia.txt" />
-    <Text Include="res\l-systems\plants\NormalTree.txt" />
-    <Text Include="res\l-systems\plants\Pine.txt" />
-    <Text Include="res\l-systems\plants\JungleTree.txt" />
-    <Text Include="res\l-systems\plants\Grass2D.txt" />
     <Text Include="src\vendor\simplex_noise\LICENSE.txt" />
-    <Text Include="res\l-systems\plants\Grass.txt" />
   </ItemGroup>
 </Project>
