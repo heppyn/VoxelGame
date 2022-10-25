@@ -1,5 +1,6 @@
 #pragma once
 #include <memory>
+#include <functional>
 
 #include "GameObject.h"
 #include "renderer/Camera.h"
@@ -38,4 +39,5 @@ class Game {
 namespace Engine {
 // to be defined in the client
 Game* CreateGame();
+std::function<int()> GetTestRunner();
 } // namespace Engine

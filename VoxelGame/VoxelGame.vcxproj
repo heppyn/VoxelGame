@@ -51,7 +51,7 @@
     <EnableASAN>false</EnableASAN>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Test|Win32'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
@@ -79,7 +79,7 @@
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Test|x64'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
@@ -139,7 +139,7 @@
     <IncludePath>$(IncludePath);$(VCInstallDir)UnitTest\include</IncludePath>
     <LibraryPath>$(VCInstallDir)UnitTest\lib;$(LibraryPath)</LibraryPath>
     <ExternalIncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)VoxelGame\src\vendor</ExternalIncludePath>
-    <TargetExt>.lib</TargetExt>
+    <TargetExt>.exe</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Export|Win32'">
     <LinkIncremental>true</LinkIncremental>
@@ -167,7 +167,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Test|x64'">
     <LinkIncremental>true</LinkIncremental>
     <ExternalIncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)VoxelGame\src\vendor</ExternalIncludePath>
-    <TargetExt>.lib</TargetExt>
+    <TargetExt>.exe</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Export|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -295,7 +295,7 @@
     <ClCompile>
       <WarningLevel>Level4</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>GLEW_STATIC;x64;GLM_FORCE_SILENT_WARNINGS;_DEBUG;_CONSOLE;TEST_ONLY;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>src;src\vendor;tests;$(SolutionDir)Dependencies\GLFW_x64\include;$(SolutionDir)Dependencies\GLEW\include;$(SolutionDir)Dependencies\GLAD\include</AdditionalIncludeDirectories>
       <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
@@ -306,6 +306,8 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(SolutionDir)Dependencies\GLEW\lib\Release\x64;$(SolutionDir)Dependencies\GLAD\include;$(SolutionDir)Dependencies\GLFW_x64\lib-vc2019</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;User32.lib;Gdi32.lib;Shell32.lib;glew32s.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Export|x64'">
@@ -349,6 +351,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\engine\systems\SceneManager.cpp" />
     <ClCompile Include="src\engine\BlockFaces.cpp" />
     <ClCompile Include="src\engine\BlockInfo.cpp" />
     <ClCompile Include="src\engine\Chunk.cpp" />
@@ -363,6 +366,7 @@
     <ClCompile Include="src\engine\Log.cpp" />
     <ClCompile Include="src\engine\Random.cpp" />
     <ClCompile Include="src\engine\Scene.cpp" />
+    <ClCompile Include="src\engine\systems\OctTree.cpp" />
     <ClCompile Include="src\helpers\Math.cpp" />
     <ClCompile Include="src\open_gl\GpuTimer.cpp" />
     <ClCompile Include="src\open_gl\InputHandlerGl.cpp" />
@@ -378,7 +382,6 @@
     <ClCompile Include="src\renderer\SceneRenderer.cpp" />
     <ClCompile Include="src\renderer\Shader.cpp" />
     <ClCompile Include="src\renderer\Camera.cpp" />
-    <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\renderer\Texture2D.cpp" />
     <ClCompile Include="src\vendor\glad\glad.c" />
     <ClCompile Include="src\vendor\glm\detail\glm.cpp" />
@@ -404,6 +407,7 @@
     <ClCompile Include="tests\engine\SceneTest.cpp" />
     <ClCompile Include="tests\helpers\MathTest.cpp" />
     <ClCompile Include="tests\helpers\PrintTest.cpp" />
+    <ClCompile Include="tests\TestRunner.cpp" />
     <ClCompile Include="tests\renderer\ShaderTest.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -547,6 +551,7 @@
     <None Include="src\vendor\perlin_noise\LICENSE" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\engine\systems\SceneManager.h" />
     <ClInclude Include="src\engine\BlockFaces.h" />
     <ClInclude Include="src\engine\files\Export.h" />
     <ClInclude Include="src\engine\GameObjectFactory.h" />
@@ -567,6 +572,7 @@
     <ClInclude Include="src\engine\Random.h" />
     <ClInclude Include="src\engine\Scene.h" />
     <ClInclude Include="src\engine\EntryPoint.h" />
+    <ClInclude Include="src\engine\systems\OctTree.h" />
     <ClInclude Include="src\helpers\Constants.h" />
     <ClInclude Include="src\helpers\Math.h" />
     <ClInclude Include="src\helpers\Print.h" />

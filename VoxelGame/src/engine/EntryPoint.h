@@ -1,5 +1,7 @@
 #pragma once
 
+#include <functional>
+
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
@@ -8,14 +10,19 @@
 #include "open_gl/WindowManagerGl.h"
 #include "engine/Log.h"
 
-#define CATCH_CONFIG_RUNNER
-// TODO: fix this include
-#include "vendor/catch.hpp"
-
 
 extern Game* Engine::CreateGame();
 
-// camera
+#ifdef VXL_PROVIDED_TEST_RUNNER
+extern std::function<int()> Engine::GetTestRunner();
+#else
+namespace Engine {
+std::function<int()> GetTestRunner() {
+    return []() { return 0; };
+}
+} // namespace Engine
+#endif
+
 Game* game = Engine::CreateGame();
 Renderer::Camera* camera;
 
@@ -34,18 +41,7 @@ int main(const int argc, const char* argv[]) {
     game->Init();
     camera = game->GetCamera();
 
-    // first initialize game to use resource manager etc.
-    // add -s to see successful runs
-    // const char* params[] = { "main", "-s" };
-
-#ifdef TEST_ONLY
-    constexpr auto testOnly = true;
-#else
-    constexpr auto testOnly = false;
-#endif
-
-    if (const int result = Catch::Session().run(); result || testOnly) {
-        std::cin.ignore();
+    if (const int result = Engine::GetTestRunner()(); result) {
         return result;
     }
 
