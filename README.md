@@ -17,16 +17,18 @@ Includes for already compiled dependencies `/Dependencies`
   - GLFW
   - GLFW_x64
   
-Dependencies that are compiled are placed in `/VoxelGame/src/vendor`
+Dependencies that have to be compiled are placed in `/VoxelGame/src/vendor`
   - glad
   - glm
   - stb_image
   - perlin_noise
   - simplex_noise
   
-Game engine resources are placed in `/VoxelGame/res`
+Game resources are placed in `/VoxelEplorer/res`
   - textures
   - shaders
+
+Engine part is compiled as static library and included by VoxelExplorer.
 
 ## Building on Windows
 The engine uses features from C++20. If you are using Visual studio, please update to version 16.7+.
